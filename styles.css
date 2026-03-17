@@ -492,26 +492,26 @@ a:hover {
   border-top: 1px solid var(--border);
 }
 
-.resume-btn {
+.resume-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 1.25rem;
-  padding: 0.6rem 1.5rem;
-  border-radius: 50px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
   color: var(--accent-light);
-  border: 1.5px solid var(--accent);
-  background: transparent;
-  transition: all 0.3s ease;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--accent);
+  transition: color 0.3s ease;
 }
 
-.resume-btn:hover {
-  background: var(--accent);
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+.resume-link:hover {
+  color: var(--accent-hover);
+}
+
+.resume-link i {
+  font-size: 0.85rem;
 }
 
 .stat {
@@ -764,6 +764,184 @@ a:hover {
   border-radius: 20px;
   letter-spacing: 0.02em;
   transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+/* ===== News Section ===== */
+.news-section {
+  background: var(--bg-secondary);
+}
+
+.news-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.news-list li {
+  position: relative;
+  padding: 0.6rem 0 0.6rem 1.25rem;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  border-bottom: 1px solid var(--border);
+}
+
+.news-list li:last-child {
+  border-bottom: none;
+}
+
+.news-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1.05em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-light);
+}
+
+.news-list li em {
+  color: var(--accent-light);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.news-list li strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ===== Publications Section ===== */
+.pub-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.pub-item {
+  padding: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color 0.3s ease, background-color 0.35s ease;
+}
+
+.pub-item:hover {
+  border-color: var(--accent-light);
+}
+
+.pub-venue-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  background: rgba(99, 102, 241, 0.12);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  margin-bottom: 0.6rem;
+}
+
+.pub-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 0.4rem;
+}
+
+.pub-title a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--accent);
+}
+
+.pub-title a:hover {
+  color: var(--accent-light);
+}
+
+.pub-authors {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.4rem;
+}
+
+.pub-authors strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.pub-links {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.pub-links a {
+  color: var(--accent-light);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.pub-type {
+  color: var(--accent-light);
+  font-size: 0.8rem;
+}
+
+.pub-citation {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.pub-citation em {
+  font-style: italic;
+}
+
+/* ===== Skills Grid ===== */
+.sub-section-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  color: var(--text-primary);
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.skill-category {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  transition: border-color 0.3s ease, background-color 0.35s ease;
+}
+
+.skill-category:hover {
+  border-color: var(--accent-light);
+}
+
+.skill-category h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.skill-category h4 i {
+  color: var(--accent-light);
+  font-size: 0.85rem;
 }
 
 /* ===== Projects Section — reuses hcard-list ===== */
@@ -1079,6 +1257,15 @@ a:hover {
   /* Contact mobile */
   .contact-text {
     font-size: 1rem;
+  }
+
+  /* Skills mobile */
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sub-section-title {
+    font-size: 1.25rem;
   }
 
   .contact-btn {

@@ -189,7 +189,7 @@ function initMobileMenu() {
 // ===== Scroll reveal animation =====
 function initScrollReveal() {
   const revealElements = document.querySelectorAll(
-    '.section-title, .origin-content, .timeline-item, .experience-card, .project-card, .contact-content'
+    '.section-title, .origin-content, .timeline-item, .experience-card, .project-card, .contact-content, .news-list, .pub-item, .skills-grid'
   );
 
   revealElements.forEach(el => el.classList.add('reveal'));
