@@ -492,6 +492,28 @@ a:hover {
   border-top: 1px solid var(--border);
 }
 
+.resume-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-light);
+  border: 1.5px solid var(--accent);
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.resume-btn:hover {
+  background: var(--accent);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+}
+
 .stat {
   display: flex;
   flex-direction: column;
