@@ -784,6 +784,28 @@ a:hover {
   transform: translateY(-2px);
 }
 
+.contact-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.contact-btn-outline {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border-light);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contact-btn-outline:hover {
+  color: var(--accent-light);
+  border-color: var(--accent);
+  background: var(--tag-bg);
+}
+
 .contact-links {
   margin-top: 2rem;
   display: flex;
