@@ -449,32 +449,17 @@ a:hover {
   position: relative;
 }
 
-.image-placeholder {
+.profile-photo {
   width: 100%;
   aspect-ratio: 3 / 4;
-  background: var(--placeholder-bg);
+  object-fit: cover;
   border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-serif);
-  font-size: 4rem;
-  color: var(--text-muted);
   border: 1px solid var(--border);
-  position: relative;
-  overflow: hidden;
-  transition: background 0.35s ease, border-color 0.35s ease;
+  transition: border-color 0.35s ease;
 }
 
-.image-placeholder::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: conic-gradient(from 0deg, transparent, var(--conic-accent), transparent 30%);
-  animation: rotate 8s linear infinite;
+.profile-photo:hover {
+  border-color: var(--accent-light);
 }
 
 .origin-text {
