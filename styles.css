@@ -656,6 +656,15 @@ a:hover {
   opacity: 0.9;
 }
 
+.hcard-logo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 6px;
+}
+
 .hcard-company-label {
   font-size: 0.75rem;
   font-weight: 700;
