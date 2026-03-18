@@ -189,7 +189,7 @@ function initMobileMenu() {
 // ===== Scroll reveal animation =====
 function initScrollReveal() {
   const revealElements = document.querySelectorAll(
-    '.section-title, .origin-content, .timeline-item, .experience-card, .project-card, .contact-content, .news-list, .pub-item, .skills-grid'
+    '.section-title, .origin-content, .timeline-item, .experience-card, .project-card, .contact-content, .news-list, .pub-item, .skills-grid, .music-layout'
   );
 
   revealElements.forEach(el => el.classList.add('reveal'));
@@ -215,6 +215,114 @@ function initScrollIndicator() {
   });
 }
 
+// ===== Music Stack =====
+function initMusicStack() {
+  const wrapper = document.getElementById('musicStack');
+  if (!wrapper) return;
+
+  const cards = wrapper.querySelectorAll('.music-card');
+  const dots = wrapper.querySelectorAll('.music-dot');
+  const totalCards = cards.length;
+  let currentIndex = 0;
+  let isScrolling = false;
+
+  function updateStack(activeIdx) {
+    cards.forEach((card, i) => {
+      card.classList.remove('active', 'pos-1', 'pos-2', 'pos-3', 'hidden');
+      const diff = (i - activeIdx + totalCards) % totalCards;
+      if (diff === 0) card.classList.add('active');
+      else if (diff === 1) card.classList.add('pos-1');
+      else if (diff === 2) card.classList.add('pos-2');
+      else if (diff === 3) card.classList.add('pos-3');
+      else card.classList.add('hidden');
+    });
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === activeIdx);
+    });
+  }
+
+  // Scroll on the stack area to switch cards
+  wrapper.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    if (isScrolling) return;
+    isScrolling = true;
+
+    if (e.deltaY > 0) {
+      currentIndex = (currentIndex + 1) % totalCards;
+    } else {
+      currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+    }
+    updateStack(currentIndex);
+
+    setTimeout(() => { isScrolling = false; }, 400);
+  }, { passive: false });
+
+  // Click dots to switch
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      currentIndex = parseInt(dot.dataset.index);
+      updateStack(currentIndex);
+    });
+  });
+
+  // Play/pause buttons
+  const playBtns = wrapper.querySelectorAll('.music-play-btn');
+  let currentlyPlaying = null;
+
+  playBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const idx = parseInt(btn.dataset.index);
+      const audio = cards[idx].querySelector('audio');
+
+      if (currentlyPlaying && currentlyPlaying !== audio) {
+        currentlyPlaying.pause();
+        currentlyPlaying.currentTime = 0;
+        playBtns.forEach(b => b.classList.remove('playing'));
+      }
+
+      if (audio.paused) {
+        audio.play();
+        btn.classList.add('playing');
+        currentlyPlaying = audio;
+      } else {
+        audio.pause();
+        btn.classList.remove('playing');
+        currentlyPlaying = null;
+      }
+    });
+  });
+
+  // When audio ends, reset button state
+  cards.forEach((card, i) => {
+    const audio = card.querySelector('audio');
+    audio.addEventListener('ended', () => {
+      playBtns[i].classList.remove('playing');
+      currentlyPlaying = null;
+    });
+  });
+
+  // Touch swipe support for mobile
+  let touchStartY = 0;
+  wrapper.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  wrapper.addEventListener('touchend', (e) => {
+    const deltaY = touchStartY - e.changedTouches[0].clientY;
+    if (Math.abs(deltaY) > 30) {
+      if (deltaY > 0) {
+        currentIndex = (currentIndex + 1) % totalCards;
+      } else {
+        currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+      }
+      updateStack(currentIndex);
+    }
+  }, { passive: true });
+
+  updateStack(0);
+}
+
 // ===== Init everything =====
 document.addEventListener('DOMContentLoaded', () => {
   initThemeToggle();
@@ -223,4 +331,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initScrollReveal();
   initScrollIndicator();
+  initMusicStack();
 });

@@ -349,43 +349,59 @@
         <span class="title-number">06</span>
         Music
       </h2>
-      <p class="music-desc">My music taste spans a wide range of genres, including Alternative Pop, Electro Pop, Dream Pop, R&B, and Indie Folk.</p>
-      <div class="music-cards">
-        <div class="music-card">
-          <div class="music-card-art" style="background: linear-gradient(135deg, #6366f1, #a855f7);">
-            <i class="fas fa-music"></i>
+      <div class="music-layout">
+        <div class="music-text">
+          <p class="music-desc">My music taste spans a wide range of genres, including <strong>Alternative Pop</strong>, <strong>Electro Pop</strong>, <strong>Dream Pop</strong>, <strong>R&B</strong>, and <strong>Indie Folk</strong>.</p>
+          <div class="music-genres">
+            <span>Alternative Pop</span>
+            <span>Electro Pop</span>
+            <span>Dream Pop</span>
+            <span>R&B</span>
+            <span>Indie Folk</span>
           </div>
-          <div class="music-card-info">
-            <h3 class="music-card-title">Track 1</h3>
-            <p class="music-card-artist">Artist</p>
-          </div>
-          <audio class="music-player" controls preload="none">
-            <source src="" type="audio/mpeg">
-          </audio>
+          <p class="music-hint"><i class="fas fa-hand-pointer"></i> Scroll on the cards to switch tracks</p>
         </div>
-        <div class="music-card">
-          <div class="music-card-art" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">
-            <i class="fas fa-music"></i>
+        <div class="music-stack-wrapper" id="musicStack">
+          <div class="music-stack">
+            <div class="music-card active" data-index="0" style="background: linear-gradient(135deg, #6366f1, #a855f7);">
+              <div class="music-card-overlay">
+                <h3 class="music-card-title">Track 1</h3>
+                <p class="music-card-artist">Artist</p>
+                <button class="music-play-btn" data-index="0"><i class="fas fa-play"></i></button>
+              </div>
+              <audio preload="none"><source src="" type="audio/mpeg"></audio>
+            </div>
+            <div class="music-card" data-index="1" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">
+              <div class="music-card-overlay">
+                <h3 class="music-card-title">Track 2</h3>
+                <p class="music-card-artist">Artist</p>
+                <button class="music-play-btn" data-index="1"><i class="fas fa-play"></i></button>
+              </div>
+              <audio preload="none"><source src="" type="audio/mpeg"></audio>
+            </div>
+            <div class="music-card" data-index="2" style="background: linear-gradient(135deg, #14b8a6, #3b82f6);">
+              <div class="music-card-overlay">
+                <h3 class="music-card-title">Track 3</h3>
+                <p class="music-card-artist">Artist</p>
+                <button class="music-play-btn" data-index="2"><i class="fas fa-play"></i></button>
+              </div>
+              <audio preload="none"><source src="" type="audio/mpeg"></audio>
+            </div>
+            <div class="music-card" data-index="3" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+              <div class="music-card-overlay">
+                <h3 class="music-card-title">Track 4</h3>
+                <p class="music-card-artist">Artist</p>
+                <button class="music-play-btn" data-index="3"><i class="fas fa-play"></i></button>
+              </div>
+              <audio preload="none"><source src="" type="audio/mpeg"></audio>
+            </div>
           </div>
-          <div class="music-card-info">
-            <h3 class="music-card-title">Track 2</h3>
-            <p class="music-card-artist">Artist</p>
+          <div class="music-dots">
+            <span class="music-dot active" data-index="0"></span>
+            <span class="music-dot" data-index="1"></span>
+            <span class="music-dot" data-index="2"></span>
+            <span class="music-dot" data-index="3"></span>
           </div>
-          <audio class="music-player" controls preload="none">
-            <source src="" type="audio/mpeg">
-          </audio>
-        </div>
-        <div class="music-card">
-          <div class="music-card-art" style="background: linear-gradient(135deg, #14b8a6, #3b82f6);">
-            <i class="fas fa-music"></i>
-          </div>
-          <div class="music-card-info">
-            <h3 class="music-card-title">Track 3</h3>
-            <p class="music-card-artist">Artist</p>
-          </div>
-          <audio class="music-player" controls preload="none">
-            <source src="" type="audio/mpeg">
-          </audio>
         </div>
       </div>
     </div>
