@@ -642,7 +642,7 @@ a:hover {
 
 .hcard-left {
   flex-shrink: 0;
-  width: 160px;
+  width: 180px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -657,12 +657,12 @@ a:hover {
 }
 
 .hcard-logo {
-  width: 64px;
-  height: 64px;
+  width: 88px;
+  height: 88px;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.15);
-  padding: 6px;
+  padding: 8px;
 }
 
 .hcard-company-label {
