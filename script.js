@@ -220,6 +220,7 @@ function initMusicStack() {
   const wrapper = document.getElementById('musicStack');
   if (!wrapper) return;
 
+  const stack = wrapper.querySelector('.music-stack');
   const cards = wrapper.querySelectorAll('.music-card');
   const dots = wrapper.querySelectorAll('.music-dot');
   const totalCards = cards.length;
@@ -241,9 +242,13 @@ function initMusicStack() {
     });
   }
 
-  // Scroll on the stack area to switch cards
-  const stack = wrapper.querySelector('.music-stack');
-  stack.addEventListener('wheel', (e) => {
+  // Wheel event: use document-level listener, check if mouse is over stack
+  let mouseOverStack = false;
+  stack.addEventListener('mouseenter', () => { mouseOverStack = true; });
+  stack.addEventListener('mouseleave', () => { mouseOverStack = false; });
+
+  document.addEventListener('wheel', (e) => {
+    if (!mouseOverStack) return;
     e.preventDefault();
     if (isScrolling) return;
     isScrolling = true;
@@ -266,9 +271,10 @@ function initMusicStack() {
     });
   });
 
-  // Play/pause buttons
+  // Play/pause buttons + progress bar
   const playBtns = wrapper.querySelectorAll('.music-play-btn');
   let currentlyPlaying = null;
+  let currentPlayingIdx = null;
 
   playBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -280,36 +286,62 @@ function initMusicStack() {
         currentlyPlaying.pause();
         currentlyPlaying.currentTime = 0;
         playBtns.forEach(b => b.classList.remove('playing'));
+        if (currentPlayingIdx !== null) {
+          const prevFill = cards[currentPlayingIdx].querySelector('.music-progress-fill');
+          if (prevFill) prevFill.style.width = '0%';
+        }
       }
 
       if (audio.paused) {
         audio.play();
         btn.classList.add('playing');
         currentlyPlaying = audio;
+        currentPlayingIdx = idx;
       } else {
         audio.pause();
         btn.classList.remove('playing');
         currentlyPlaying = null;
+        currentPlayingIdx = null;
       }
     });
   });
 
-  // When audio ends, reset button state
+  // Progress bar updates + seek
   cards.forEach((card, i) => {
     const audio = card.querySelector('audio');
+    const progressBar = card.querySelector('.music-progress-bar');
+    const progressFill = card.querySelector('.music-progress-fill');
+
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) {
+        progressFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+      }
+    });
+
     audio.addEventListener('ended', () => {
       playBtns[i].classList.remove('playing');
+      progressFill.style.width = '0%';
       currentlyPlaying = null;
+      currentPlayingIdx = null;
+    });
+
+    progressBar.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (audio.duration) {
+        const rect = progressBar.getBoundingClientRect();
+        const ratio = (e.clientX - rect.left) / rect.width;
+        audio.currentTime = ratio * audio.duration;
+      }
     });
   });
 
   // Touch swipe support for mobile
   let touchStartY = 0;
-  wrapper.addEventListener('touchstart', (e) => {
+  stack.addEventListener('touchstart', (e) => {
     touchStartY = e.touches[0].clientY;
   }, { passive: true });
 
-  wrapper.addEventListener('touchend', (e) => {
+  stack.addEventListener('touchend', (e) => {
     const deltaY = touchStartY - e.changedTouches[0].clientY;
     if (Math.abs(deltaY) > 30) {
       if (deltaY > 0) {
