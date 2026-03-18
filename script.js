@@ -242,13 +242,8 @@ function initMusicStack() {
     });
   }
 
-  // Wheel event: use document-level listener, check if mouse is over stack
-  let mouseOverStack = false;
-  stack.addEventListener('mouseenter', () => { mouseOverStack = true; });
-  stack.addEventListener('mouseleave', () => { mouseOverStack = false; });
-
-  document.addEventListener('wheel', (e) => {
-    if (!mouseOverStack) return;
+  // Wheel event: bind on each card directly (avoids Chrome passive intervention on document)
+  function handleWheel(e) {
     e.preventDefault();
     if (isScrolling) return;
     isScrolling = true;
@@ -261,7 +256,11 @@ function initMusicStack() {
     updateStack(currentIndex);
 
     setTimeout(() => { isScrolling = false; }, 400);
-  }, { passive: false });
+  }
+
+  cards.forEach(card => {
+    card.addEventListener('wheel', handleWheel, { passive: false });
+  });
 
   // Click dots to switch
   dots.forEach(dot => {
