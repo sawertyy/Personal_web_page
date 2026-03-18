@@ -242,7 +242,8 @@ function initMusicStack() {
   }
 
   // Scroll on the stack area to switch cards
-  wrapper.addEventListener('wheel', (e) => {
+  const stack = wrapper.querySelector('.music-stack');
+  stack.addEventListener('wheel', (e) => {
     e.preventDefault();
     if (isScrolling) return;
     isScrolling = true;

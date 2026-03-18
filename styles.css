@@ -1045,30 +1045,30 @@ a:hover {
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
 }
 
-/* Stacking positions — scattered photo style */
+/* Stacking positions — compact photo stack */
 .music-card.active {
-  transform: rotate(-2deg);
+  transform: rotate(-1deg);
   z-index: 4;
   opacity: 1;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
 }
 
 .music-card.pos-1 {
-  transform: translate(18px, -8px) rotate(6deg);
+  transform: translate(8px, -5px) rotate(4deg);
   z-index: 3;
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .music-card.pos-2 {
-  transform: translate(-12px, 10px) rotate(-5deg);
+  transform: translate(-6px, 6px) rotate(-3deg);
   z-index: 2;
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 .music-card.pos-3 {
-  transform: translate(22px, 18px) rotate(10deg);
+  transform: translate(10px, 10px) rotate(7deg);
   z-index: 1;
-  opacity: 0.5;
+  opacity: 0.75;
 }
 
 .music-card.hidden {
