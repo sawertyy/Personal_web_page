@@ -292,7 +292,7 @@ function initMusicStack() {
       }
 
       if (audio.paused) {
-        audio.play();
+        audio.play().catch(() => {});
         btn.classList.add('playing');
         currentlyPlaying = audio;
         currentPlayingIdx = idx;
