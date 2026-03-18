@@ -1120,6 +1120,7 @@ a:hover {
 .music-card-overlay {
   position: absolute;
   inset: 0;
+  z-index: 2;
   background: linear-gradient(
     to top,
     rgba(0, 0, 0, 0.75) 0%,
@@ -1128,11 +1129,13 @@ a:hover {
   );
   backdrop-filter: blur(2px);
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.35s ease;
 }
 
 .music-card.active:hover .music-card-overlay {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .music-card-title {
