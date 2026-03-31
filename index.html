@@ -1,34 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jiayi Hu | Personal Website</title>
+  <title>Jiayi Hu | AI Product Builder</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700;900&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Prevent FOUC: apply saved theme before render -->
   <script>
     (function() {
       var saved = localStorage.getItem('theme');
-      if (saved) {
-        document.documentElement.setAttribute('data-theme', saved);
-      }
+      if (saved) document.documentElement.setAttribute('data-theme', saved);
     })();
   </script>
 </head>
 <body>
+  <!-- Liquid Ether Background Canvas -->
+  <canvas id="liquidEtherCanvas"></canvas>
+
   <!-- Navigation -->
   <nav class="navbar">
     <div class="nav-logo">JH</div>
     <div class="nav-links">
-      <a href="#home">Home</a>
-      <a href="#origin">About</a>
-      <a href="#academic">Education</a>
-      <a href="#professional">Experience</a>
-      <a href="#news">News</a>
+      <a href="#home" class="active">Home</a>
+      <a href="#about">About</a>
+      <a href="#education">Education</a>
+      <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
       <a href="#music">Music</a>
       <a href="#contact">Contact</a>
@@ -46,313 +45,156 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <section id="home" class="hero">
-    <div class="hero-content">
-      <p class="hero-subtitle">Welcome to my personal homepage</p>
-      <div class="hero-name-wrapper">
-        <canvas id="dotMatrixCanvas"></canvas>
-      </div>
-      <p class="hero-role">AI Product Builder & Influencer</p>
-      <p class="hero-identity">Technical Romanticist</p>
-      <div class="hero-buttons">
-        <a href="https://www.xiaohongshu.com/user/profile/616993e0000000000201a75b?xsec_token=YBn0IWe2wm4A5foi42kf20UXkuMh5hap4q_qxqHtNgpVU=&xsec_source=app_share&xhsshare=WeixinSession&appuid=616993e0000000000201a75b&apptime=1773841992&share_id=c9d528275f494b6ea77bb009c127dea9&wechatWid=7a17883496a97b08ebb2072d5971548e&wechatOrigin=menu" target="_blank" rel="noopener noreferrer" class="hero-btn btn-outline">
-          <i class="fas fa-book-open"></i>
-          <span>RedBook</span>
-          <i class="fas fa-arrow-up-right-from-square btn-external"></i>
-        </a>
-        <a href="https://www.researchgate.net/profile/Jiayi-Hu-32?ev=hdr_xprf" target="_blank" rel="noopener noreferrer" class="hero-btn btn-filled">
-          <i class="fab fa-researchgate"></i>
-          <span>ResearchGate</span>
-        </a>
-        <a href="https://github.com/sawertyy" target="_blank" rel="noopener noreferrer" class="hero-btn btn-outline">
-          <i class="fab fa-github"></i>
-          <span>GitHub</span>
-        </a>
-      </div>
-    </div>
-    <div class="hero-bottom">
-      <p class="hero-welcome"></p>
-      <div class="scroll-indicator">
-        <span>dive in</span>
-        <div class="scroll-arrow">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  <!-- Scroll Container -->
+  <main class="snap-container" id="snapContainer">
+
+    <!-- Hero Section -->
+    <section id="home" class="snap-section hero">
+      <div class="hero-content">
+        <div class="hero-name-wrapper">
+          <canvas id="dotMatrixCanvas"></canvas>
+        </div>
+        <p class="hero-identity"><em>Technical Romanticist</em></p>
+        <p class="hero-role">AI Product Builder &mdash; Exploring the intersection of data, design & human insight</p>
+        <div class="hero-social">
+          <a href="https://github.com/sawertyy" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="https://www.researchgate.net/profile/Jiayi-Hu-32?ev=hdr_xprf" target="_blank" rel="noopener noreferrer" aria-label="ResearchGate"><i class="fab fa-researchgate"></i></a>
+          <a href="https://www.xiaohongshu.com/user/profile/616993e0000000000201a75b?xsec_token=YBn0IWe2wm4A5foi42kf20UXkuMh5hap4q_qxqHtNgpVU=&xsec_source=app_share&xhsshare=WeixinSession&appuid=616993e0000000000201a75b&apptime=1773841992&share_id=c9d528275f494b6ea77bb009c127dea9&wechatWid=7a17883496a97b08ebb2072d5971548e&wechatOrigin=menu" target="_blank" rel="noopener noreferrer" aria-label="RedBook"><i class="fas fa-book-open"></i></a>
         </div>
       </div>
-    </div>
-  </section>
+      <div class="hero-scroll-hint">
+        <span>scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
 
-  <!-- Origin Story Section -->
-  <section id="origin" class="section origin-section">
-    <div class="section-container">
-      <h2 class="section-title">
-        <span class="title-number">01</span>
-        About Me
-      </h2>
-      <div class="origin-content">
-        <div class="origin-image">
+    <!-- About Section -->
+    <section id="about" class="snap-section about-section">
+      <div class="about-layout">
+        <div class="about-photo">
           <img src="profile.jpg" alt="Jiayi Hu" class="profile-photo">
         </div>
-        <div class="origin-text">
-          <p class="origin-intro">Hi! I'm <strong>Jiayi Hu</strong>, an AI product enthusiast and data explorer from Lishui, Zhejiang, China.</p>
-          <p>I graduated from China University of Geosciences (Beijing) with a B.S. in Geographic Information Science. Currently, I'm pursuing a Master's in Surveying and Mapping Engineering (Spatiotemporal Big Data) at Wuhan University, admitted through the recommended exemption program. During my undergraduate studies, I maintained a GPA of 3.86 (top 5%), received the National Scholarship, and published an SCI Q2 paper as the first author.</p>
-          <p>I have extensive internship experience at companies including Baidu, Xiaohongshu (RED), and BaiRong Cloud. I specialize in transforming data insights into product strategies and am passionate about LLM applications, user growth, and data-driven product design. I also won two national-level awards in the China Undergraduate Mathematical Contest in Modeling.</p>
-          <p>My career goal is to become a <strong>Product Manager</strong>. If you'd like to learn more about my background and qualifications, feel free to download my resume.</p>
-          <a href="resume.pdf" download class="resume-link"><i class="fas fa-download"></i> Download My Resume</a>
-          <div class="origin-stats">
+        <div class="about-text">
+          <h2 class="section-label">About</h2>
+          <p class="about-headline">Master's student at <strong>Wuhan University</strong>, SCI first-author, with product internships at <strong>Baidu</strong>, <strong>Xiaohongshu</strong>, <strong>BaiRong Cloud</strong> & <strong>Esri China</strong>.</p>
+          <p class="about-sub">Passionate about LLM applications, user growth, and data-driven product design. Aspiring Product Manager bridging AI and human experience.</p>
+          <div class="about-stats">
             <div class="stat">
               <span class="stat-number">4</span>
               <span class="stat-label">Product Internships</span>
             </div>
             <div class="stat">
               <span class="stat-number">SCI</span>
-              <span class="stat-label">Q2 First Author Paper</span>
+              <span class="stat-label">Q2 First Author</span>
             </div>
             <div class="stat">
               <span class="stat-number">2</span>
-              <span class="stat-label">National Modeling Awards</span>
+              <span class="stat-label">National Awards</span>
             </div>
+          </div>
+          <a href="resume.pdf" download class="resume-btn"><i class="fas fa-download"></i> Resume</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="snap-section education-section">
+      <div class="section-inner">
+        <h2 class="section-label">Education</h2>
+        <div class="edu-timeline">
+          <div class="edu-item anim-item">
+            <span class="edu-date">2025 — Present</span>
+            <h3 class="edu-school">Wuhan University</h3>
+            <p class="edu-degree">M.Eng. Surveying & Mapping (Spatiotemporal Big Data)</p>
+            <p class="edu-note">Project 985 &middot; Recommended Admission</p>
+          </div>
+          <div class="edu-item anim-item">
+            <span class="edu-date">2021 — 2025</span>
+            <h3 class="edu-school">China University of Geosciences, Beijing</h3>
+            <p class="edu-degree">B.S. Geographic Information Science</p>
+            <p class="edu-note">GPA 3.86 (Top 5%) &middot; National Scholarship &middot; Project 211</p>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Academic Section -->
-  <section id="academic" class="section academic-section">
-    <div class="section-container">
-      <h2 class="section-title">
-        <span class="title-number">02</span>
-        Education
-      </h2>
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-date">Sep 2025 — Present</span>
-            <h3>M.Eng. in Surveying & Mapping (Spatiotemporal Big Data)</h3>
-            <p class="timeline-place">Wuhan University (Project 985 · Recommended Admission)</p>
-            <p>Researching spatiotemporal big data analysis and applications, focusing on innovative AI practices in geospatial data.</p>
+    <!-- Experience Section -->
+    <section id="experience" class="snap-section experience-section">
+      <div class="section-inner">
+        <h2 class="section-label">Experience</h2>
+        <div class="exp-scroll-wrapper">
+          <div class="exp-track">
+            <div class="exp-card anim-item">
+              <div class="exp-card-accent" style="background: linear-gradient(135deg, #0f2b46, #1a4a7a);"></div>
+              <div class="exp-card-body">
+                <img src="images/%E7%99%BE%E5%BA%A6.svg" alt="Baidu" class="exp-logo">
+                <h3>AI Product Intern</h3>
+                <p class="exp-company">Baidu &middot; Jan 2026 — Present</p>
+                <p class="exp-desc">Optimized user initial query features and drove creative writing model evaluation for continuous AI product iteration.</p>
+              </div>
+            </div>
+            <div class="exp-card anim-item">
+              <div class="exp-card-accent" style="background: linear-gradient(135deg, #8b2500, #d4a853);"></div>
+              <div class="exp-card-body">
+                <img src="images/%E5%B0%8F%E7%BA%A2%E4%B9%A6.png" alt="Xiaohongshu" class="exp-logo">
+                <h3>E-commerce Product Intern</h3>
+                <p class="exp-company">Xiaohongshu (RED) &middot; Sep — Dec 2025</p>
+                <p class="exp-desc">Led AI-powered search innovation, designed filter keyword recommendations and trending search cards to boost conversion.</p>
+              </div>
+            </div>
+            <div class="exp-card anim-item">
+              <div class="exp-card-accent" style="background: linear-gradient(135deg, #1a1a2e, #0f2b46);"></div>
+              <div class="exp-card-body">
+                <img src="images/%E7%99%BE%E8%9E%8D%E4%BA%91%E5%88%9B.png" alt="BaiRong Cloud" class="exp-logo">
+                <h3>AI Product Intern</h3>
+                <p class="exp-company">BaiRong Cloud &middot; Jun — Sep 2025</p>
+                <p class="exp-desc">Explored AI Agent solutions for enterprise scenarios and promoted LLM product adoption for efficiency improvement.</p>
+              </div>
+            </div>
+            <div class="exp-card anim-item">
+              <div class="exp-card-accent" style="background: linear-gradient(135deg, #0f2b46, #2a6847);"></div>
+              <div class="exp-card-body">
+                <img src="images/%E6%98%93%E6%99%BA%E7%91%9E.webp" alt="Esri China" class="exp-logo">
+                <h3>Product Operations Intern</h3>
+                <p class="exp-company">Esri China &middot; Jul — Oct 2024</p>
+                <p class="exp-desc">GIS product solution design, technical documentation, and user acquisition strategy execution.</p>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-date">Sep 2021 — Jun 2025</span>
-            <h3>B.S. in Geographic Information Science</h3>
-            <p class="timeline-place">China University of Geosciences, Beijing (Project 211)</p>
-            <p>GPA 3.86, top 5% in major. Received National Scholarship. Published SCI Q2 paper as first author. Won two national-level awards in the China Undergraduate Mathematical Contest in Modeling, and a Beijing First Prize.</p>
+        <div class="exp-scroll-hint">
+          <i class="fas fa-arrow-left"></i>
+          <span>Swipe to explore</span>
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="snap-section projects-section">
+      <div class="section-inner">
+        <h2 class="section-label">Publications & Projects</h2>
+        <div class="project-list">
+          <div class="project-item anim-item">
+            <span class="project-badge">SCI Q2 &middot; First Author</span>
+            <h3><a href="https://doi.org/10.3390/land13111830" target="_blank">Multi-Scenario Simulation of Urban Expansion Considering Multilevel Urban Flows</a></h3>
+            <p class="project-meta"><strong>Hu, J.</strong>; Liu, D.; Zheng, X. &mdash; <em>Land</em>, 2024</p>
+          </div>
+          <div class="project-item anim-item">
+            <span class="project-badge">National Award</span>
+            <h3>Supermarket Vegetable Pricing Optimization</h3>
+            <p class="project-meta"><strong>Hu, J.</strong>; Xu, J.; Ye, L. &mdash; CUMCM 2024 &middot; Beijing First Prize</p>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Professional Section -->
-  <section id="professional" class="section professional-section">
-    <div class="section-container">
-      <h2 class="section-title">
-        <span class="title-number">03</span>
-        Experience
-      </h2>
-      <div class="hcard-list">
-        <div class="hcard">
-          <div class="hcard-left" style="background: linear-gradient(135deg, #3b82f6, #6366f1);">
-            <img src="images/百度.svg" alt="Baidu" class="hcard-logo">
-            <span class="hcard-company-label">Baidu</span>
-          </div>
-          <div class="hcard-right">
-            <h3 class="hcard-title">AI Product Intern</h3>
-            <p class="hcard-meta"><strong>Baidu</strong> · Jan 2026 — Present</p>
-            <div class="hcard-badges">
-              <span class="hcard-badge badge-accent">AI Product</span>
-              <span class="hcard-badge badge-muted">Internship</span>
-            </div>
-            <ul class="hcard-details">
-              <li>Optimized user initial query features and designed showcase card layouts to enhance display effectiveness</li>
-              <li>Participated in creative writing model evaluation and drove continuous AI product experience iteration</li>
-            </ul>
-            <div class="card-tags">
-              <span>Prompt Engineering</span>
-              <span>Model Evaluation</span>
-              <span>Product Design</span>
-            </div>
-          </div>
-        </div>
-        <div class="hcard">
-          <div class="hcard-left" style="background: linear-gradient(135deg, #ef4444, #f97316);">
-            <img src="images/小红书.png" alt="Xiaohongshu" class="hcard-logo">
-            <span class="hcard-company-label">RED</span>
-          </div>
-          <div class="hcard-right">
-            <h3 class="hcard-title">E-commerce Product Intern</h3>
-            <p class="hcard-meta"><strong>Xiaohongshu (RED)</strong> · Sep 2025 — Dec 2025</p>
-            <div class="hcard-badges">
-              <span class="hcard-badge badge-accent">E-commerce</span>
-              <span class="hcard-badge badge-muted">Internship</span>
-            </div>
-            <ul class="hcard-details">
-              <li>Led AI product innovation, optimized filter keyword recommendations for search</li>
-              <li>Designed product card styles and "Trending Searches" recommendation cards to improve e-commerce conversion</li>
-            </ul>
-            <div class="card-tags">
-              <span>AI Innovation</span>
-              <span>User Experience</span>
-              <span>Search Optimization</span>
-            </div>
-          </div>
-        </div>
-        <div class="hcard">
-          <div class="hcard-left" style="background: linear-gradient(135deg, #8b5cf6, #6366f1);">
-            <img src="images/百融云创.png" alt="BaiRong Cloud" class="hcard-logo">
-            <span class="hcard-company-label">BaiRong</span>
-          </div>
-          <div class="hcard-right">
-            <h3 class="hcard-title">AI Product Intern</h3>
-            <p class="hcard-meta"><strong>BaiRong Cloud</strong> · Jun 2025 — Sep 2025</p>
-            <div class="hcard-badges">
-              <span class="hcard-badge badge-accent">AI Agent</span>
-              <span class="hcard-badge badge-muted">Internship</span>
-            </div>
-            <ul class="hcard-details">
-              <li>Contributed to AI Agent product innovation, explored intelligent agent solutions for business scenarios</li>
-              <li>Promoted the adoption of LLM products for enterprise efficiency improvement</li>
-            </ul>
-            <div class="card-tags">
-              <span>LLM Applications</span>
-              <span>Product Innovation</span>
-              <span>AI Agent</span>
-            </div>
-          </div>
-        </div>
-        <div class="hcard">
-          <div class="hcard-left" style="background: linear-gradient(135deg, #059669, #10b981);">
-            <img src="images/易智瑞.webp" alt="Esri China" class="hcard-logo">
-            <span class="hcard-company-label">Esri</span>
-          </div>
-          <div class="hcard-right">
-            <h3 class="hcard-title">Product Operations Intern</h3>
-            <p class="hcard-meta"><strong>Esri China</strong> · Jul 2024 — Oct 2024</p>
-            <div class="hcard-badges">
-              <span class="hcard-badge badge-accent">GIS</span>
-              <span class="hcard-badge badge-muted">Internship</span>
-            </div>
-            <ul class="hcard-details">
-              <li>Responsible for GIS product solution design and technical documentation</li>
-              <li>Participated in user acquisition strategy formulation and execution</li>
-            </ul>
-            <div class="card-tags">
-              <span>Product Ops</span>
-              <span>Solution Design</span>
-              <span>GIS</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- News Section -->
-  <section id="news" class="section news-section">
-    <div class="section-container">
-      <h2 class="section-title">
-        <span class="title-number">04</span>
-        News
-      </h2>
-      <ul class="news-list">
-        <li><em>2026.01</em> : Joined <strong>Baidu</strong> as an AI Product Intern, working on user query optimization and creative writing model evaluation.</li>
-        <li><em>2025.09</em> : Started pursuing M.Eng. in Surveying & Mapping Engineering (Spatiotemporal Big Data) at <strong>Wuhan University</strong>.</li>
-        <li><em>2025.09</em> : Joined <strong>Xiaohongshu (RED)</strong> as an E-commerce Product Intern, leading AI-powered search innovations.</li>
-        <li><em>2025.06</em> : Joined <strong>BaiRong Cloud</strong> as an AI Product Intern, exploring AI Agent solutions for enterprise scenarios.</li>
-        <li><em>2024.11</em> : Paper on multi-scenario simulation of urban expansion accepted by <strong><em>Land</em></strong> (SCI Q2).</li>
-        <li><em>2024.07</em> : Joined <strong>Esri China</strong> as a Product Operations Intern.</li>
-        <li><em>2024</em> : Won <strong>National Award</strong> in China Undergraduate Mathematical Contest in Modeling (twice) and Beijing First Prize.</li>
-        <li><em>2023</em> : Received <strong>National Scholarship</strong> during undergraduate studies at China University of Geosciences, Beijing.</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Publications & Projects Section -->
-  <section id="projects" class="section projects-section">
-    <div class="section-container">
-      <h2 class="section-title">
-        <span class="title-number">05</span>
-        Publications and Projects
-      </h2>
-      <div class="pub-list">
-        <div class="pub-item">
-          <div class="pub-venue-badge">Land · 2024</div>
-          <h3 class="pub-title"><a href="https://doi.org/10.3390/land13111830" target="_blank">Research on Multi-Scenario Simulation of Urban Expansion for Beijing–Tianjin–Hebei Region Considering Multilevel Urban Flows</a></h3>
-          <p class="pub-authors"><strong>Hu, J.</strong>; Liu, D.; Zheng, X.</p>
-          <p class="pub-links">
-            <a href="https://doi.org/10.3390/land13111830" target="_blank"><strong>Paper</strong></a> | <strong class="pub-type">SCI Q2 · First Author</strong>
-          </p>
-          <p class="pub-citation"><em>Land</em>, 2024, 13, 1830. Proposed a coupled HGLM-PLUS model integrating multilevel urban flows (economy, transportation, population, information) to simulate urban expansion. Improved overall accuracy by 0.047, Kappa coefficient by 0.207, and FoM index by 0.051.</p>
-        </div>
-        <div class="pub-item">
-          <div class="pub-venue-badge">CUMCM · 2024</div>
-          <h3 class="pub-title">Supermarket Vegetable Pricing Optimization</h3>
-          <p class="pub-authors"><strong>Hu, J.</strong> Xu,J; Ye, L.</p>
-          <p class="pub-links">
-            <strong class="pub-type">National Award · Beijing First Prize</strong>
-          </p>
-          <p class="pub-citation">China Undergraduate Mathematical Contest in Modeling. Built a bi-objective optimization model for supermarket vegetable restocking and pricing decisions. Provided quantitative support for business operations.</p>
-        </div>
-      </div>
-
-      <h3 class="sub-section-title">Skills</h3>
-      <div class="skills-grid">
-        <div class="skill-category">
-          <h4><i class="fas fa-palette"></i> Product Design</h4>
-          <div class="card-tags">
-            <span>Figma</span>
-            <span>Xmind</span>
-            <span>PRD Documentation</span>
-          </div>
-        </div>
-        <div class="skill-category">
-          <h4><i class="fas fa-database"></i> Data Analysis</h4>
-          <div class="card-tags">
-            <span>SQL</span>
-            <span>Python</span>
-            <span>R</span>
-            <span>Tableau</span>
-            <span>Excel</span>
-          </div>
-        </div>
-        <div class="skill-category">
-          <h4><i class="fas fa-brain"></i> AI</h4>
-          <div class="card-tags">
-            <span>Prompt Engineering</span>
-            <span>Agent Development</span>
-            <span>ML</span>
-            <span>Deep Learning</span>
-          </div>
-        </div>
-        <div class="skill-category">
-          <h4><i class="fas fa-star"></i> Other</h4>
-          <div class="card-tags">
-            <span>CET-6</span>
-            <span>Canva</span>
-            <span>Photoshop</span>
-            <span>Premiere Pro</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Music Section -->
-  <section id="music" class="section music-section">
-    <div class="section-container">
-      <h2 class="section-title">
-        <span class="title-number">06</span>
-        Music
-      </h2>
+    <!-- Music Section -->
+    <section id="music" class="snap-section music-section">
       <div class="music-layout">
         <div class="music-text">
-          <p class="music-desc">Music has always been a very special part of my life — not about chasing something, but about <strong>feeling</strong> something.</p>
-          <p class="music-desc">My taste in music is quite broad, but I mainly listen to <strong>melodic bass</strong>, <strong>chill house</strong>, <strong>synthpop</strong>, <strong>indie pop</strong>, and <strong>R&B</strong>. I don't have a particular favorite artist — I only recognize a song. Check out the cards on the right for what I've been listening to lately ^^</p>
+          <h2 class="section-label">Music</h2>
+          <p class="music-tagline">I don't follow artists &mdash; I follow <strong>feelings</strong>.</p>
           <div class="music-genres">
             <span>Melodic Bass</span>
             <span>Chill House</span>
@@ -360,7 +202,7 @@
             <span>Indie Pop</span>
             <span>R&B</span>
           </div>
-          <p class="music-hint"><i class="fas fa-hand-pointer"></i> Scroll on the cards to switch tracks</p>
+          <p class="music-hint"><i class="fas fa-hand-pointer"></i> Scroll on cards to switch</p>
         </div>
         <div class="music-stack-wrapper" id="musicStack">
           <div class="music-stack">
@@ -429,32 +271,27 @@
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Contact Section -->
-  <section id="contact" class="section contact-section">
-    <div class="section-container">
-      <h2 class="section-title">
-        <span class="title-number">07</span>
-        Get in Touch
-      </h2>
-      <div class="contact-content">
-        <p class="contact-text">Whether it's product collaboration, academic exchange, or just a casual chat — I'd love to connect with you!</p>
-        <a href="mailto:jiayi_1016@163.com" class="contact-btn">Send Email</a>
+    <!-- Contact Section -->
+    <section id="contact" class="snap-section contact-section">
+      <div class="contact-inner">
+        <h2 class="section-label">Let's Connect</h2>
+        <p class="contact-text">Open to product collaboration, academic exchange, or a conversation about the future of AI.</p>
+        <a href="mailto:jiayi_1016@163.com" class="contact-btn">Say Hello</a>
         <div class="contact-links">
           <a href="mailto:jiayi_1016@163.com"><i class="fas fa-envelope"></i> jiayi_1016@163.com</a>
           <span class="separator">&middot;</span>
           <a href="tel:18074289569"><i class="fas fa-phone"></i> 180-7428-9569</a>
         </div>
+        <footer class="footer">
+          <p class="footer-tagline">"Rationality builds the structure. Sensitivity finds the beauty."</p>
+          <p>Designed & Built by Jiayi Hu &copy; 2026</p>
+        </footer>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <p>Designed & Built by Jiayi Hu &copy; 2026</p>
-  </footer>
+  </main>
 
   <script src="script.js"></script>
 </body>
