@@ -17,15 +17,15 @@
   --text-primary: #1a1a2e;
   --text-secondary: #4a4a5a;
   --text-muted: #8a8a9a;
-  --accent: #d4a853;
-  --accent-light: #d4a853;
-  --accent-hover: #c49540;
+  --accent: #2563EB;
+  --accent-light: #2563EB;
+  --accent-hover: #1D4ED8;
   --ocean: #0f2b46;
   --ocean-light: #1a4a7a;
   --border: #e8e4de;
   --border-light: #d8d4ce;
-  --tag-bg: rgba(212, 168, 83, 0.06);
-  --tag-border: rgba(212, 168, 83, 0.2);
+  --tag-bg: rgba(37, 99, 235, 0.06);
+  --tag-border: rgba(37, 99, 235, 0.2);
   --card-shadow: rgba(15, 43, 70, 0.06);
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-serif: 'DM Serif Display', Georgia, serif;
@@ -42,15 +42,15 @@
   --text-primary: #e8e4de;
   --text-secondary: #a0aab8;
   --text-muted: #6a7a8a;
-  --accent: #d4a853;
-  --accent-light: #e8c97a;
-  --accent-hover: #f0d88a;
+  --accent: #60A5FA;
+  --accent-light: #93BBFC;
+  --accent-hover: #B8D0FF;
   --ocean: #0f2b46;
   --ocean-light: #1a4a7a;
   --border: #1e3450;
   --border-light: #2a4a6a;
-  --tag-bg: rgba(212, 168, 83, 0.08);
-  --tag-border: rgba(212, 168, 83, 0.2);
+  --tag-bg: rgba(96, 165, 250, 0.08);
+  --tag-border: rgba(96, 165, 250, 0.2);
   --card-shadow: rgba(0, 0, 0, 0.3);
   color-scheme: dark;
 }
@@ -83,14 +83,20 @@ a:hover {
   color: #fff;
 }
 
-/* ===== Liquid Ether Canvas ===== */
-#liquidEtherCanvas {
+/* ===== Liquid Ether Container ===== */
+#liquidEtherContainer {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
   z-index: 0;
   pointer-events: none;
+}
+
+#liquidEtherContainer canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
 }
 
 /* ===== Scroll Snap Container ===== */
@@ -273,16 +279,6 @@ a:hover {
   max-width: 1100px;
 }
 
-.hero-name-wrapper {
-  width: 100%;
-  margin-bottom: 1.5rem;
-}
-
-#dotMatrixCanvas {
-  width: 100%;
-  display: block;
-}
-
 .hero-identity {
   font-family: var(--font-serif);
   font-size: 2rem;
@@ -324,7 +320,7 @@ a:hover {
   color: var(--accent);
   border-color: var(--accent);
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(212, 168, 83, 0.15);
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
 }
 
 .hero-scroll-hint {
@@ -464,7 +460,7 @@ a:hover {
 
 .resume-btn:hover {
   background: var(--accent);
-  color: var(--ocean);
+  color: #ffffff;
   transform: translateY(-1px);
 }
 
@@ -656,7 +652,7 @@ a:hover {
 
 .project-item:hover {
   border-color: var(--accent);
-  box-shadow: 0 8px 30px rgba(212, 168, 83, 0.06);
+  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.06);
 }
 
 .project-badge {
@@ -916,7 +912,7 @@ a:hover {
   height: 44px;
   border-radius: 50%;
   border: none;
-  background: rgba(212,168,83,0.95);
+  background: rgba(37,99,235,0.95);
   color: #0f2b46;
   font-size: 0.95rem;
   cursor: pointer;
@@ -928,7 +924,7 @@ a:hover {
 }
 
 .music-play-btn:hover {
-  background: #d4a853;
+  background: #2563EB;
   transform: scale(1.08);
 }
 
@@ -995,7 +991,7 @@ a:hover {
   display: inline-block;
   padding: 0.9rem 3rem;
   background: var(--accent);
-  color: var(--ocean);
+  color: #ffffff;
   border: 2px solid var(--accent);
   border-radius: 50px;
   font-size: 0.95rem;
@@ -1007,7 +1003,7 @@ a:hover {
 .contact-btn:hover {
   background: transparent;
   color: var(--accent);
-  box-shadow: 0 4px 25px rgba(212,168,83,0.25);
+  box-shadow: 0 4px 25px rgba(37,99,235,0.25);
   transform: translateY(-2px);
 }
 
