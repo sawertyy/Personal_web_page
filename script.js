@@ -1310,14 +1310,33 @@ function initCardSwap() {
   // Initial position
   placeAll(false);
 
-  function updateCounter() {
+  function updateCounter(direction) {
     var frontIdx = order[0];
     var card = cards[frontIdx];
-    // Update chapter display
     var chapterNum = document.getElementById('journeyChapterNum');
     var chapterLabel = document.getElementById('journeyChapterLabel');
-    if (chapterNum) chapterNum.textContent = String(frontIdx + 1).padStart(2, '0');
-    if (chapterLabel) chapterLabel.textContent = card.typeLabel;
+    var slideOut = direction === 'up' ? -30 : 30;
+    var slideIn = direction === 'up' ? 30 : -30;
+
+    if (chapterNum && chapterLabel) {
+      // Slide out old text
+      gsap.to([chapterNum, chapterLabel], {
+        y: slideOut, opacity: 0, duration: 0.2, ease: 'power2.in',
+        onComplete: function() {
+          chapterNum.textContent = String(frontIdx + 1).padStart(2, '0');
+          chapterLabel.textContent = card.typeLabel;
+          // Slide in new text from opposite direction
+          gsap.fromTo([chapterNum, chapterLabel],
+            { y: slideIn, opacity: 0 },
+            { y: 0, opacity: chapterNum === chapterNum ? 0.25 : 1, duration: 0.3, ease: 'power2.out' }
+          );
+          // Fix: num has opacity 0.25, label has opacity 1
+          gsap.to(chapterNum, { opacity: 0.25, duration: 0.3, ease: 'power2.out' });
+          gsap.to(chapterLabel, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+        }
+      });
+    }
+
     // Sync active dot
     var frontType = card.type;
     var dots = document.querySelectorAll('.journey-dot');
@@ -1369,9 +1388,7 @@ function initCardSwap() {
       gsap.to(frontEl, {
         y: backSlot.y, opacity: backSlot.opacity,
         duration: 0.4, ease: 'power2.out',
-        onComplete: function() { isAnimating = false; updateCounter(); }
-      });
-    }, 350);
+        onComplete: function() { isAnimating = false; updateCounter('up'); }
   }
 
   // Reverse swap — back card slides in from top
@@ -1410,7 +1427,7 @@ function initCardSwap() {
     gsap.to(backEl, {
       y: frontSlot.y, opacity: 1,
       duration: 0.5, ease: 'power2.out',
-      onComplete: function() { isAnimating = false; updateCounter(); }
+      onComplete: function() { isAnimating = false; updateCounter('down'); }
     });
   }
 
