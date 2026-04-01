@@ -553,8 +553,17 @@ function initLiquidEther() {
       const forceY = (Mouse.diff.y / 2) * props.mouse_force + props.audioForce.y;
       const csX = props.cursor_size * props.cellScale.x;
       const csY = props.cursor_size * props.cellScale.y;
-      const centerX = Math.min(Math.max(Mouse.coords.x, -1 + csX + props.cellScale.x * 2), 1 - csX - props.cellScale.x * 2);
-      const centerY = Math.min(Math.max(Mouse.coords.y, -1 + csY + props.cellScale.y * 2), 1 - csY - props.cellScale.y * 2);
+      var centerX, centerY;
+      if (props.audioActive) {
+        var t = performance.now() * 0.0005;
+        centerX = Math.sin(t * 1.3) * 0.4;
+        centerY = Math.cos(t * 0.9) * 0.4;
+      } else {
+        centerX = Mouse.coords.x;
+        centerY = Mouse.coords.y;
+      }
+      centerX = Math.min(Math.max(centerX, -1 + csX + props.cellScale.x * 2), 1 - csX - props.cellScale.x * 2);
+      centerY = Math.min(Math.max(centerY, -1 + csY + props.cellScale.y * 2), 1 - csY - props.cellScale.y * 2);
       const u = this.mouse.material.uniforms;
       u.force.value.set(forceX, forceY);
       u.center.value.set(centerX, centerY);
@@ -762,7 +771,8 @@ function initLiquidEther() {
         cursor_size: audioReactive.connected ? this.options.audioCursorSize : this.options.cursorSize,
         mouse_force: audioReactive.connected ? this.options.audioMouseForce : this.options.mouseForce,
         cellScale: this.cellScale,
-        audioForce: audioReactive.force
+        audioForce: audioReactive.force,
+        audioActive: audioReactive.connected
       });
 
       let vel = this.fbos.vel_1;
