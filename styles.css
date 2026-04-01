@@ -689,6 +689,12 @@ a:hover {
   color: var(--accent);
 }
 
+.bento-resume-text {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
 .resume-link {
   display: inline-flex;
   align-items: center;
