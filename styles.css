@@ -496,7 +496,7 @@ a:hover {
 
 /* --- Intro card --- */
 .bento-intro {
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .bento-intro-text {
