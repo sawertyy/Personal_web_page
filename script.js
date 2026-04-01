@@ -1389,6 +1389,8 @@ function initCardSwap() {
         y: backSlot.y, opacity: backSlot.opacity,
         duration: 0.4, ease: 'power2.out',
         onComplete: function() { isAnimating = false; updateCounter('up'); }
+      });
+    }, 350);
   }
 
   // Reverse swap — back card slides in from top
