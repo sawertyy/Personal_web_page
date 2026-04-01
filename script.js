@@ -1545,12 +1545,14 @@ function initCardSwap() {
       }
 
       // === Post-hijack: hover-only card switching ===
-      if (isHoveringCards && !isAnimating && !wheelCooldown) {
+      if (isHoveringCards) {
         e.preventDefault();
-        wheelCooldown = true;
-        if (e.deltaY > 0) swap();
-        else if (e.deltaY < 0) swapReverse();
-        setTimeout(function() { wheelCooldown = false; }, 600);
+        if (!isAnimating && !wheelCooldown) {
+          wheelCooldown = true;
+          if (e.deltaY > 0) swap();
+          else if (e.deltaY < 0) swapReverse();
+          setTimeout(function() { wheelCooldown = false; }, 600);
+        }
         return;
       }
 
