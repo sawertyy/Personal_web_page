@@ -242,7 +242,7 @@ a:hover {
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
   position: relative;
   padding-left: 3rem;
 }
@@ -255,6 +255,15 @@ a:hover {
   width: 2rem;
   height: 1px;
   background: var(--accent);
+}
+
+.section-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
 }
 
 /* ===== Hero Section ===== */
