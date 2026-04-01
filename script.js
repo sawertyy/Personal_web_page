@@ -44,8 +44,8 @@ function initLiquidEther() {
     autoResumeDelay: 3000,
     autoRampDuration: 0.6,
     audioMouseForce: 0,
-    audioCursorSize: 80,
-    audioForceMultiplier: 0.8,
+    audioCursorSize: 50,
+    audioForceMultiplier: 0.3,
   };
 
   // --- Palette Texture ---
@@ -1864,6 +1864,10 @@ function initCardSwap() {
     document.querySelector('.journey-section')?.classList.remove('audio-active');
   }
 
+  // Expose for floating player
+  window._connectFluidAudio = connectFluidAudio;
+  window._disconnectFluidAudio = disconnectFluidAudio;
+
   // Mini player on music card
   var musicCardEl = stackEl.querySelector('[data-card-id="music"]');
   if (musicCardEl) {
@@ -2275,9 +2279,11 @@ function initFloatingPlayer() {
     if (window._fpAudio.paused) {
       window._fpAudio.play().catch(function() {});
       fpPlayBtn.querySelector('i').className = 'fas fa-pause';
+      if (window._connectFluidAudio) window._connectFluidAudio(window._fpAudio);
     } else {
       window._fpAudio.pause();
       fpPlayBtn.querySelector('i').className = 'fas fa-play';
+      if (window._disconnectFluidAudio) window._disconnectFluidAudio();
     }
   });
 
@@ -2287,10 +2293,28 @@ function initFloatingPlayer() {
       window._fpAudio.pause();
       window._fpAudio.currentTime = 0;
     }
+    if (window._disconnectFluidAudio) window._disconnectFluidAudio();
     // Reset global music state (from initCardSwap scope)
     if (window._resetMusicState) window._resetMusicState();
     hideFloatingPlayer();
   });
+
+  // Progress bar seek (click + drag)
+  var fpProgressBar = document.getElementById('fpProgress');
+  var fpDragging = false;
+  function fpSeek(e) {
+    if (!window._fpAudio || !window._fpAudio.duration) return;
+    var rect = fpProgressBar.getBoundingClientRect();
+    var ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+    window._fpAudio.currentTime = ratio * window._fpAudio.duration;
+  }
+  fpProgressBar.addEventListener('click', fpSeek);
+  fpProgressBar.addEventListener('mousedown', function(e) { fpDragging = true; fpSeek(e); });
+  document.addEventListener('mousemove', function(e) { if (fpDragging) fpSeek(e); });
+  document.addEventListener('mouseup', function() { fpDragging = false; });
+  fpProgressBar.addEventListener('touchstart', function(e) { fpDragging = true; fpSeek(e.touches[0]); }, { passive: true });
+  document.addEventListener('touchmove', function(e) { if (fpDragging) fpSeek(e.touches[0]); }, { passive: true });
+  document.addEventListener('touchend', function() { fpDragging = false; });
 }
 
 // ===== Init =====
