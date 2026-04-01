@@ -1618,13 +1618,10 @@ function initCardSwap() {
       return;
     }
 
-    // Stop music if playing
-    if (musicState.audio) {
-      musicState.audio.pause();
-      musicState.audio.currentTime = 0;
-      musicState.playing = false;
-      musicState.audio = null;
-      disconnectFluidAudio();
+    // Don't stop music — floating player takes over
+    // Just reset overlay visual transparency
+    if (musicState.audio && musicState.playing) {
+      setMusicTransparencyGlobal(false);
     }
 
     // Reset music transparency
@@ -1836,6 +1833,13 @@ function initCardSwap() {
   // --- Music playback ---
   var musicState = { audio: null, playing: false };
 
+  // Expose reset for floating player close
+  window._resetMusicState = function() {
+    musicState.audio = null;
+    musicState.playing = false;
+    disconnectFluidAudio();
+  };
+
   function connectFluidAudio(audioEl) {
     if (window.fluidAudio) window.fluidAudio.connect(audioEl);
     document.querySelector('.journey-section')?.classList.add('audio-active');
@@ -1875,6 +1879,8 @@ function initCardSwap() {
           musicState.playing = true;
           miniPlay.classList.add('playing');
           connectFluidAudio(audioEl);
+          // Show floating player
+          if (window.showFloatingPlayer) window.showFloatingPlayer(musicData.songs[miniSongIdx], audioEl);
           audioEl.ontimeupdate = function() {
             if (audioEl.duration && miniProgress) {
               miniProgress.style.width = (audioEl.currentTime / audioEl.duration * 100) + '%';
@@ -1962,6 +1968,9 @@ function initCardSwap() {
         musicState.playing = true;
         connectFluidAudio(audioEl);
         setMusicTransparency(true);
+
+        // Show floating player
+        if (window.showFloatingPlayer) window.showFloatingPlayer(song, audioEl);
 
         // Highlight playing item + main btn
         if (mainBtn) mainBtn.querySelector('i').className = 'fas fa-pause';
@@ -2203,6 +2212,73 @@ function initPixelTransition() {
   }
 }
 
+// ===== Floating Music Player =====
+function setMusicTransparencyGlobal(on) {
+  // Stub — overlay transparency is handled inside wireOverlayMusic
+}
+
+function initFloatingPlayer() {
+  var fp = document.getElementById('floatingPlayer');
+  var fpCover = document.getElementById('fpCover');
+  var fpName = document.getElementById('fpName');
+  var fpArtist = document.getElementById('fpArtist');
+  var fpPlayBtn = document.getElementById('fpPlayBtn');
+  var fpCloseBtn = document.getElementById('fpCloseBtn');
+  var fpProgressFill = document.getElementById('fpProgressFill');
+  if (!fp) return;
+
+  // Expose globally so playSong can call it
+  window.showFloatingPlayer = function(song, audioEl) {
+    fpCover.src = song.cover;
+    fpCover.alt = song.name;
+    fpName.textContent = song.name;
+    fpArtist.textContent = song.artist;
+    fpPlayBtn.querySelector('i').className = 'fas fa-pause';
+    fp.classList.add('active');
+
+    // Track progress
+    audioEl.addEventListener('timeupdate', function fpUpdate() {
+      if (audioEl !== window._fpAudio) {
+        audioEl.removeEventListener('timeupdate', fpUpdate);
+        return;
+      }
+      if (audioEl.duration) {
+        fpProgressFill.style.width = (audioEl.currentTime / audioEl.duration * 100) + '%';
+      }
+    });
+    window._fpAudio = audioEl;
+  };
+
+  window.hideFloatingPlayer = function() {
+    fp.classList.remove('active');
+    fpProgressFill.style.width = '0%';
+    window._fpAudio = null;
+  };
+
+  // Play/Pause toggle
+  fpPlayBtn.addEventListener('click', function() {
+    if (!window._fpAudio) return;
+    if (window._fpAudio.paused) {
+      window._fpAudio.play().catch(function() {});
+      fpPlayBtn.querySelector('i').className = 'fas fa-pause';
+    } else {
+      window._fpAudio.pause();
+      fpPlayBtn.querySelector('i').className = 'fas fa-play';
+    }
+  });
+
+  // Close — stop music and hide
+  fpCloseBtn.addEventListener('click', function() {
+    if (window._fpAudio) {
+      window._fpAudio.pause();
+      window._fpAudio.currentTime = 0;
+    }
+    // Reset global music state (from initCardSwap scope)
+    if (window._resetMusicState) window._resetMusicState();
+    hideFloatingPlayer();
+  });
+}
+
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', () => {
   initThemeToggle();
@@ -2215,6 +2291,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollIndicator();
   initNavScroll();
   initCardSwap();
+  initFloatingPlayer();
   initBentoSkills();
   initPixelTransition();
 });

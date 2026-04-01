@@ -206,6 +206,20 @@
 
   </main>
 
+  <!-- Floating Music Player -->
+  <div class="floating-player" id="floatingPlayer">
+    <img class="floating-player-cover" id="fpCover" src="" alt="">
+    <div class="floating-player-info">
+      <span class="floating-player-name" id="fpName"></span>
+      <span class="floating-player-artist" id="fpArtist"></span>
+    </div>
+    <div class="floating-player-progress" id="fpProgress">
+      <div class="floating-player-progress-fill" id="fpProgressFill"></div>
+    </div>
+    <button class="floating-player-btn" id="fpPlayBtn" aria-label="Play/Pause"><i class="fas fa-pause"></i></button>
+    <button class="floating-player-close" id="fpCloseBtn" aria-label="Close"><i class="fas fa-times"></i></button>
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="script.js"></script>

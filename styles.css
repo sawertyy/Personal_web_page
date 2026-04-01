@@ -1477,6 +1477,104 @@ a:hover {
   margin-top: 0.5rem;
 }
 
+/* ===== Floating Music Player ===== */
+.floating-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1.25rem;
+  z-index: 2000;
+  transition: transform 0.3s ease;
+}
+
+.floating-player.active {
+  display: flex;
+}
+
+.floating-player-cover {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.floating-player-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.floating-player-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.floating-player-artist {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.floating-player-progress {
+  flex: 1;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.floating-player-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 0.1s linear;
+}
+
+.floating-player-btn,
+.floating-player-close {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.floating-player-btn:hover,
+.floating-player-close:hover {
+  background: var(--border);
+}
+
+.floating-player-close {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
 /* ===== Footer ===== */
 .footer {
   margin-top: 3rem;
