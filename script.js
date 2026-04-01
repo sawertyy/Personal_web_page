@@ -1514,8 +1514,12 @@ function initCardSwap() {
 
         if (e.deltaY > 0) {
           if (frontIdx === cards.length - 1) {
+            // Last card — absorb this scroll, release hijack for next one
+            e.preventDefault();
             journeyHijack = false;
-            // Fall through to global page scroll below
+            pageCooldown = true;
+            setTimeout(function() { pageCooldown = false; }, 1200);
+            return;
           } else {
             e.preventDefault();
             if (!isAnimating && !wheelCooldown) {
