@@ -1551,7 +1551,8 @@ function initCardSwap() {
       }
 
       // === Global one-page-at-a-time scroll ===
-      if (pageCooldown) { e.preventDefault(); return; }
+      e.preventDefault();
+      if (pageCooldown) return;
 
       var currentIdx = 0;
       for (var i = 0; i < allSections.length; i++) {
@@ -1568,10 +1569,9 @@ function initCardSwap() {
 
       if (targetIdx === currentIdx) return;
 
-      e.preventDefault();
       pageCooldown = true;
       allSections[targetIdx].scrollIntoView({ behavior: 'smooth' });
-      setTimeout(function() { pageCooldown = false; }, 800);
+      setTimeout(function() { pageCooldown = false; }, 1200);
     }, { passive: false });
   }
 
