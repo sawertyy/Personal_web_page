@@ -1439,9 +1439,11 @@ function initCardSwap() {
     });
   });
 
-  // --- Wheel: Hover-only card switching ---
+  // --- Wheel: Journey hijack + hover card switching ---
   var isHoveringCards = false;
   var wheelCooldown = false;
+  var journeyHijack = true;
+  var journeySectionEl = document.querySelector('.journey-section');
 
   var cardViewport = document.querySelector('.cardswap-viewport');
   if (cardViewport) {
@@ -1449,24 +1451,60 @@ function initCardSwap() {
     cardViewport.addEventListener('mouseleave', function() { isHoveringCards = false; });
   }
 
+  function isJourneyVisible() {
+    if (!journeySectionEl) return false;
+    var rect = journeySectionEl.getBoundingClientRect();
+    return rect.top <= 10 && rect.bottom >= window.innerHeight - 10;
+  }
+
   var snapContainer = document.getElementById('snapContainer');
   if (snapContainer) {
     snapContainer.addEventListener('wheel', function(e) {
-      if (!isHoveringCards || isAnimating || wheelCooldown) return;
+      // === First-visit hijack mode ===
+      if (journeyHijack && isJourneyVisible()) {
+        var frontIdx = order[0];
 
+        if (e.deltaY > 0) {
+          // Scrolling down
+          if (frontIdx === cards.length - 1) {
+            // Last card (Now) — release hijack, let page scroll to Contact
+            journeyHijack = false;
+            return;
+          }
+          e.preventDefault();
+          if (!isAnimating && !wheelCooldown) {
+            wheelCooldown = true;
+            swap();
+            setTimeout(function() { wheelCooldown = false; }, 600);
+          }
+        } else if (e.deltaY < 0) {
+          // Scrolling up
+          if (frontIdx === 0) {
+            // First card (Experience) — let page scroll back to About
+            return;
+          }
+          e.preventDefault();
+          if (!isAnimating && !wheelCooldown) {
+            wheelCooldown = true;
+            swapReverse();
+            setTimeout(function() { wheelCooldown = false; }, 600);
+          }
+        }
+        return;
+      }
+
+      // === Post-hijack: hover-only card switching ===
+      if (!isHoveringCards || isAnimating || wheelCooldown) return;
       e.preventDefault();
       wheelCooldown = true;
-
       if (e.deltaY > 0) swap();
       else if (e.deltaY < 0) swapReverse();
-
       setTimeout(function() { wheelCooldown = false; }, 600);
     }, { passive: false });
   }
 
   // --- Touch Swipe ---
   var touchStartY = 0;
-  var journeySectionEl = document.querySelector('.journey-section');
   if (journeySectionEl) {
     journeySectionEl.addEventListener('touchstart', function(e) {
       touchStartY = e.touches[0].clientY;
