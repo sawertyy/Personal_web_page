@@ -185,7 +185,7 @@ a:hover {
 
 .nav-right {
   position: fixed;
-  top: 1rem;
+  top: 0.75rem;
   right: 1.5rem;
   z-index: 1001;
   display: flex;
@@ -195,10 +195,10 @@ a:hover {
 
 .theme-toggle {
   background: none;
-  border: none;
+  border: 1px solid var(--text-muted);
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
   display: flex;
   align-items: center;
