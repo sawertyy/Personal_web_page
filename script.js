@@ -1109,7 +1109,7 @@ var JOURNEY_CARDS = [
         tags: ['AI Agent', 'Enterprise', 'SaaS']
       },
       {
-        logo: 'images/%E6%98%93%E6%99%BA%E7%91%9E.webp', company: 'Esri China', role: 'Product Operations Intern',
+        logo: 'images/%E6%98%93%E6%99%BA%E7%91%9E.png', company: 'Esri China', role: 'Product Operations Intern',
         period: 'Jul \u2014 Oct 2024',
         desc: 'Designed a \u201cProvincial Natural Resources Dashboard\u201d interactive demo and led typhoon weather scenario showcases at industry conferences.',
         highlights: [
