@@ -395,15 +395,16 @@ a:hover {
 }
 
 .about-section.snap-section {
-  padding: 2.5rem 3rem;
+  padding: 4rem 3rem 2.5rem;
 }
 
 .about-bento {
   display: grid;
-  grid-template-columns: 1fr 1.5fr 1fr;
+  grid-template-columns: 1.2fr 1.3fr 1fr;
   grid-template-rows: 1fr auto;
   gap: 0.75rem;
-  max-width: 1100px;
+  max-width: 1300px;
+  max-height: calc(100vh - 6rem);
   width: 100%;
   padding: 0 1rem;
 }
@@ -494,6 +495,10 @@ a:hover {
 }
 
 /* --- Intro card --- */
+.bento-intro {
+  overflow-y: auto;
+}
+
 .bento-intro-text {
   font-size: 0.95rem;
   line-height: 1.7;
