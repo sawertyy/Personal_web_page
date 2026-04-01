@@ -184,6 +184,10 @@ a:hover {
 }
 
 .nav-right {
+  position: fixed;
+  top: 1rem;
+  right: 1.5rem;
+  z-index: 1001;
   display: flex;
   align-items: center;
   gap: 0.5rem;
