@@ -2084,6 +2084,83 @@ a:hover {
 }
 
 /* Music card variant */
+/* Experience card — compact list */
+.cardswap-exp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.cardswap-exp-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.cardswap-exp-item img {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+[data-theme="light"] .cardswap-exp-item img {
+  filter: none;
+}
+
+.cardswap-exp-company {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.cardswap-exp-role {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardswap-exp-year {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Music card — intro text + genre tags */
+.cardswap-music-intro {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0.5rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardswap-music-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.cardswap-music-tag {
+  font-size: 0.65rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 20px;
+  background: var(--border);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
 .cardswap-music-cover {
   width: 100%;
   height: 220px;

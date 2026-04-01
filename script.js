@@ -1156,6 +1156,7 @@ var JOURNEY_CARDS = [
     accentGradient: 'linear-gradient(135deg, #312e81, #6366f1)',
     title: "What I'm Listening To", meta: 'Melodic Bass \u00b7 Chill House \u00b7 Synthpop',
     desc: 'Music has always been a very special part of my life \u2014 not about chasing something, but about feeling something.',
+    introText: 'Music has always been a very special part of my life \u2014 not about chasing something, but about feeling something. My taste is quite broad, but I mainly listen to melodic bass, chill house, synthpop, indie pop, and R&B. I don\u2019t have a particular favorite artist \u2014 I only recognize a song.',
     songs: [
       { name: 'Everything is romantic', artist: 'Charli xcx ft. caroline polachek', cover: 'music/Charli%20xcx%20-%20Everything%20is%20romantic%20featuring%20caroline%20polachek.jpg', audioId: 'journey-audio-0', genre: 'Electro Pop' },
       { name: 'Staring Down Sunset', artist: 'Tinlicker ft. Nathan Nicholson', cover: 'music/Tinlicker%20-%20Staring%20Down%20Sunset%20ft.%20Nathan%20Nicholson.jpg', audioId: 'journey-audio-1', genre: 'Dream Pop' },
@@ -1202,19 +1203,20 @@ function initCardSwap() {
 
     var bodyContent = '';
     if (card.type === 'experience') {
-      var logos = card.items.map(function(item) {
-        return '<img src="' + item.logo + '" alt="' + item.company + '">';
+      var expRows = card.items.map(function(item) {
+        var year = item.period.match(/\d{4}/);
+        year = year ? year[0] : '';
+        return '<div class="cardswap-exp-item">' +
+          '<img src="' + item.logo + '" alt="' + item.company + '">' +
+          '<span class="cardswap-exp-company">' + item.company + '</span>' +
+          '<span class="cardswap-exp-role">' + item.role + '</span>' +
+          '<span class="cardswap-exp-year">' + year + '</span>' +
+        '</div>';
       }).join('');
       bodyContent =
         '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
         '<div class="cardswap-card-title">' + card.title + '</div>' +
-        '<div class="cardswap-card-tagline">From Baidu to Xiaohongshu, building AI that connects</div>' +
-        '<div class="cardswap-hero-stat">' +
-          '<span class="cardswap-hero-num">' + card.items.length + '</span>' +
-          '<span class="cardswap-hero-num-label">Product Internships</span>' +
-        '</div>' +
-        '<div class="cardswap-logo-row">' + logos + '</div>' +
-        '<div class="cardswap-card-hint">' + card.items.length + ' internships \u2192</div>';
+        '<div class="cardswap-exp-list">' + expRows + '</div>';
     } else if (card.type === 'project') {
       var badges = card.items.map(function(item) {
         return '<span class="cardswap-pub-badge ' + item.badgeType + '">' + item.badge + '</span>';
@@ -1228,11 +1230,14 @@ function initCardSwap() {
         '<div class="cardswap-card-hint">' + card.items.length + ' publications \u2192</div>';
     } else if (card.type === 'music') {
       var s = card.songs[0];
+      var musicTags = card.tags.map(function(t) {
+        return '<span class="cardswap-music-tag">' + t + '</span>';
+      }).join('');
       bodyContent =
         '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
-        '<img src="' + s.cover + '" alt="' + s.name + '" class="cardswap-music-cover">' +
         '<div class="cardswap-card-title">' + card.title + '</div>' +
-        '<div class="cardswap-card-tagline">' + card.meta + '</div>' +
+        '<p class="cardswap-music-intro">' + (card.introText || card.desc) + '</p>' +
+        '<div class="cardswap-music-tags">' + musicTags + '</div>' +
         '<div class="cardswap-music-controls">' +
           '<button class="cardswap-music-play" data-song-index="0" aria-label="Play"><i class="fas fa-play"></i></button>' +
           '<div class="cardswap-music-progress"><div class="cardswap-music-progress-fill"></div></div>' +
