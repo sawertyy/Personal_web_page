@@ -1658,9 +1658,14 @@ a:hover {
   padding: 2rem 2.25rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   height: calc(100% - 3px);
   overflow: hidden;
+}
+
+.cardswap-card-bottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .cardswap-card-type {
@@ -1855,7 +1860,7 @@ a:hover {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   margin-bottom: 0.75rem;
 }
 

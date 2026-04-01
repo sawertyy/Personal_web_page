@@ -1224,10 +1224,11 @@ function initCardSwap() {
       bodyContent =
         '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
         '<div class="cardswap-card-title">' + card.title + '</div>' +
-        '<div class="cardswap-card-tagline">SCI first-author with research on urban simulation &amp; productive forces</div>' +
-        '<div class="cardswap-hero-badge"><i class="fas fa-award"></i> SCI \u00b7 Q2 \u00b7 First Author</div>' +
-        '<div class="cardswap-badge-row">' + badges + '</div>' +
-        '<div class="cardswap-card-hint">' + card.items.length + ' publications \u2192</div>';
+        '<div class="cardswap-card-bottom">' +
+          '<div class="cardswap-card-tagline">SCI first-author with research on urban simulation &amp; productive forces</div>' +
+          '<div class="cardswap-hero-badge"><i class="fas fa-award"></i> SCI \u00b7 Q2 \u00b7 First Author</div>' +
+          '<div class="cardswap-badge-row">' + badges + '</div>' +
+        '</div>';
     } else if (card.type === 'music') {
       var s = card.songs[0];
       var musicTags = card.tags.map(function(t) {
@@ -1236,12 +1237,14 @@ function initCardSwap() {
       bodyContent =
         '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
         '<div class="cardswap-card-title">' + card.title + '</div>' +
-        '<p class="cardswap-music-intro">' + (card.introText || card.desc) + '</p>' +
-        '<div class="cardswap-music-tags">' + musicTags + '</div>' +
-        '<div class="cardswap-music-controls">' +
-          '<button class="cardswap-music-play" data-song-index="0" aria-label="Play"><i class="fas fa-play"></i></button>' +
-          '<div class="cardswap-music-progress"><div class="cardswap-music-progress-fill"></div></div>' +
-          '<span class="cardswap-music-song-name">' + s.name + '</span>' +
+        '<div class="cardswap-card-bottom">' +
+          '<p class="cardswap-music-intro">' + (card.introText || card.desc) + '</p>' +
+          '<div class="cardswap-music-tags">' + musicTags + '</div>' +
+          '<div class="cardswap-music-controls">' +
+            '<button class="cardswap-music-play" data-song-index="0" aria-label="Play"><i class="fas fa-play"></i></button>' +
+            '<div class="cardswap-music-progress"><div class="cardswap-music-progress-fill"></div></div>' +
+            '<span class="cardswap-music-song-name">' + s.name + '</span>' +
+          '</div>' +
         '</div>';
     } else if (card.type === 'now') {
       var firstItem = card.nowItems[0] || { text: '' };
@@ -1251,13 +1254,15 @@ function initCardSwap() {
       }).join('');
       bodyContent =
         '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
-        '<div class="cardswap-status">' +
-          '<span class="cardswap-status-dot"></span>' +
-          '<span class="cardswap-status-text">Currently Active</span>' +
-        '</div>' +
         '<div class="cardswap-card-title">' + card.title + '</div>' +
-        '<div class="cardswap-card-tagline">' + plainText + '</div>' +
-        '<div class="cardswap-now-chat">' + lines + '</div>';
+        '<div class="cardswap-card-bottom">' +
+          '<div class="cardswap-status">' +
+            '<span class="cardswap-status-dot"></span>' +
+            '<span class="cardswap-status-text">Currently Active</span>' +
+          '</div>' +
+          '<div class="cardswap-card-tagline">' + plainText + '</div>' +
+          '<div class="cardswap-now-chat">' + lines + '</div>' +
+        '</div>';
     }
 
     el.innerHTML =
