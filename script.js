@@ -1156,7 +1156,7 @@ var JOURNEY_CARDS = [
     accentGradient: 'linear-gradient(135deg, #312e81, #6366f1)',
     title: "What I'm Listening To", meta: 'Melodic Bass \u00b7 Chill House \u00b7 Synthpop',
     desc: 'Music has always been a very special part of my life \u2014 not about chasing something, but about feeling something.',
-    introText: 'Music has always been a very special part of my life \u2014 not about chasing something, but about feeling something. My taste is quite broad, but I mainly listen to melodic bass, chill house, synthpop, indie pop, and R&B. I don\u2019t have a particular favorite artist \u2014 I only recognize a song.',
+    introText: 'Music has always been a very special part of my life \u2014 not about chasing something, but about feeling something. My taste is quite broad, but I mainly listen to <strong>melodic bass</strong>, <strong>chill house</strong>, <strong>synthpop</strong>, <strong>indie pop</strong>, and <strong>R&B</strong>. I don\u2019t have a particular favorite artist \u2014 I only recognize a song.',
     songs: [
       { name: 'Everything is romantic', artist: 'Charli xcx ft. caroline polachek', cover: 'music/Charli%20xcx%20-%20Everything%20is%20romantic%20featuring%20caroline%20polachek.jpg', audioId: 'journey-audio-0', genre: 'Electro Pop' },
       { name: 'Staring Down Sunset', artist: 'Tinlicker ft. Nathan Nicholson', cover: 'music/Tinlicker%20-%20Staring%20Down%20Sunset%20ft.%20Nathan%20Nicholson.jpg', audioId: 'journey-audio-1', genre: 'Dream Pop' },
@@ -1245,6 +1245,7 @@ function initCardSwap() {
             '<div class="cardswap-music-progress"><div class="cardswap-music-progress-fill"></div></div>' +
             '<span class="cardswap-music-song-name">' + s.name + '</span>' +
           '</div>' +
+          '<div class="cardswap-card-hint">' + card.songs.length + ' songs, tap for more \u2192</div>' +
         '</div>';
     } else if (card.type === 'now') {
       var firstItem = card.nowItems[0] || { text: '' };
