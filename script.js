@@ -21,6 +21,9 @@ function initLiquidEther() {
   const container = document.getElementById('liquidEtherContainer');
   if (!container || typeof THREE === 'undefined') return;
 
+  // Skip fluid sim entirely for reduced motion preference
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
   // --- Configuration ---
   const CONFIG = {
     mouseForce: 20,
@@ -40,6 +43,9 @@ function initLiquidEther() {
     takeoverDuration: 0.25,
     autoResumeDelay: 3000,
     autoRampDuration: 0.6,
+    audioMouseForce: 0,
+    audioCursorSize: 80,
+    audioForceMultiplier: 0.8,
   };
 
   // --- Palette Texture ---
@@ -411,6 +417,10 @@ function initLiquidEther() {
     }
     update() {
       if (!this.enabled) return;
+      if (audioReactive.connected) {
+        if (this.active) this.forceStop();
+        return;
+      }
       const now = performance.now();
       const idle = now - this.manager.lastUserInteraction;
       if (idle < this.resumeDelay) {
@@ -539,8 +549,8 @@ function initLiquidEther() {
       this.scene.add(this.mouse);
     }
     update(props) {
-      const forceX = (Mouse.diff.x / 2) * props.mouse_force;
-      const forceY = (Mouse.diff.y / 2) * props.mouse_force;
+      const forceX = (Mouse.diff.x / 2) * props.mouse_force + props.audioForce.x;
+      const forceY = (Mouse.diff.y / 2) * props.mouse_force + props.audioForce.y;
       const csX = props.cursor_size * props.cellScale.x;
       const csY = props.cursor_size * props.cellScale.y;
       const centerX = Math.min(Math.max(Mouse.coords.x, -1 + csX + props.cellScale.x * 2), 1 - csX - props.cellScale.x * 2);
@@ -749,9 +759,10 @@ function initLiquidEther() {
 
       this.advection.update({ dt: this.options.dt, isBounce: this.options.isBounce, BFECC: this.options.BFECC });
       this.externalForce.update({
-        cursor_size: this.options.cursorSize,
-        mouse_force: this.options.mouseForce,
-        cellScale: this.cellScale
+        cursor_size: audioReactive.connected ? this.options.audioCursorSize : this.options.cursorSize,
+        mouse_force: audioReactive.connected ? this.options.audioMouseForce : this.options.mouseForce,
+        cellScale: this.cellScale,
+        audioForce: audioReactive.force
       });
 
       let vel = this.fbos.vel_1;
@@ -832,6 +843,60 @@ function initLiquidEther() {
     rampDuration: CONFIG.autoRampDuration
   });
 
+  // ===== Audio Reactive =====
+  const audioReactive = {
+    ctx: null,
+    analyser: null,
+    sourceMap: new WeakMap(),
+    dataArray: null,
+    connected: false,
+    currentAudio: null,
+    force: { x: 0, y: 0 },
+
+    connect(audioEl) {
+      if (this.currentAudio === audioEl && this.connected) return;
+      this.disconnect();
+      if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      this.ctx.resume();
+      this.analyser = this.ctx.createAnalyser();
+      this.analyser.fftSize = 256;
+      this.analyser.smoothingTimeConstant = 0.8;
+      this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+      // createMediaElementSource can only be called once per element
+      let source = this.sourceMap.get(audioEl);
+      if (!source) {
+        source = this.ctx.createMediaElementSource(audioEl);
+        this.sourceMap.set(audioEl, source);
+      }
+      source.connect(this.analyser);
+      this.analyser.connect(this.ctx.destination);
+      this.connected = true;
+      this.currentAudio = audioEl;
+    },
+
+    disconnect() {
+      const source = this.currentAudio ? this.sourceMap.get(this.currentAudio) : null;
+      if (source) { source.disconnect(); }
+      if (this.analyser) { this.analyser.disconnect(); this.analyser = null; }
+      this.connected = false;
+      this.currentAudio = null;
+    },
+
+    getEnergy() {
+      if (!this.connected || !this.analyser) return 0;
+      this.analyser.getByteFrequencyData(this.dataArray);
+      let sum = 0;
+      const bassEnd = Math.floor(this.dataArray.length * 0.3);
+      for (let i = 0; i < bassEnd; i++) sum += this.dataArray[i];
+      return sum / (bassEnd * 255);
+    }
+  };
+
+  window.fluidAudio = {
+    connect: (el) => audioReactive.connect(el),
+    disconnect: () => audioReactive.disconnect()
+  };
+
   function resizeHandler() {
     Common.resize(container);
     output.resize();
@@ -841,6 +906,20 @@ function initLiquidEther() {
     if (!running) return;
     autoDriver.update();
     Mouse.update();
+    // Audio-reactive force — compute independently (not via Mouse.diff)
+    audioReactive.force.x = 0;
+    audioReactive.force.y = 0;
+    if (audioReactive.connected) {
+      var energy = audioReactive.getEnergy();
+      if (energy > 0.05) {
+        var t = performance.now() * 0.001;
+        var angle = t * 1.5 + Math.sin(t * 0.7) * 2;
+        var force = energy * CONFIG.audioForceMultiplier;
+        audioReactive.force.x = Math.cos(angle) * force;
+        audioReactive.force.y = Math.sin(angle) * force;
+        Mouse.mouseMoved = true;
+      }
+    }
     Common.update();
     output.update();
     rafId = requestAnimationFrame(loop);
@@ -990,149 +1069,1076 @@ function initNavScroll() {
   });
 }
 
-// ===== Music Stack =====
-function initMusicStack() {
-  const wrapper = document.getElementById('musicStack');
-  if (!wrapper) return;
-
-  const stack = wrapper.querySelector('.music-stack');
-  const cards = wrapper.querySelectorAll('.music-card');
-  const dots = wrapper.querySelectorAll('.music-dot');
-  const totalCards = cards.length;
-  let currentIndex = 0;
-  let isScrolling = false;
-
-  function updateStack(activeIdx) {
-    cards.forEach((card, i) => {
-      card.classList.remove('active', 'pos-1', 'pos-2', 'pos-3', 'hidden');
-      const diff = (i - activeIdx + totalCards) % totalCards;
-      if (diff === 0) card.classList.add('active');
-      else if (diff === 1) card.classList.add('pos-1');
-      else if (diff === 2) card.classList.add('pos-2');
-      else if (diff === 3) card.classList.add('pos-3');
-      else card.classList.add('hidden');
-    });
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('active', i === activeIdx);
-    });
+// ===== CardSwap Journey Section =====
+var JOURNEY_CARDS = [
+  {
+    id: 'experience', type: 'experience', typeLabel: 'Experience', typeIcon: 'fas fa-briefcase',
+    accentGradient: 'linear-gradient(135deg, #0f2b46, #1a4a7a)',
+    title: 'Where I\u2019ve Worked',
+    items: [
+      {
+        logo: 'images/%E7%99%BE%E5%BA%A6.svg', company: 'Baidu', role: 'AI Product Intern',
+        period: 'Jan 2026 \u2014 Present',
+        desc: 'Built 150+ emotionally engaging dynamic greetings for AI assistant and designed feature demo cards for creative writing, multimodal understanding, and text generation.',
+        highlights: [
+          'Sayhi greetings: homepage title CTR \u2192 3%, 91% new users enter conversation',
+          'Feature demo cards: CTR 4.13%, 12.1% users continue chatting with model',
+          'Creative writing evaluation across 5 leading LLMs, identifying core strengths & gaps'
+        ],
+        tags: ['LLM', 'A/B Testing', 'User Research']
+      },
+      {
+        logo: 'images/%E5%B0%8F%E7%BA%A2%E4%B9%A6.png', company: 'Xiaohongshu', role: 'E-commerce Product Intern',
+        period: 'Sep \u2014 Dec 2025',
+        desc: 'Designed LLM-powered filter keyword recommendations and optimized product cards & trending search cards to drive discovery and conversion.',
+        highlights: [
+          'LLM filter keywords: coverage 40%, CTR 5%, post-filter conversion +30%',
+          'Product card optimization: search GMV +3%, DAB +1%',
+          '\u201cTrending Searches\u201d card: 2% CTR, improved search distribution'
+        ],
+        tags: ['E-commerce', 'Search', 'Conversion']
+      },
+      {
+        logo: 'images/%E7%99%BE%E8%9E%8D%E4%BA%91%E5%88%9B.png', company: 'BaiRong Cloud', role: 'AI Product Intern',
+        period: 'Jun \u2014 Sep 2025',
+        desc: 'Built AI Agent features from 0\u21921 inside CRM and designed AI outbound calling to replace manual calls for overseas finance clients.',
+        highlights: [
+          'AI Agent in CRM: 5 managers\u2019 efficiency +50% (4h \u2192 2h), helped close deal',
+          'AI outbound: intention rate 56%, labor cost \u221280%, call cycle 8d \u2192 2d'
+        ],
+        tags: ['AI Agent', 'Enterprise', 'SaaS']
+      },
+      {
+        logo: 'images/%E6%98%93%E6%99%BA%E7%91%9E.webp', company: 'Esri China', role: 'Product Operations Intern',
+        period: 'Jul \u2014 Oct 2024',
+        desc: 'Designed a \u201cProvincial Natural Resources Dashboard\u201d interactive demo and led typhoon weather scenario showcases at industry conferences.',
+        highlights: [
+          'Dashboard template adopted into official library, 200+ monthly uses',
+          'Conference demo: 5 inquiries, 2 signings, tutorial views 10,000+'
+        ],
+        tags: ['GIS', 'Documentation', 'Operations']
+      }
+    ]
+  },
+  {
+    id: 'research', type: 'project', typeLabel: 'Research & Awards', typeIcon: 'fas fa-file-alt',
+    accentGradient: 'linear-gradient(135deg, #1e40af, #3b82f6)',
+    title: 'Publications & Awards',
+    items: [
+      {
+        badge: 'SCI Q2 \u00b7 First Author', badgeType: 'sci',
+        title: 'Multi-Scenario Simulation of Urban Expansion',
+        meta: 'Hu, J.; Liu, D.; Zheng, X. \u2014 Land, 2024',
+        desc: 'Published in SCI Q2 journal as first author. Research on multi-scenario urban expansion simulation considering multilevel urban flows.',
+        link: 'https://doi.org/10.3390/land13111830',
+        tags: ['Urban Simulation', 'Cellular Automata', 'Multi-Scenario']
+      },
+      {
+        badge: 'SCI \u00b7 Second Author', badgeType: 'sci',
+        title: 'New Quality Productive Forces & Urban-Rural Income Gap',
+        meta: 'Zhang, C.; Hu, J.; Song, C.; Lu, Y. \u2014 EDS, 2025',
+        desc: 'Research on how New Quality Productive Forces influenced the urban-rural income gap.',
+        link: 'https://doi.org/10.1007/s10668-025-06929-3',
+        tags: ['Productive Forces', 'Urban-Rural Gap', 'Panel Data']
+      },
+      {
+        badge: 'National Award', badgeType: 'award',
+        title: 'Supermarket Vegetable Pricing Optimization',
+        meta: 'Hu, J.; Xu, J.; Ye, L. \u2014 CUMCM 2024 \u00b7 Beijing First Prize',
+        desc: 'Mathematical modeling competition entry for optimizing supermarket vegetable pricing strategy.',
+        link: null,
+        tags: ['Mathematical Modeling', 'Optimization', 'Pricing Strategy']
+      }
+    ]
+  },
+  {
+    id: 'music', type: 'music', typeLabel: 'Music', typeIcon: 'fas fa-music',
+    accentGradient: 'linear-gradient(135deg, #312e81, #6366f1)',
+    title: "What I'm Listening To", meta: 'Melodic Bass \u00b7 Chill House \u00b7 Synthpop',
+    desc: 'Music has always been a very special part of my life \u2014 not about chasing something, but about feeling something.',
+    songs: [
+      { name: 'Everything is romantic', artist: 'Charli xcx ft. caroline polachek', cover: 'music/Charli%20xcx%20-%20Everything%20is%20romantic%20featuring%20caroline%20polachek.jpg', audioId: 'journey-audio-0', genre: 'Electro Pop' },
+      { name: 'Staring Down Sunset', artist: 'Tinlicker ft. Nathan Nicholson', cover: 'music/Tinlicker%20-%20Staring%20Down%20Sunset%20ft.%20Nathan%20Nicholson.jpg', audioId: 'journey-audio-1', genre: 'Dream Pop' },
+      { name: 'Saiko', artist: 'yeule', cover: 'music/yeule%20-%20Saiko.jpg', audioId: 'journey-audio-2', genre: 'Alternative Pop' },
+      { name: '\u5fc3\u8df3119', artist: 'JOYCE \u5c31\u4ee5\u65af', cover: 'music/%E5%BF%83%E8%B7%B3119%20-%20JOYCE%20%E5%B0%B1%E4%BB%A5%E6%96%AF.jpg', audioId: 'journey-audio-3', genre: 'R&B' }
+    ],
+    tags: ['Melodic Bass', 'Chill House', 'Synthpop', 'Indie Pop', 'R&B']
+  },
+  {
+    id: 'now', type: 'now', typeLabel: 'Now', typeIcon: 'fas fa-clock',
+    accentGradient: 'linear-gradient(135deg, #0369a1, #38bdf8)',
+    title: "What I'm Up To", meta: 'Last updated Mar 2026',
+    desc: 'A snapshot of my current state.',
+    nowItems: [
+      { label: 'Doing', text: 'Exploring AI assistant UX and creative writing evaluation at Baidu' },
+      { label: 'Reading', text: '<em>erta and ferti AI</em> by Jasmine Sun \u2014 rethinking how AI products find product-market fit' },
+      { label: 'Thinking', text: 'Should AI product evaluation be defined by user satisfaction or model capability benchmarks?' }
+    ],
+    tags: []
   }
+];
 
-  function handleWheel(e) {
-    e.preventDefault();
-    if (isScrolling) return;
-    isScrolling = true;
+// --- CardSwap class ---
+function initCardSwap() {
+  var stackEl = document.getElementById('cardswapStack');
+  if (!stackEl || typeof gsap === 'undefined') return;
 
-    if (e.deltaY > 0) {
-      currentIndex = (currentIndex + 1) % totalCards;
-    } else {
-      currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+  var cards = JOURNEY_CARDS;
+  var cardEls = [];
+  var order = cards.map(function(_, i) { return i; });
+  var autoTimer = null;
+  var isPaused = false;
+  var isAnimating = false;
+  var isMobile = window.innerWidth <= 768;
+  var distY = isMobile ? 18 : 28;
+  var skewY = 0;
+
+  // Render cards
+  cards.forEach(function(card, i) {
+    var el = document.createElement('div');
+    el.className = 'cardswap-card card-type-' + card.type;
+    el.dataset.index = i;
+    el.dataset.cardId = card.id;
+
+    var bodyContent = '';
+    if (card.type === 'experience') {
+      var logos = card.items.map(function(item) {
+        return '<img src="' + item.logo + '" alt="' + item.company + '">';
+      }).join('');
+      bodyContent =
+        '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
+        '<div class="cardswap-card-title">' + card.title + '</div>' +
+        '<div class="cardswap-card-tagline">From Baidu to Xiaohongshu, building AI that connects</div>' +
+        '<div class="cardswap-hero-stat">' +
+          '<span class="cardswap-hero-num">' + card.items.length + '</span>' +
+          '<span class="cardswap-hero-num-label">Product Internships</span>' +
+        '</div>' +
+        '<div class="cardswap-logo-row">' + logos + '</div>' +
+        '<div class="cardswap-card-hint">' + card.items.length + ' internships \u2192</div>';
+    } else if (card.type === 'project') {
+      var badges = card.items.map(function(item) {
+        return '<span class="cardswap-pub-badge ' + item.badgeType + '">' + item.badge + '</span>';
+      }).join('');
+      bodyContent =
+        '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
+        '<div class="cardswap-card-title">' + card.title + '</div>' +
+        '<div class="cardswap-card-tagline">SCI first-author with research on urban simulation &amp; productive forces</div>' +
+        '<div class="cardswap-hero-badge"><i class="fas fa-award"></i> SCI \u00b7 Q2 \u00b7 First Author</div>' +
+        '<div class="cardswap-badge-row">' + badges + '</div>' +
+        '<div class="cardswap-card-hint">' + card.items.length + ' publications \u2192</div>';
+    } else if (card.type === 'music') {
+      var s = card.songs[0];
+      bodyContent =
+        '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
+        '<img src="' + s.cover + '" alt="' + s.name + '" class="cardswap-music-cover">' +
+        '<div class="cardswap-card-title">' + card.title + '</div>' +
+        '<div class="cardswap-card-tagline">' + card.meta + '</div>' +
+        '<div class="cardswap-music-controls">' +
+          '<button class="cardswap-music-play" data-song-index="0" aria-label="Play"><i class="fas fa-play"></i></button>' +
+          '<div class="cardswap-music-progress"><div class="cardswap-music-progress-fill"></div></div>' +
+          '<span class="cardswap-music-song-name">' + s.name + '</span>' +
+        '</div>';
+    } else if (card.type === 'now') {
+      var firstItem = card.nowItems[0] || { text: '' };
+      var plainText = firstItem.text.replace(/<[^>]*>/g, '');
+      var lines = card.nowItems.map(function(item) {
+        return '<div class="cardswap-now-line"><span class="cardswap-now-label">' + item.label + '</span>' + item.text + '</div>';
+      }).join('');
+      bodyContent =
+        '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
+        '<div class="cardswap-status">' +
+          '<span class="cardswap-status-dot"></span>' +
+          '<span class="cardswap-status-text">Currently Active</span>' +
+        '</div>' +
+        '<div class="cardswap-card-title">' + card.title + '</div>' +
+        '<div class="cardswap-card-tagline">' + plainText + '</div>' +
+        '<div class="cardswap-now-chat">' + lines + '</div>';
     }
-    updateStack(currentIndex);
-    setTimeout(() => { isScrolling = false; }, 400);
-  }
 
-  cards.forEach(card => {
-    card.addEventListener('wheel', handleWheel, { passive: false });
+    el.innerHTML =
+      '<div class="cardswap-card-accent" style="background: ' + card.accentGradient + '"></div>' +
+      '<div class="cardswap-card-body">' + bodyContent + '</div>';
+
+    stackEl.appendChild(el);
+    cardEls.push(el);
   });
 
-  dots.forEach(dot => {
-    dot.addEventListener('click', () => {
-      currentIndex = parseInt(dot.dataset.index);
-      updateStack(currentIndex);
+  // Position helpers
+  function makeSlot(visualIdx) {
+    return {
+      x: 0,
+      y: visualIdx * distY,
+      z: -visualIdx * 30,
+      zIndex: cards.length - visualIdx,
+      opacity: Math.max(0.5, 1 - visualIdx * 0.15)
+    };
+  }
+
+  function placeAll(animate) {
+    cardEls.forEach(function(el, i) {
+      var vi = order.indexOf(i);
+      var slot = makeSlot(vi);
+      if (animate) {
+        gsap.to(el, {
+          x: slot.x, y: slot.y, z: slot.z,
+          xPercent: -50, yPercent: -50,
+          skewY: 0, opacity: slot.opacity, zIndex: slot.zIndex,
+          duration: 0.5, ease: 'power2.inOut', force3D: true
+        });
+      } else {
+        gsap.set(el, {
+          x: slot.x, y: slot.y, z: slot.z,
+          xPercent: -50, yPercent: -50,
+          skewY: 0, opacity: slot.opacity, zIndex: slot.zIndex,
+          transformOrigin: 'center center', force3D: true
+        });
+      }
+    });
+  }
+
+  // Initial position
+  placeAll(false);
+
+  function updateCounter() {
+    var frontIdx = order[0];
+    var card = cards[frontIdx];
+    // Update chapter display
+    var chapterNum = document.getElementById('journeyChapterNum');
+    var chapterLabel = document.getElementById('journeyChapterLabel');
+    if (chapterNum) chapterNum.textContent = String(frontIdx + 1).padStart(2, '0');
+    if (chapterLabel) chapterLabel.textContent = card.typeLabel;
+    // Sync active dot
+    var frontType = card.type;
+    var dots = document.querySelectorAll('.journey-dot');
+    dots.forEach(function(d) {
+      d.classList.toggle('active', d.dataset.type === frontType);
+    });
+  }
+
+  // Swap animation — smooth slide up
+  function swap() {
+    if (isAnimating || order.length < 2) return;
+    isAnimating = true;
+
+    var frontIdx = order[0];
+    var frontEl = cardEls[frontIdx];
+
+    // 1. Front card slides up and out
+    gsap.to(frontEl, {
+      y: '-=400', opacity: 0,
+      duration: 0.4, ease: 'power2.out'
+    });
+
+    // 2. Rotate order
+    order = order.slice(1).concat(order[0]);
+
+    // 3. Remaining cards slide up to new positions
+    setTimeout(function() {
+      cardEls.forEach(function(el, i) {
+        if (i === frontIdx) return;
+        var vi = order.indexOf(i);
+        var slot = makeSlot(vi);
+        gsap.to(el, {
+          x: slot.x, y: slot.y, z: slot.z,
+          xPercent: -50, yPercent: -50,
+          skewY: 0, opacity: slot.opacity, zIndex: slot.zIndex,
+          duration: 0.5, ease: 'power2.inOut', force3D: true
+        });
+      });
+    }, 150);
+
+    // 4. Send front card to back
+    setTimeout(function() {
+      var backSlot = makeSlot(cards.length - 1);
+      gsap.set(frontEl, {
+        x: backSlot.x, y: backSlot.y + 200, z: backSlot.z,
+        xPercent: -50, yPercent: -50,
+        opacity: 0, zIndex: backSlot.zIndex
+      });
+      gsap.to(frontEl, {
+        y: backSlot.y, opacity: backSlot.opacity,
+        duration: 0.4, ease: 'power2.out',
+        onComplete: function() { isAnimating = false; updateCounter(); }
+      });
+    }, 350);
+  }
+
+  // Reverse swap — back card slides in from top
+  function swapReverse() {
+    if (isAnimating || order.length < 2) return;
+    isAnimating = true;
+
+    var backIdx = order[order.length - 1];
+    var backEl = cardEls[backIdx];
+
+    // 1. Place back card above viewport
+    var frontSlot = makeSlot(0);
+    gsap.set(backEl, {
+      x: frontSlot.x, y: frontSlot.y - 400, z: frontSlot.z,
+      xPercent: -50, yPercent: -50,
+      opacity: 0, zIndex: frontSlot.zIndex
+    });
+
+    // 2. Rotate order
+    order = [backIdx].concat(order.slice(0, -1));
+
+    // 3. Others slide down
+    cardEls.forEach(function(el, i) {
+      if (i === backIdx) return;
+      var vi = order.indexOf(i);
+      var slot = makeSlot(vi);
+      gsap.to(el, {
+        x: slot.x, y: slot.y, z: slot.z,
+        xPercent: -50, yPercent: -50,
+        skewY: 0, opacity: slot.opacity, zIndex: slot.zIndex,
+        duration: 0.5, ease: 'power2.inOut', force3D: true
+      });
+    });
+
+    // 4. Back card slides in from top
+    gsap.to(backEl, {
+      y: frontSlot.y, opacity: 1,
+      duration: 0.5, ease: 'power2.out',
+      onComplete: function() { isAnimating = false; updateCounter(); }
+    });
+  }
+
+  // Auto rotation (disabled — kept for API compatibility)
+  var autoTimer = null;
+  function startAuto() {
+    stopAuto();
+    autoTimer = setInterval(function() {
+      if (!isPaused) swap();
+    }, 3000);
+  }
+  function stopAuto() {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  }
+
+  // Hover: subtle pull-out effect
+  cardEls.forEach(function(el, i) {
+    el.addEventListener('mouseenter', function() {
+      var vi = order.indexOf(i);
+      if (vi === 0) {
+        gsap.to(el, { scale: 1.03, duration: 0.3, ease: 'power2.out' });
+      }
+    });
+    el.addEventListener('mouseleave', function() {
+      gsap.to(el, { scale: 1, duration: 0.3, ease: 'power2.out' });
     });
   });
 
-  // Play/pause
-  const playBtns = wrapper.querySelectorAll('.music-play-btn');
-  let currentlyPlaying = null;
-  let currentPlayingIdx = null;
+  // --- Wheel: Hover-only card switching ---
+  var isHoveringCards = false;
+  var wheelCooldown = false;
 
-  playBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const idx = parseInt(btn.dataset.index);
-      const audio = cards[idx].querySelector('audio');
+  var cardViewport = document.querySelector('.cardswap-viewport');
+  if (cardViewport) {
+    cardViewport.addEventListener('mouseenter', function() { isHoveringCards = true; });
+    cardViewport.addEventListener('mouseleave', function() { isHoveringCards = false; });
+  }
 
-      if (currentlyPlaying && currentlyPlaying !== audio) {
-        currentlyPlaying.pause();
-        currentlyPlaying.currentTime = 0;
-        playBtns.forEach(b => b.classList.remove('playing'));
-        if (currentPlayingIdx !== null) {
-          const prevFill = cards[currentPlayingIdx].querySelector('.music-progress-fill');
-          if (prevFill) prevFill.style.width = '0%';
+  var snapContainer = document.getElementById('snapContainer');
+  if (snapContainer) {
+    snapContainer.addEventListener('wheel', function(e) {
+      if (!isHoveringCards || isAnimating || wheelCooldown) return;
+
+      e.preventDefault();
+      wheelCooldown = true;
+
+      if (e.deltaY > 0) swap();
+      else if (e.deltaY < 0) swapReverse();
+
+      setTimeout(function() { wheelCooldown = false; }, 600);
+    }, { passive: false });
+  }
+
+  // --- Touch Swipe ---
+  var touchStartY = 0;
+  var journeySectionEl = document.querySelector('.journey-section');
+  if (journeySectionEl) {
+    journeySectionEl.addEventListener('touchstart', function(e) {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    journeySectionEl.addEventListener('touchend', function(e) {
+      var diff = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(diff) < 50) return;
+      if (isAnimating) return;
+      if (diff > 0) swap();
+      else swapReverse();
+    }, { passive: true });
+  }
+
+  // --- Overlay (Card Extract/Return Animation) ---
+  var overlay = document.getElementById('cardOverlay');
+  var overlayContent = document.getElementById('cardOverlayContent');
+  var overlayClose = document.getElementById('cardOverlayClose');
+  var activeClone = null;
+  var activeCardRect = null;
+
+  function openOverlay(card, cardEl) {
+    var rect = cardEl.getBoundingClientRect();
+    activeCardRect = rect;
+    isPaused = true;
+
+    // Clone card for animation
+    var clone = cardEl.cloneNode(true);
+    clone.className = 'cardswap-card-clone';
+    clone.style.cssText = 'position:fixed;top:' + rect.top + 'px;left:' + rect.left + 'px;width:' + rect.width + 'px;height:' + rect.height + 'px;z-index:2001;margin:0;transform:none;pointer-events:auto;';
+    document.body.appendChild(clone);
+    activeClone = clone;
+
+    // Show backdrop
+    overlay.classList.add('active');
+    overlayContent.style.display = 'none';
+    document.body.style.overflow = 'hidden';
+
+    // Phase 1: Smooth expand to 85vw × 85vh
+    var targetW = Math.min(window.innerWidth * 0.85, 1200);
+    var targetH = window.innerHeight * 0.85;
+    gsap.to(clone, {
+      top: '50%', left: '50%',
+      xPercent: -50, yPercent: -50,
+      width: targetW, height: targetH,
+      borderRadius: 24,
+      duration: 0.6, ease: 'power2.out',
+      onComplete: function() {
+        // Phase 2: Replace content
+        clone.innerHTML = '<div class="overlay-expanded">' +
+          '<button class="clone-close" aria-label="Close"><i class="fas fa-times"></i></button>' +
+          renderOverlay(card) + '</div>';
+        clone.style.overflowY = 'hidden'; // split handles its own scroll
+
+        var cloneClose = clone.querySelector('.clone-close');
+        if (cloneClose) cloneClose.addEventListener('click', closeOverlay);
+
+        // Phase 3: Content stagger fade-in
+        var items = clone.querySelectorAll('.overlay-anim-item');
+        if (items.length) {
+          gsap.fromTo(items, { y: 20, opacity: 0 }, {
+            y: 0, opacity: 1,
+            duration: 0.4, ease: 'power2.out',
+            stagger: 0.08
+          });
+        }
+
+        // Animate skill bars
+        var skillFills = clone.querySelectorAll('.exp-skill-fill');
+        skillFills.forEach(function(fill) {
+          var level = fill.dataset.level || 0;
+          setTimeout(function() { fill.style.width = level + '%'; }, 300);
+        });
+
+        // Counter scroll animation for metrics
+        var counters = clone.querySelectorAll('.metric-value[data-count]');
+        counters.forEach(function(el) {
+          var target = parseInt(el.dataset.count) || 0;
+          var obj = { val: 0 };
+          gsap.to(obj, {
+            val: target, duration: 1.2, ease: 'power2.out',
+            onUpdate: function() { el.textContent = Math.round(obj.val); }
+          });
+        });
+
+        if (card.type === 'music') wireOverlayMusic(card, clone);
+      }
+    });
+  }
+
+  function closeOverlay() {
+    if (!activeClone) {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+      return;
+    }
+
+    // Reset music transparency
+    overlay.style.background = '';
+    activeClone.style.background = '';
+    activeClone.style.backdropFilter = '';
+    activeClone.style.webkitBackdropFilter = '';
+
+    // Phase 1: Content fade out
+    var items = activeClone.querySelectorAll('.overlay-anim-item');
+    gsap.to(items, { y: 10, opacity: 0, duration: 0.2, stagger: 0.03 });
+
+    // Phase 2: Clone shrinks back
+    var cloneRef = activeClone;
+    var rectRef = activeCardRect;
+    setTimeout(function() {
+      cloneRef.style.overflowY = 'hidden';
+      gsap.to(cloneRef, {
+        top: rectRef.top, left: rectRef.left,
+        xPercent: 0, yPercent: 0,
+        width: rectRef.width, height: rectRef.height,
+        borderRadius: 20,
+        duration: 0.5, ease: 'power2.inOut',
+        onComplete: function() {
+          if (cloneRef) cloneRef.remove();
+          activeClone = null;
+          activeCardRect = null;
+          overlay.classList.remove('active');
+          overlayContent.style.display = '';
+          document.body.style.overflow = '';
+          isPaused = false;
+        }
+      });
+    }, 150);
+  }
+
+  if (overlayClose) overlayClose.addEventListener('click', closeOverlay);
+  if (overlay) {
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) closeOverlay(); });
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && activeClone) closeOverlay();
+  });
+
+  // Click to open overlay — pass the card element
+  cardEls.forEach(function(el, i) {
+    el.addEventListener('click', function(e) {
+      if (e.target.closest('.cardswap-music-play') || e.target.closest('.cardswap-music-progress')) return;
+      openOverlay(cards[i], el);
+    });
+  });
+
+  function renderOverlay(card) {
+    // === EXPERIENCE — Timeline + Skills ===
+    if (card.type === 'experience') {
+      // Left nav
+      var leftNav = card.items.map(function(item, i) {
+        return '<div class="overlay-left-nav-item' + (i === 0 ? ' active' : '') + '" data-idx="' + i + '">' +
+          '<span class="overlay-left-nav-dot"></span>' +
+          '<span>' + item.company + '</span>' +
+        '</div>';
+      }).join('');
+
+      var left = '<div class="overlay-split-left">' +
+        '<h3 class="overlay-split-title overlay-anim-item">' + card.title + '</h3>' +
+        '<p class="overlay-split-desc overlay-anim-item">4 product internships across AI, social, fintech & GIS</p>' +
+        '<div class="overlay-left-stats overlay-anim-item">' +
+          '<div><span class="overlay-left-stat-num">' + card.items.length + '</span><span class="overlay-left-stat-label">Internships</span></div>' +
+        '</div>' +
+        '<div class="overlay-left-nav">' + leftNav + '</div>' +
+      '</div>';
+
+      // Right content — timeline entries
+      var right = card.items.map(function(item) {
+        var hl = item.highlights ? item.highlights.map(function(h) { return '<li>' + h + '</li>'; }).join('') : '';
+        var tags = item.tags.map(function(t) { return '<span class="exp-tag">' + t + '</span>'; }).join('');
+        // Extract skills from tags for visualization
+        var skills = item.tags.map(function(t, i) {
+          var levels = [85, 75, 70];
+          return '<div class="exp-skill-bar">' +
+            '<span class="exp-skill-name">' + t + '</span>' +
+            '<div class="exp-skill-track"><div class="exp-skill-fill" data-level="' + (levels[i] || 65) + '"></div></div>' +
+          '</div>';
+        }).join('');
+
+        return '<div class="overlay-exp-entry overlay-anim-item">' +
+          '<div class="exp-timeline-dot"></div>' +
+          '<div class="exp-entry-header">' +
+            '<img src="' + item.logo + '" alt="" class="exp-logo">' +
+            '<div>' +
+              '<h3>' + item.role + '</h3>' +
+              '<p class="exp-company">' + item.company + ' \u00b7 ' + item.period + '</p>' +
+            '</div>' +
+          '</div>' +
+          '<p class="exp-desc">' + item.desc + '</p>' +
+          (hl ? '<ul class="exp-highlights">' + hl + '</ul>' : '') +
+          '<div class="exp-skills">' + skills + '</div>' +
+          '<div class="exp-tags">' + tags + '</div>' +
+        '</div>';
+      }).join('');
+
+      return '<div class="overlay-split">' + left +
+        '<div class="overlay-split-right">' + right + '</div></div>';
+    }
+
+    // === RESEARCH — Academic Style ===
+    if (card.type === 'project') {
+      var paperCount = card.items.filter(function(i) { return i.badgeType === 'sci'; }).length;
+      var awardCount = card.items.filter(function(i) { return i.badgeType === 'award'; }).length;
+
+      var left = '<div class="overlay-split-left">' +
+        '<h3 class="overlay-split-title overlay-anim-item">' + card.title + '</h3>' +
+        '<p class="overlay-split-desc overlay-anim-item">Published research & academic achievements</p>' +
+        '<div class="overlay-left-stats overlay-anim-item">' +
+          '<div><span class="overlay-left-stat-num metric-value" data-count="' + paperCount + '">0</span><span class="overlay-left-stat-label">Publications</span></div>' +
+          '<div><span class="overlay-left-stat-num metric-value" data-count="' + awardCount + '">0</span><span class="overlay-left-stat-label">Awards</span></div>' +
+        '</div>' +
+      '</div>';
+
+      var right = card.items.map(function(item) {
+        var tags = item.tags.map(function(t) { return '<span class="project-keyword">' + t + '</span>'; }).join('');
+        var link = item.link ? '<a href="' + item.link + '" target="_blank" rel="noopener noreferrer" class="research-link">View Publication \u2192</a>' : '';
+        var citation = item.meta ? '<p class="research-citation">' + item.meta + '</p>' : '';
+
+        return '<div class="overlay-research-entry overlay-anim-item">' +
+          '<span class="project-badge">' + item.badge + '</span>' +
+          '<h3 class="research-title">' + item.title + '</h3>' +
+          citation +
+          '<p class="research-abstract">' + item.desc + '</p>' +
+          link +
+          '<div class="project-keywords">' + tags + '</div>' +
+        '</div>';
+      }).join('');
+
+      return '<div class="overlay-split">' + left +
+        '<div class="overlay-split-right">' + right + '</div></div>';
+    }
+
+    // === MUSIC — Player UI ===
+    if (card.type === 'music') {
+      var firstSong = card.songs[0];
+      var left = '<div class="overlay-split-left">' +
+        '<img src="' + firstSong.cover + '" alt="' + firstSong.name + '" class="music-player-cover overlay-anim-item" id="overlayMusicCover">' +
+        '<div class="overlay-anim-item" style="text-align:center;">' +
+          '<div class="music-player-title" id="overlayMusicTitle">' + firstSong.name + '</div>' +
+          '<div class="music-player-artist" id="overlayMusicArtist">' + firstSong.artist + '</div>' +
+        '</div>' +
+        '<div class="music-player-controls overlay-anim-item">' +
+          '<button class="music-player-btn" id="overlayMusicMainBtn" data-audio-id="' + firstSong.audioId + '"><i class="fas fa-play"></i></button>' +
+        '</div>' +
+        '<div class="overlay-anim-item">' +
+          '<div class="music-player-progress" id="overlayMusicProgress"><div class="music-player-progress-fill" id="overlayMusicProgressFill"></div></div>' +
+        '</div>' +
+      '</div>';
+
+      var songList = card.songs.map(function(song, i) {
+        return '<div class="overlay-music-item overlay-anim-item" data-song-index="' + i + '">' +
+          '<img src="' + song.cover + '" alt="' + song.name + '" class="overlay-music-cover">' +
+          '<div class="overlay-music-info">' +
+            '<div class="overlay-music-name">' + song.name + '</div>' +
+            '<div class="overlay-music-artist">' + song.artist + ' \u00b7 ' + song.genre + '</div>' +
+          '</div>' +
+          '<button class="overlay-music-play" data-audio-id="' + song.audioId + '" aria-label="Play ' + song.name + '"><i class="fas fa-play"></i></button>' +
+        '</div>';
+      }).join('');
+
+      var right = '<h3 class="overlay-split-title overlay-anim-item">Playlist</h3>' +
+        '<p class="overlay-split-desc overlay-anim-item">' + card.desc + '</p>' +
+        '<div class="overlay-music-list">' + songList + '</div>';
+
+      return '<div class="overlay-split">' + left +
+        '<div class="overlay-split-right">' + right + '</div></div>';
+    }
+
+    // === NOW — Chat + Status Indicator ===
+    if (card.type === 'now') {
+      var left = '<div class="overlay-split-left">' +
+        '<h3 class="overlay-split-title overlay-anim-item">' + card.title + '</h3>' +
+        '<div class="status-indicator overlay-anim-item">' +
+          '<span class="status-dot"></span>' +
+          '<span class="status-text">Currently: Studying at WHU</span>' +
+        '</div>' +
+        '<p class="overlay-split-desc overlay-anim-item">' + card.meta + '</p>' +
+        '<p class="overlay-split-desc overlay-anim-item" style="margin-top:auto;font-size:0.75rem;color:var(--text-muted);">' + card.desc + '</p>' +
+      '</div>';
+
+      var labelColors = { Doing: 'building', Reading: 'reading', Thinking: 'learning', Listening: 'listening' };
+      var chatLines = card.nowItems.map(function(item) {
+        var colorClass = labelColors[item.label] || 'building';
+        return '<div class="chat-bubble chat-answer overlay-anim-item">' +
+          '<span class="chat-avatar">J</span>' +
+          '<div class="chat-content">' +
+            '<span class="now-label-tag ' + colorClass + '">' + item.label + '</span>' +
+            '<p>' + item.text + '</p>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+      var right = '<div class="chat-bubble chat-question overlay-anim-item"><span class="chat-avatar">?</span><p>What are you up to lately?</p></div>' +
+        chatLines;
+
+      return '<div class="overlay-split">' + left +
+        '<div class="overlay-split-right" style="display:flex;flex-direction:column;gap:1rem;">' + right + '</div></div>';
+    }
+
+    return '';
+  }
+
+  // --- Music playback ---
+  var musicState = { audio: null, playing: false };
+
+  function connectFluidAudio(audioEl) {
+    if (window.fluidAudio) window.fluidAudio.connect(audioEl);
+    document.querySelector('.journey-section')?.classList.add('audio-active');
+  }
+
+  function disconnectFluidAudio() {
+    if (window.fluidAudio) window.fluidAudio.disconnect();
+    document.querySelector('.journey-section')?.classList.remove('audio-active');
+  }
+
+  // Mini player on music card
+  var musicCardEl = stackEl.querySelector('[data-card-id="music"]');
+  if (musicCardEl) {
+    var miniPlay = musicCardEl.querySelector('.cardswap-music-play');
+    var miniProgress = musicCardEl.querySelector('.cardswap-music-progress-fill');
+    var miniName = musicCardEl.querySelector('.cardswap-music-song-name');
+    var musicData = cards.find(function(c) { return c.id === 'music'; });
+    var miniSongIdx = 0;
+
+    if (miniPlay) {
+      miniPlay.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var audioEl = document.getElementById(musicData.songs[miniSongIdx].audioId);
+        if (musicState.playing && musicState.audio === audioEl) {
+          audioEl.pause();
+          musicState.playing = false;
+          miniPlay.classList.remove('playing');
+          disconnectFluidAudio();
+        } else {
+          if (musicState.audio && musicState.audio !== audioEl) {
+            musicState.audio.pause();
+            musicState.audio.currentTime = 0;
+            disconnectFluidAudio();
+          }
+          audioEl.play().catch(function() {});
+          musicState.audio = audioEl;
+          musicState.playing = true;
+          miniPlay.classList.add('playing');
+          connectFluidAudio(audioEl);
+          audioEl.ontimeupdate = function() {
+            if (audioEl.duration && miniProgress) {
+              miniProgress.style.width = (audioEl.currentTime / audioEl.duration * 100) + '%';
+            }
+          };
+          audioEl.onended = function() {
+            miniPlay.classList.remove('playing');
+            if (miniProgress) miniProgress.style.width = '0%';
+            musicState.playing = false;
+            musicState.audio = null;
+            disconnectFluidAudio();
+          };
+        }
+      });
+    }
+  }
+
+  // Overlay music player
+  function wireOverlayMusic(card, container) {
+    var root = container || overlayContent;
+    var items = root.querySelectorAll('.overlay-music-item');
+    var mainBtn = root.querySelector('#overlayMusicMainBtn');
+    var coverImg = root.querySelector('#overlayMusicCover');
+    var titleEl = root.querySelector('#overlayMusicTitle');
+    var artistEl = root.querySelector('#overlayMusicArtist');
+    var progressBar = root.querySelector('#overlayMusicProgress');
+    var progressFill = root.querySelector('#overlayMusicProgressFill');
+    var songs = card.songs || [];
+    var currentSongIndex = 0;
+
+    function setMusicTransparency(on) {
+      if (on) {
+        overlay.style.background = 'rgba(0, 0, 0, 0.3)';
+        if (activeClone) {
+          activeClone.style.background = 'rgba(15, 20, 30, 0.75)';
+          activeClone.style.backdropFilter = 'blur(8px)';
+          activeClone.style.webkitBackdropFilter = 'blur(8px)';
+        }
+      } else {
+        overlay.style.background = '';
+        if (activeClone) {
+          activeClone.style.background = '';
+          activeClone.style.backdropFilter = '';
+          activeClone.style.webkitBackdropFilter = '';
         }
       }
-
-      if (audio.paused) {
-        audio.play().catch(() => {});
-        btn.classList.add('playing');
-        currentlyPlaying = audio;
-        currentPlayingIdx = idx;
-      } else {
-        audio.pause();
-        btn.classList.remove('playing');
-        currentlyPlaying = null;
-        currentPlayingIdx = null;
-      }
-    });
-  });
-
-  // Progress bars
-  cards.forEach((card, i) => {
-    const audio = card.querySelector('audio');
-    const progressBar = card.querySelector('.music-progress-bar');
-    const progressFill = card.querySelector('.music-progress-fill');
-
-    audio.addEventListener('timeupdate', () => {
-      if (audio.duration) {
-        progressFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
-      }
-    });
-
-    audio.addEventListener('ended', () => {
-      playBtns[i].classList.remove('playing');
-      progressFill.style.width = '0%';
-      currentlyPlaying = null;
-      currentPlayingIdx = null;
-    });
-
-    progressBar.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (audio.duration) {
-        const rect = progressBar.getBoundingClientRect();
-        audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
-      }
-    });
-  });
-
-  // Touch swipe
-  let touchStartY = 0;
-  stack.addEventListener('touchstart', (e) => {
-    touchStartY = e.touches[0].clientY;
-  }, { passive: true });
-
-  stack.addEventListener('touchend', (e) => {
-    const deltaY = touchStartY - e.changedTouches[0].clientY;
-    if (Math.abs(deltaY) > 30) {
-      currentIndex = deltaY > 0
-        ? (currentIndex + 1) % totalCards
-        : (currentIndex - 1 + totalCards) % totalCards;
-      updateStack(currentIndex);
     }
-  }, { passive: true });
 
-  updateStack(0);
+    function updateLeftPanel(song) {
+      if (coverImg) { coverImg.src = song.cover; coverImg.alt = song.name; }
+      if (titleEl) titleEl.textContent = song.name;
+      if (artistEl) artistEl.textContent = song.artist;
+      if (mainBtn) mainBtn.dataset.audioId = song.audioId;
+    }
+
+    function clearAllPlaying() {
+      items.forEach(function(it) {
+        it.classList.remove('playing');
+        var b = it.querySelector('.overlay-music-play');
+        if (b) { b.classList.remove('playing'); b.querySelector('i').className = 'fas fa-play'; }
+      });
+      if (mainBtn) mainBtn.querySelector('i').className = 'fas fa-play';
+    }
+
+    function playSong(index) {
+      var song = songs[index];
+      if (!song) return;
+      var audioEl = document.getElementById(song.audioId);
+      if (!audioEl) return;
+
+      // Stop previous if different
+      if (musicState.audio && musicState.audio !== audioEl) {
+        musicState.audio.pause();
+        musicState.audio.currentTime = 0;
+        disconnectFluidAudio();
+      }
+      clearAllPlaying();
+      currentSongIndex = index;
+      updateLeftPanel(song);
+
+      if (audioEl.paused) {
+        audioEl.play().catch(function() {});
+        musicState.audio = audioEl;
+        musicState.playing = true;
+        connectFluidAudio(audioEl);
+        setMusicTransparency(true);
+
+        // Highlight playing item + main btn
+        if (mainBtn) mainBtn.querySelector('i').className = 'fas fa-pause';
+        var activeItem = root.querySelector('.overlay-music-item[data-song-index="' + index + '"]');
+        if (activeItem) {
+          activeItem.classList.add('playing');
+          var ib = activeItem.querySelector('.overlay-music-play');
+          if (ib) { ib.classList.add('playing'); ib.querySelector('i').className = 'fas fa-pause'; }
+        }
+
+        audioEl.ontimeupdate = function() {
+          if (audioEl.duration && progressFill) {
+            progressFill.style.width = (audioEl.currentTime / audioEl.duration * 100) + '%';
+          }
+        };
+        audioEl.onended = function() {
+          clearAllPlaying();
+          if (progressFill) progressFill.style.width = '0%';
+          musicState.playing = false;
+          musicState.audio = null;
+          disconnectFluidAudio();
+          setMusicTransparency(false);
+        };
+      } else {
+        // Already playing this song — pause it
+        audioEl.pause();
+        musicState.playing = false;
+        disconnectFluidAudio();
+        setMusicTransparency(false);
+      }
+    }
+
+    // Wire right-panel song list items
+    items.forEach(function(item) {
+      var btn = item.querySelector('.overlay-music-play');
+      var idx = parseInt(item.dataset.songIndex);
+
+      // Click entire item row to play
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        playSong(idx);
+      });
+      if (btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          playSong(idx);
+        });
+      }
+    });
+
+    // Wire main play button in left panel
+    if (mainBtn) {
+      mainBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        playSong(currentSongIndex);
+      });
+    }
+
+    // Progress bar seek
+    if (progressBar) {
+      progressBar.addEventListener('click', function(e) {
+        if (musicState.audio && musicState.audio.duration) {
+          var rect = progressBar.getBoundingClientRect();
+          musicState.audio.currentTime = ((e.clientX - rect.left) / rect.width) * musicState.audio.duration;
+        }
+      });
+    }
+  }
+
+  // Dot navigation — bring matching card to front
+  var dots = document.querySelectorAll('.journey-dot');
+  dots.forEach(function(dot) {
+    dot.addEventListener('click', function() {
+      var targetType = dot.dataset.type;
+      var targetIdx = -1;
+      cards.forEach(function(c, idx) { if (c.type === targetType) targetIdx = idx; });
+      if (targetIdx < 0 || order[0] === targetIdx) return;
+      var pos = order.indexOf(targetIdx);
+      order.splice(pos, 1);
+      order.unshift(targetIdx);
+      placeAll(true);
+      updateCounter();
+    });
+  });
+
+  updateCounter();
+}
+
+// ===== Typewriter Effect =====
+function initTypewriter() {
+  const el = document.querySelector('.typewriter-text');
+  if (!el) return;
+
+  const phrases = ['Technical Romanticist', 'AI Product Builder', 'Sense-Making Thinker'];
+
+  // Respect reduced motion: show first phrase statically
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = phrases[0];
+    return;
+  }
+
+  let phraseIdx = 0;
+  let charIdx = 0;
+  let isDeleting = false;
+
+  function tick() {
+    const current = phrases[phraseIdx];
+
+    if (!isDeleting) {
+      charIdx++;
+      el.textContent = current.substring(0, charIdx);
+      if (charIdx === current.length) {
+        setTimeout(() => { isDeleting = true; tick(); }, 1500);
+        return;
+      }
+      setTimeout(tick, 80);
+    } else {
+      charIdx--;
+      el.textContent = current.substring(0, charIdx);
+      if (charIdx === 0) {
+        isDeleting = false;
+        phraseIdx = (phraseIdx + 1) % phrases.length;
+        setTimeout(tick, 400);
+        return;
+      }
+      setTimeout(tick, 40);
+    }
+  }
+
+  tick();
+}
+
+// ===== Bento Skill Bars Animation =====
+function initBentoSkills() {
+  const fills = document.querySelectorAll('.bento-skill-fill');
+  if (!fills.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const level = entry.target.getAttribute('data-level') || 0;
+          entry.target.style.width = level + '%';
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.3 }
+  );
+
+  fills.forEach(el => observer.observe(el));
+}
+
+// ===== Pixel Transition Card =====
+function initPixelTransition() {
+  const card = document.getElementById('pixelCard');
+  const pixelGrid = document.getElementById('pixelGrid');
+  if (!card || !pixelGrid) return;
+
+  const gridSize = 8;
+  const pixelColor = '#ffffff';
+  const animationStepDuration = 0.4;
+  let isActive = false;
+  let delayedCall = null;
+
+  const isTouchDevice =
+    'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.matchMedia('(pointer: coarse)').matches;
+
+  // Generate pixel grid
+  pixelGrid.innerHTML = '';
+  const size = 100 / gridSize;
+  for (let row = 0; row < gridSize; row++) {
+    for (let col = 0; col < gridSize; col++) {
+      const pixel = document.createElement('div');
+      pixel.classList.add('pixel-card__pixel');
+      pixel.style.backgroundColor = pixelColor;
+      pixel.style.width = size + '%';
+      pixel.style.height = size + '%';
+      pixel.style.left = (col * size) + '%';
+      pixel.style.top = (row * size) + '%';
+      pixelGrid.appendChild(pixel);
+    }
+  }
+
+  const activeEl = card.querySelector('.pixel-card__active');
+
+  function animatePixels(activate) {
+    isActive = activate;
+    const pixels = pixelGrid.querySelectorAll('.pixel-card__pixel');
+    if (!pixels.length || !activeEl) return;
+
+    gsap.killTweensOf(pixels);
+    if (delayedCall) delayedCall.kill();
+
+    gsap.set(pixels, { display: 'none' });
+
+    const totalPixels = pixels.length;
+    const staggerDuration = animationStepDuration / totalPixels;
+
+    // Show pixels with random stagger
+    gsap.to(pixels, {
+      display: 'block',
+      duration: 0,
+      stagger: { each: staggerDuration, from: 'random' }
+    });
+
+    // Switch content at midpoint
+    delayedCall = gsap.delayedCall(animationStepDuration, function() {
+      activeEl.style.display = activate ? 'block' : 'none';
+      activeEl.style.pointerEvents = activate ? 'none' : '';
+    });
+
+    // Hide pixels after transition
+    gsap.to(pixels, {
+      display: 'none',
+      duration: 0,
+      delay: animationStepDuration,
+      stagger: { each: staggerDuration, from: 'random' }
+    });
+  }
+
+  if (isTouchDevice) {
+    card.addEventListener('click', function() {
+      animatePixels(!isActive);
+    });
+  } else {
+    card.addEventListener('mouseenter', function() {
+      if (!isActive) animatePixels(true);
+    });
+    card.addEventListener('mouseleave', function() {
+      if (isActive) animatePixels(false);
+    });
+    card.addEventListener('focus', function() {
+      if (!isActive) animatePixels(true);
+    });
+    card.addEventListener('blur', function() {
+      if (isActive) animatePixels(false);
+    });
+  }
 }
 
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', () => {
   initThemeToggle();
   initLiquidEther();
+  initTypewriter();
   initNavbar();
   initMobileMenu();
   initScrollReveal();
   initActiveNavLinks();
   initScrollIndicator();
   initNavScroll();
-  initMusicStack();
+  initCardSwap();
+  initBentoSkills();
+  initPixelTransition();
 });
