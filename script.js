@@ -44,8 +44,8 @@ function initLiquidEther() {
     autoResumeDelay: 3000,
     autoRampDuration: 0.6,
     audioMouseForce: 0,
-    audioCursorSize: 50,
-    audioForceMultiplier: 0.3,
+    audioCursorSize: 60,
+    audioForceMultiplier: 0.5,
   };
 
   // --- Palette Texture ---

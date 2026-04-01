@@ -1,3 +1,6 @@
 .DS_Store
 *.pdf
 !resume.pdf
+.claude/
+impeccable/
+*.docx
