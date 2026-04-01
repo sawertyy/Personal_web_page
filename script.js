@@ -1491,9 +1491,12 @@ function initCardSwap() {
   }
 
   var snapContainer = document.getElementById('snapContainer');
+  var allSections = snapContainer ? Array.from(snapContainer.querySelectorAll('.snap-section')) : [];
+  var pageCooldown = false;
+
   if (snapContainer) {
     snapContainer.addEventListener('wheel', function(e) {
-      // === First-visit hijack mode ===
+      // === First-visit Journey hijack mode ===
       if (journeyHijack && isJourneyVisible()) {
         // Detect first arrival — ignore inertia scroll from snap
         if (!journeyWasVisible) {
@@ -1510,41 +1513,65 @@ function initCardSwap() {
         var frontIdx = order[0];
 
         if (e.deltaY > 0) {
-          // Scrolling down
           if (frontIdx === cards.length - 1) {
-            // Last card (Now) — release hijack, let page scroll to Contact
             journeyHijack = false;
+            // Fall through to global page scroll below
+          } else {
+            e.preventDefault();
+            if (!isAnimating && !wheelCooldown) {
+              wheelCooldown = true;
+              swap();
+              setTimeout(function() { wheelCooldown = false; }, 600);
+            }
             return;
-          }
-          e.preventDefault();
-          if (!isAnimating && !wheelCooldown) {
-            wheelCooldown = true;
-            swap();
-            setTimeout(function() { wheelCooldown = false; }, 600);
           }
         } else if (e.deltaY < 0) {
-          // Scrolling up
           if (frontIdx === 0) {
-            // First card (Experience) — let page scroll back to About
+            // Fall through to global page scroll below
+          } else {
+            e.preventDefault();
+            if (!isAnimating && !wheelCooldown) {
+              wheelCooldown = true;
+              swapReverse();
+              setTimeout(function() { wheelCooldown = false; }, 600);
+            }
             return;
           }
-          e.preventDefault();
-          if (!isAnimating && !wheelCooldown) {
-            wheelCooldown = true;
-            swapReverse();
-            setTimeout(function() { wheelCooldown = false; }, 600);
-          }
         }
-        return;
       }
 
       // === Post-hijack: hover-only card switching ===
-      if (!isHoveringCards || isAnimating || wheelCooldown) return;
+      if (isHoveringCards && !isAnimating && !wheelCooldown) {
+        e.preventDefault();
+        wheelCooldown = true;
+        if (e.deltaY > 0) swap();
+        else if (e.deltaY < 0) swapReverse();
+        setTimeout(function() { wheelCooldown = false; }, 600);
+        return;
+      }
+
+      // === Global one-page-at-a-time scroll ===
+      if (pageCooldown) { e.preventDefault(); return; }
+
+      var currentIdx = 0;
+      for (var i = 0; i < allSections.length; i++) {
+        var rect = allSections[i].getBoundingClientRect();
+        if (Math.abs(rect.top) < window.innerHeight / 2) { currentIdx = i; break; }
+      }
+
+      var targetIdx;
+      if (e.deltaY > 0) {
+        targetIdx = Math.min(currentIdx + 1, allSections.length - 1);
+      } else {
+        targetIdx = Math.max(currentIdx - 1, 0);
+      }
+
+      if (targetIdx === currentIdx) return;
+
       e.preventDefault();
-      wheelCooldown = true;
-      if (e.deltaY > 0) swap();
-      else if (e.deltaY < 0) swapReverse();
-      setTimeout(function() { wheelCooldown = false; }, 600);
+      pageCooldown = true;
+      allSections[targetIdx].scrollIntoView({ behavior: 'smooth' });
+      setTimeout(function() { pageCooldown = false; }, 800);
     }, { passive: false });
   }
 
