@@ -1552,6 +1552,15 @@ function initCardSwap() {
       return;
     }
 
+    // Stop music if playing
+    if (musicState.audio) {
+      musicState.audio.pause();
+      musicState.audio.currentTime = 0;
+      musicState.playing = false;
+      musicState.audio = null;
+      disconnectFluidAudio();
+    }
+
     // Reset music transparency
     overlay.style.background = '';
     activeClone.style.background = '';
@@ -1831,10 +1840,11 @@ function initCardSwap() {
     var currentSongIndex = 0;
 
     function setMusicTransparency(on) {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       if (on) {
-        overlay.style.background = 'rgba(0, 0, 0, 0.3)';
+        overlay.style.background = isDark ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.15)';
         if (activeClone) {
-          activeClone.style.background = 'rgba(15, 20, 30, 0.75)';
+          activeClone.style.background = isDark ? 'rgba(15, 20, 30, 0.75)' : 'rgba(255, 255, 255, 0.8)';
           activeClone.style.backdropFilter = 'blur(8px)';
           activeClone.style.webkitBackdropFilter = 'blur(8px)';
         }
