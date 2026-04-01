@@ -1979,7 +1979,7 @@ function initTypewriter() {
   const el = document.querySelector('.typewriter-text');
   if (!el) return;
 
-  const phrases = ['Technical Romanticist', 'AI Product Builder', 'Sense-Making Thinker'];
+  const phrases = ['INTP', 'WHU Master\'s Student', 'Product Manager Intern'];
 
   // Respect reduced motion: show first phrase statically
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {

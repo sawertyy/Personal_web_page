@@ -684,25 +684,21 @@ a:hover {
   color: var(--accent);
 }
 
-.resume-btn {
+.resume-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1.2rem;
-  border: 1px solid var(--accent);
-  border-radius: 50px;
+  gap: 0.35rem;
   color: var(--accent);
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   font-weight: 500;
-  letter-spacing: 0.05em;
-  transition: all 0.3s ease;
-  width: fit-content;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.3s ease;
+  margin-top: 0.75rem;
 }
 
-.resume-btn:hover {
-  background: var(--accent);
-  color: #ffffff;
-  transform: translateY(-1px);
+.resume-link:hover {
+  color: var(--accent-hover);
 }
 
 /* ===== Experience Section ===== */
@@ -3325,7 +3321,7 @@ a:hover {
   border-radius: 50%;
 }
 
-.resume-btn:focus-visible,
+.resume-link:focus-visible,
 .contact-btn:focus-visible {
   outline-offset: 4px;
 }
