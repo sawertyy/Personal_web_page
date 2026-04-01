@@ -1474,6 +1474,8 @@ function initCardSwap() {
   var isHoveringCards = false;
   var wheelCooldown = false;
   var journeyHijack = true;
+  var journeyJustArrived = false;
+  var journeyWasVisible = false;
   var journeySectionEl = document.querySelector('.journey-section');
 
   var cardViewport = document.querySelector('.cardswap-viewport');
@@ -1493,6 +1495,18 @@ function initCardSwap() {
     snapContainer.addEventListener('wheel', function(e) {
       // === First-visit hijack mode ===
       if (journeyHijack && isJourneyVisible()) {
+        // Detect first arrival — ignore inertia scroll from snap
+        if (!journeyWasVisible) {
+          journeyWasVisible = true;
+          journeyJustArrived = true;
+          e.preventDefault();
+          setTimeout(function() { journeyJustArrived = false; }, 500);
+          return;
+        }
+        if (journeyJustArrived) {
+          e.preventDefault();
+          return;
+        }
         var frontIdx = order[0];
 
         if (e.deltaY > 0) {
