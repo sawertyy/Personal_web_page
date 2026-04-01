@@ -134,19 +134,17 @@ a:hover {
   justify-content: center;
   gap: 1.5rem;
   padding: 0.5rem 1.5rem;
-  background: var(--bg-navbar);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border);
-  border-radius: 50px;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
   transition: all 0.3s ease;
   width: fit-content;
 }
 
 .navbar.scrolled {
   padding: 0.4rem 1.25rem;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: none;
 }
 
 .nav-links {
