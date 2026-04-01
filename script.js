@@ -1331,18 +1331,18 @@ function initCardSwap() {
     if (chapterNum && chapterLabel) {
       // Slide out old text
       gsap.to([chapterNum, chapterLabel], {
-        y: slideOut, opacity: 0, duration: 0.2, ease: 'power2.in',
+        y: slideOut, opacity: 0, duration: 0.15, ease: 'power2.in',
         onComplete: function() {
           chapterNum.textContent = String(frontIdx + 1).padStart(2, '0');
           chapterLabel.textContent = card.typeLabel;
-          // Slide in new text from opposite direction
-          gsap.fromTo([chapterNum, chapterLabel],
+          gsap.fromTo(chapterNum,
             { y: slideIn, opacity: 0 },
-            { y: 0, opacity: chapterNum === chapterNum ? 0.25 : 1, duration: 0.3, ease: 'power2.out' }
+            { y: 0, opacity: 0.25, duration: 0.25, ease: 'power2.out' }
           );
-          // Fix: num has opacity 0.25, label has opacity 1
-          gsap.to(chapterNum, { opacity: 0.25, duration: 0.3, ease: 'power2.out' });
-          gsap.to(chapterLabel, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+          gsap.fromTo(chapterLabel,
+            { y: slideIn, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.25, ease: 'power2.out' }
+          );
         }
       });
     }
@@ -1371,6 +1371,7 @@ function initCardSwap() {
 
     // 2. Rotate order
     order = order.slice(1).concat(order[0]);
+    updateCounter('up');
 
     // 3. Remaining cards slide up to new positions
     setTimeout(function() {
@@ -1398,7 +1399,7 @@ function initCardSwap() {
       gsap.to(frontEl, {
         y: backSlot.y, opacity: backSlot.opacity,
         duration: 0.4, ease: 'power2.out',
-        onComplete: function() { isAnimating = false; updateCounter('up'); }
+        onComplete: function() { isAnimating = false; }
       });
     }, 350);
   }
@@ -1421,6 +1422,7 @@ function initCardSwap() {
 
     // 2. Rotate order
     order = [backIdx].concat(order.slice(0, -1));
+    updateCounter('down');
 
     // 3. Others slide down
     cardEls.forEach(function(el, i) {
@@ -1439,7 +1441,7 @@ function initCardSwap() {
     gsap.to(backEl, {
       y: frontSlot.y, opacity: 1,
       duration: 0.5, ease: 'power2.out',
-      onComplete: function() { isAnimating = false; updateCounter('down'); }
+      onComplete: function() { isAnimating = false; }
     });
   }
 
