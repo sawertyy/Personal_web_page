@@ -22,14 +22,11 @@
 
   <!-- Navigation -->
   <nav class="navbar">
-    <div class="nav-logo">JH</div>
+    <a href="#home" class="nav-logo" aria-label="Back to top">JH</a>
     <div class="nav-links">
       <a href="#home" class="active">Home</a>
       <a href="#about">About</a>
-      <a href="#education">Education</a>
-      <a href="#experience">Experience</a>
-      <a href="#projects">Projects</a>
-      <a href="#music">Music</a>
+      <a href="#journey">Journey</a>
       <a href="#contact">Contact</a>
     </div>
     <div class="nav-right">
@@ -51,13 +48,7 @@
     <!-- Hero Section -->
     <section id="home" class="snap-section hero">
       <div class="hero-content">
-        <p class="hero-identity"><em>Technical Romanticist</em></p>
-        <p class="hero-role">AI Product Builder &mdash; Exploring the intersection of data, design & human insight</p>
-        <div class="hero-social">
-          <a href="https://github.com/sawertyy" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
-          <a href="https://www.researchgate.net/profile/Jiayi-Hu-32?ev=hdr_xprf" target="_blank" rel="noopener noreferrer" aria-label="ResearchGate"><i class="fab fa-researchgate"></i></a>
-          <a href="https://www.xiaohongshu.com/user/profile/616993e0000000000201a75b?xsec_token=YBn0IWe2wm4A5foi42kf20UXkuMh5hap4q_qxqHtNgpVU=&xsec_source=app_share&xhsshare=WeixinSession&appuid=616993e0000000000201a75b&apptime=1773841992&share_id=c9d528275f494b6ea77bb009c127dea9&wechatWid=7a17883496a97b08ebb2072d5971548e&wechatOrigin=menu" target="_blank" rel="noopener noreferrer" aria-label="RedBook"><i class="fas fa-book-open"></i></a>
-        </div>
+        <p class="hero-statement">Rationality builds the structure.<br>Sensitivity finds the beauty.</p>
       </div>
       <div class="hero-scroll-hint">
         <span>scroll</span>
@@ -65,208 +56,121 @@
       </div>
     </section>
 
-    <!-- About Section -->
+    <!-- About Section — Bento Grid -->
     <section id="about" class="snap-section about-section">
-      <div class="about-layout">
-        <div class="about-photo">
-          <img src="profile.jpg" alt="Jiayi Hu" class="profile-photo">
+      <div class="about-bento">
+
+        <!-- Photo card (col 1, spans 2 rows) -->
+        <div class="bento-card bento-photo">
+          <img src="profile.jpg" alt="Jiayi Hu" class="bento-photo-img">
         </div>
-        <div class="about-text">
-          <h2 class="section-label">About</h2>
-          <p class="about-headline">Master's student at <strong>Wuhan University</strong>, SCI first-author, with product internships at <strong>Baidu</strong>, <strong>Xiaohongshu</strong>, <strong>BaiRong Cloud</strong> & <strong>Esri China</strong>.</p>
-          <p class="about-sub">Passionate about LLM applications, user growth, and data-driven product design. Aspiring Product Manager bridging AI and human experience.</p>
-          <div class="about-stats">
-            <div class="stat">
-              <span class="stat-number">4</span>
-              <span class="stat-label">Product Internships</span>
-            </div>
-            <div class="stat">
-              <span class="stat-number">SCI</span>
-              <span class="stat-label">Q2 First Author</span>
-            </div>
-            <div class="stat">
-              <span class="stat-number">2</span>
-              <span class="stat-label">National Awards</span>
-            </div>
-          </div>
+
+        <!-- Name + Intro card (col 2, row 1) -->
+        <div class="bento-card bento-intro">
+          <h2 class="bento-name-title">JIAYI HU</h2>
+          <p class="bento-typewriter"><span class="typewriter-text"></span><span class="typewriter-cursor">|</span></p>
+          <p class="bento-role">AI Product Builder &mdash; Exploring the intersection of data, design &amp; human insight</p>
+          <div class="bento-intro-divider"></div>
+          <h3 class="bento-card-label">About</h3>
+          <p class="bento-intro-text">Master's student at <strong>Wuhan University</strong>, SCI first-author, with product internships at <strong>Baidu</strong>, <strong>Xiaohongshu</strong>, <strong>BaiRong Cloud</strong> &amp; <strong>Esri China</strong>.</p>
+          <p class="bento-sub">Building AI products that feel human.</p>
           <a href="resume.pdf" download class="resume-btn"><i class="fas fa-download"></i> Resume</a>
         </div>
+
+        <!-- Stats + Skills card (col 3, row 1) -->
+        <div class="bento-card bento-skills">
+          <div class="bento-stats-row">
+            <div class="bento-stat">
+              <span class="bento-stat-num">4</span>
+              <span class="bento-stat-label">Internships</span>
+            </div>
+            <div class="bento-stat">
+              <span class="bento-stat-num">SCI</span>
+              <span class="bento-stat-label">First Author</span>
+            </div>
+            <div class="bento-stat">
+              <span class="bento-stat-num">2</span>
+              <span class="bento-stat-label">Awards</span>
+            </div>
+          </div>
+          <div class="bento-intro-divider"></div>
+          <h3 class="bento-card-label">Skills</h3>
+          <div class="bento-skill-bars">
+            <div class="bento-skill"><span class="bento-skill-name">Python</span><div class="bento-skill-track"><div class="bento-skill-fill" data-level="85"></div></div></div>
+            <div class="bento-skill"><span class="bento-skill-name">SQL</span><div class="bento-skill-track"><div class="bento-skill-fill" data-level="80"></div></div></div>
+            <div class="bento-skill"><span class="bento-skill-name">Figma</span><div class="bento-skill-track"><div class="bento-skill-fill" data-level="75"></div></div></div>
+          </div>
+        </div>
+
+        <!-- Education card (col 2, row 2) -->
+        <div class="bento-card bento-edu">
+          <h3 class="bento-card-label">Education</h3>
+          <div class="bento-edu-timeline">
+            <div class="bento-edu-item">
+              <span class="bento-edu-date">2025 &mdash; Present</span>
+              <h4 class="bento-edu-school">Wuhan University</h4>
+              <p class="bento-edu-degree">M.Eng. Spatiotemporal Big Data</p>
+              <p class="bento-edu-note">985 &middot; Recommended Admission</p>
+            </div>
+            <div class="bento-edu-item">
+              <span class="bento-edu-date">2021 &mdash; 2025</span>
+              <h4 class="bento-edu-school">China University of Geosciences</h4>
+              <p class="bento-edu-degree">B.S. Geographic Information Science</p>
+              <p class="bento-edu-note">GPA 3.86 (Top 5%) &middot; National Scholarship &middot; 211</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social + Interests card (col 3, row 2) -->
+        <div class="bento-card bento-social">
+          <h3 class="bento-card-label">Connect</h3>
+          <div class="bento-social-links">
+            <a href="https://github.com/sawertyy" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://www.researchgate.net/profile/Jiayi-Hu-32?ev=hdr_xprf" target="_blank" rel="noopener noreferrer" aria-label="ResearchGate"><i class="fab fa-researchgate"></i></a>
+            <a href="https://www.xiaohongshu.com/user/profile/616993e0000000000201a75b?xsec_token=YBn0IWe2wm4A5foi42kf20UXkuMh5hap4q_qxqHtNgpVU=&xsec_source=app_share&xhsshare=WeixinSession&appuid=616993e0000000000201a75b&apptime=1773841992&share_id=c9d528275f494b6ea77bb009c127dea9&wechatWid=7a17883496a97b08ebb2072d5971548e&wechatOrigin=menu" target="_blank" rel="noopener noreferrer" aria-label="RedBook"><i class="fas fa-book-open"></i></a>
+          </div>
+          <div class="bento-intro-divider"></div>
+          <h3 class="bento-card-label">Interests</h3>
+          <div class="bento-interest-tags">
+            <span class="bento-tag"><i class="fas fa-music"></i> Music</span>
+            <span class="bento-tag"><i class="fas fa-camera"></i> Photography</span>
+            <span class="bento-tag"><i class="fas fa-book"></i> Reading</span>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <!-- Education Section -->
-    <section id="education" class="snap-section education-section">
-      <div class="section-inner">
-        <h2 class="section-label">Education</h2>
-        <div class="edu-timeline">
-          <div class="edu-item anim-item">
-            <span class="edu-date">2025 — Present</span>
-            <h3 class="edu-school">Wuhan University</h3>
-            <p class="edu-degree">M.Eng. Surveying & Mapping (Spatiotemporal Big Data)</p>
-            <p class="edu-note">Project 985 &middot; Recommended Admission</p>
+    <!-- Journey Section (CardSwap) -->
+    <section id="journey" class="snap-section journey-section">
+      <div class="journey-layout">
+        <div class="journey-info">
+          <h2 class="section-label">Journey</h2>
+          <p class="journey-intro">A snapshot of where I've been and what I'm building — from product internships to published research, plus the music that keeps me going.</p>
+          <div class="journey-chapter">
+            <span class="journey-chapter-num" id="journeyChapterNum">01</span>
+            <span class="journey-chapter-label" id="journeyChapterLabel">Experience</span>
           </div>
-          <div class="edu-item anim-item">
-            <span class="edu-date">2021 — 2025</span>
-            <h3 class="edu-school">China University of Geosciences, Beijing</h3>
-            <p class="edu-degree">B.S. Geographic Information Science</p>
-            <p class="edu-note">GPA 3.86 (Top 5%) &middot; National Scholarship &middot; Project 211</p>
+          <div class="journey-dots" id="journeyDots">
+            <span class="journey-dot active" data-type="experience" title="Experience"></span>
+            <span class="journey-dot" data-type="project" title="Research"></span>
+            <span class="journey-dot" data-type="music" title="Music"></span>
+            <span class="journey-dot" data-type="now" title="Now"></span>
           </div>
+        </div>
+        <div class="cardswap-viewport">
+          <div class="cardswap-stack" id="cardswapStack"></div>
         </div>
       </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="snap-section experience-section">
-      <div class="section-inner">
-        <h2 class="section-label">Experience</h2>
-        <div class="exp-scroll-wrapper">
-          <div class="exp-track">
-            <div class="exp-card anim-item">
-              <div class="exp-card-accent" style="background: linear-gradient(135deg, #0f2b46, #1a4a7a);"></div>
-              <div class="exp-card-body">
-                <img src="images/%E7%99%BE%E5%BA%A6.svg" alt="Baidu" class="exp-logo">
-                <h3>AI Product Intern</h3>
-                <p class="exp-company">Baidu &middot; Jan 2026 — Present</p>
-                <p class="exp-desc">Optimized user initial query features and drove creative writing model evaluation for continuous AI product iteration.</p>
-              </div>
-            </div>
-            <div class="exp-card anim-item">
-              <div class="exp-card-accent" style="background: linear-gradient(135deg, #8b2500, #2563EB);"></div>
-              <div class="exp-card-body">
-                <img src="images/%E5%B0%8F%E7%BA%A2%E4%B9%A6.png" alt="Xiaohongshu" class="exp-logo">
-                <h3>E-commerce Product Intern</h3>
-                <p class="exp-company">Xiaohongshu (RED) &middot; Sep — Dec 2025</p>
-                <p class="exp-desc">Led AI-powered search innovation, designed filter keyword recommendations and trending search cards to boost conversion.</p>
-              </div>
-            </div>
-            <div class="exp-card anim-item">
-              <div class="exp-card-accent" style="background: linear-gradient(135deg, #1a1a2e, #0f2b46);"></div>
-              <div class="exp-card-body">
-                <img src="images/%E7%99%BE%E8%9E%8D%E4%BA%91%E5%88%9B.png" alt="BaiRong Cloud" class="exp-logo">
-                <h3>AI Product Intern</h3>
-                <p class="exp-company">BaiRong Cloud &middot; Jun — Sep 2025</p>
-                <p class="exp-desc">Explored AI Agent solutions for enterprise scenarios and promoted LLM product adoption for efficiency improvement.</p>
-              </div>
-            </div>
-            <div class="exp-card anim-item">
-              <div class="exp-card-accent" style="background: linear-gradient(135deg, #0f2b46, #2a6847);"></div>
-              <div class="exp-card-body">
-                <img src="images/%E6%98%93%E6%99%BA%E7%91%9E.webp" alt="Esri China" class="exp-logo">
-                <h3>Product Operations Intern</h3>
-                <p class="exp-company">Esri China &middot; Jul — Oct 2024</p>
-                <p class="exp-desc">GIS product solution design, technical documentation, and user acquisition strategy execution.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="exp-scroll-hint">
-          <i class="fas fa-arrow-left"></i>
-          <span>Swipe to explore</span>
-          <i class="fas fa-arrow-right"></i>
-        </div>
+      <div class="card-overlay" id="cardOverlay">
+        <button class="card-overlay-close" id="cardOverlayClose" aria-label="Close"><i class="fas fa-times"></i></button>
+        <div class="card-overlay-content" id="cardOverlayContent"></div>
       </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="snap-section projects-section">
-      <div class="section-inner">
-        <h2 class="section-label">Publications & Projects</h2>
-        <div class="project-list">
-          <div class="project-item anim-item">
-            <span class="project-badge">SCI Q2 &middot; First Author</span>
-            <h3><a href="https://doi.org/10.3390/land13111830" target="_blank">Multi-Scenario Simulation of Urban Expansion Considering Multilevel Urban Flows</a></h3>
-            <p class="project-meta"><strong>Hu, J.</strong>; Liu, D.; Zheng, X. &mdash; <em>Land</em>, 2024</p>
-          </div>
-          <div class="project-item anim-item">
-            <span class="project-badge">National Award</span>
-            <h3>Supermarket Vegetable Pricing Optimization</h3>
-            <p class="project-meta"><strong>Hu, J.</strong>; Xu, J.; Ye, L. &mdash; CUMCM 2024 &middot; Beijing First Prize</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Music Section -->
-    <section id="music" class="snap-section music-section">
-      <div class="music-layout">
-        <div class="music-text">
-          <h2 class="section-label">Music</h2>
-          <p class="music-tagline">I don't follow artists &mdash; I follow <strong>feelings</strong>.</p>
-          <div class="music-genres">
-            <span>Melodic Bass</span>
-            <span>Chill House</span>
-            <span>Synthpop</span>
-            <span>Indie Pop</span>
-            <span>R&B</span>
-          </div>
-          <p class="music-hint"><i class="fas fa-hand-pointer"></i> Scroll on cards to switch</p>
-        </div>
-        <div class="music-stack-wrapper" id="musicStack">
-          <div class="music-stack">
-            <div class="music-card active" data-index="0">
-              <img src="music/Charli%20xcx%20-%20Everything%20is%20romantic%20featuring%20caroline%20polachek.jpg" alt="Everything is romantic" class="music-card-cover">
-              <div class="music-card-bottom">
-                <span class="music-card-name">Everything is romantic</span>
-                <span class="music-card-genre">Electro Pop</span>
-              </div>
-              <div class="music-card-overlay">
-                <h3 class="music-card-title">Everything is romantic</h3>
-                <p class="music-card-artist">Charli xcx ft. caroline polachek</p>
-                <button class="music-play-btn" data-index="0"><i class="fas fa-play"></i></button>
-                <div class="music-progress-bar"><div class="music-progress-fill"></div></div>
-              </div>
-              <audio preload="none"><source src="music/Charli%20xcx%20-%20Everything%20is%20romantic%20featuring%20caroline%20polachek.mp3" type="audio/mpeg"></audio>
-            </div>
-            <div class="music-card" data-index="1">
-              <img src="music/Tinlicker%20-%20Staring%20Down%20Sunset%20ft.%20Nathan%20Nicholson.jpg" alt="Staring Down Sunset" class="music-card-cover">
-              <div class="music-card-bottom">
-                <span class="music-card-name">Staring Down Sunset</span>
-                <span class="music-card-genre">Dream Pop</span>
-              </div>
-              <div class="music-card-overlay">
-                <h3 class="music-card-title">Staring Down Sunset</h3>
-                <p class="music-card-artist">Tinlicker ft. Nathan Nicholson</p>
-                <button class="music-play-btn" data-index="1"><i class="fas fa-play"></i></button>
-                <div class="music-progress-bar"><div class="music-progress-fill"></div></div>
-              </div>
-              <audio preload="none"><source src="music/Tinlicker%20-%20Staring%20Down%20Sunset%20ft.%20Nathan%20Nicholson.mp3" type="audio/mpeg"></audio>
-            </div>
-            <div class="music-card" data-index="2">
-              <img src="music/yeule%20-%20Saiko.jpg" alt="Saiko" class="music-card-cover">
-              <div class="music-card-bottom">
-                <span class="music-card-name">Saiko</span>
-                <span class="music-card-genre">Alternative Pop</span>
-              </div>
-              <div class="music-card-overlay">
-                <h3 class="music-card-title">Saiko</h3>
-                <p class="music-card-artist">yeule</p>
-                <button class="music-play-btn" data-index="2"><i class="fas fa-play"></i></button>
-                <div class="music-progress-bar"><div class="music-progress-fill"></div></div>
-              </div>
-              <audio preload="none"><source src="music/yeule%20-%20Saiko.mp3" type="audio/mpeg"></audio>
-            </div>
-            <div class="music-card" data-index="3">
-              <img src="music/%E5%BF%83%E8%B7%B3119%20-%20JOYCE%20%E5%B0%B1%E4%BB%A5%E6%96%AF.jpg" alt="心跳119" class="music-card-cover">
-              <div class="music-card-bottom">
-                <span class="music-card-name">心跳119</span>
-                <span class="music-card-genre">R&B</span>
-              </div>
-              <div class="music-card-overlay">
-                <h3 class="music-card-title">心跳119</h3>
-                <p class="music-card-artist">JOYCE 就以斯</p>
-                <button class="music-play-btn" data-index="3"><i class="fas fa-play"></i></button>
-                <div class="music-progress-bar"><div class="music-progress-fill"></div></div>
-              </div>
-              <audio preload="none"><source src="music/%E5%BF%83%E8%B7%B3119%20-%20JOYCE%20%E5%B0%B1%E4%BB%A5%E6%96%AF.mp4" type="audio/mp4"></audio>
-            </div>
-          </div>
-          <div class="music-dots">
-            <span class="music-dot active" data-index="0"></span>
-            <span class="music-dot" data-index="1"></span>
-            <span class="music-dot" data-index="2"></span>
-            <span class="music-dot" data-index="3"></span>
-          </div>
-        </div>
+      <div style="display:none">
+        <audio id="journey-audio-0" preload="none"><source src="music/Charli%20xcx%20-%20Everything%20is%20romantic%20featuring%20caroline%20polachek.mp3" type="audio/mpeg"></audio>
+        <audio id="journey-audio-1" preload="none"><source src="music/Tinlicker%20-%20Staring%20Down%20Sunset%20ft.%20Nathan%20Nicholson.mp3" type="audio/mpeg"></audio>
+        <audio id="journey-audio-2" preload="none"><source src="music/yeule%20-%20Saiko.mp3" type="audio/mpeg"></audio>
+        <audio id="journey-audio-3" preload="none"><source src="music/%E5%BF%83%E8%B7%B3119%20-%20JOYCE%20%E5%B0%B1%E4%BB%A5%E6%96%AF.mp4" type="audio/mp4"></audio>
       </div>
     </section>
 
@@ -274,7 +178,7 @@
     <section id="contact" class="snap-section contact-section">
       <div class="contact-inner">
         <h2 class="section-label">Let's Connect</h2>
-        <p class="contact-text">Open to product collaboration, academic exchange, or a conversation about the future of AI.</p>
+        <p class="contact-text">Open to product roles, research collaboration, or just a good conversation about building with AI.</p>
         <a href="mailto:jiayi_1016@163.com" class="contact-btn">Say Hello</a>
         <div class="contact-links">
           <a href="mailto:jiayi_1016@163.com"><i class="fas fa-envelope"></i> jiayi_1016@163.com</a>
@@ -291,6 +195,7 @@
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
