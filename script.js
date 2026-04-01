@@ -1545,7 +1545,7 @@ function initCardSwap() {
       }
 
       // === Post-hijack: hover-only card switching ===
-      if (isHoveringCards) {
+      if (isHoveringCards && !journeyHijack) {
         e.preventDefault();
         if (!isAnimating && !wheelCooldown) {
           wheelCooldown = true;
