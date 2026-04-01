@@ -209,10 +209,10 @@ a:hover {
   border-color: var(--accent);
 }
 
-.theme-icon-light { display: inline; }
-.theme-icon-dark { display: none; }
-[data-theme="dark"] .theme-icon-light { display: none; }
-[data-theme="dark"] .theme-icon-dark { display: inline; }
+.theme-icon-light { display: none; }
+.theme-icon-dark { display: inline; }
+[data-theme="dark"] .theme-icon-light { display: inline; }
+[data-theme="dark"] .theme-icon-dark { display: none; }
 
 .nav-toggle {
   display: none;
