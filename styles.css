@@ -1599,6 +1599,15 @@ a:hover {
 /* ===== Journey Section (CardSwap) ===== */
 .journey-section {
   background: var(--bg-secondary);
+  transition: background-color 0.8s ease;
+}
+
+.journey-section.audio-active {
+  background-color: rgba(250, 248, 245, 0.15);
+}
+
+[data-theme="dark"] .journey-section.audio-active {
+  background-color: rgba(10, 22, 40, 0.15);
 }
 
 .journey-layout {
