@@ -1364,7 +1364,7 @@ function initCardSwap() {
 
     // 1. Front card slides up and fades out
     gsap.to(frontEl, {
-      y: '-=400', scale: 0.9, opacity: 0,
+      y: '-=400', scale: 1, opacity: 0,
       duration: 0.4, ease: 'power2.out'
     });
 
@@ -1416,7 +1416,7 @@ function initCardSwap() {
     gsap.set(backEl, {
       x: frontSlot.x, y: frontSlot.y - 400, z: frontSlot.z,
       xPercent: -50, yPercent: -50,
-      opacity: 0, scale: 0.9, zIndex: frontSlot.zIndex
+      opacity: 0, scale: 1, zIndex: frontSlot.zIndex
     });
 
     // 2. Rotate order
