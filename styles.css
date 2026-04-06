@@ -2361,15 +2361,13 @@ a:hover {
   position: fixed;
   inset: 0;
   z-index: 2000;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.35s ease, background 0.6s ease;
+  transition: opacity 0.35s ease;
 }
 
 .card-overlay.active {
