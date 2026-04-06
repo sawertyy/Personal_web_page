@@ -1805,16 +1805,18 @@ function initCardSwap() {
       '</div>';
 
       var right = card.items.map(function(item) {
-        var link = item.link ? '<a href="' + item.link + '" target="_blank" rel="noopener noreferrer" class="research-link">View Publication \u2192</a>' : '';
-        var citation = item.meta ? '<p class="research-citation">' + item.meta + '</p>' : '';
+        var boldMeta = item.meta ? item.meta.replace(/Hu, J\./g, '<strong>Hu, J.</strong>') : '';
+        var citation = boldMeta ? '<p class="research-citation">' + boldMeta + '</p>' : '';
         var img = item.image ? '<img src="' + item.image + '" alt="' + item.title + '" class="research-paper-img">' : '';
+        var titleHtml = item.link
+          ? '<a href="' + item.link + '" target="_blank" rel="noopener noreferrer" class="research-title-link"><h3 class="research-title">' + item.title + '</h3></a>'
+          : '<h3 class="research-title">' + item.title + '</h3>';
 
         return '<div class="overlay-research-entry overlay-anim-item">' +
-          img +
           '<span class="project-badge">' + item.badge + '</span>' +
-          '<h3 class="research-title">' + item.title + '</h3>' +
+          titleHtml +
           citation +
-          link +
+          img +
         '</div>';
       }).join('');
 

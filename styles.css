@@ -2267,9 +2267,10 @@ a:hover {
 .cardswap-music-cover {
   width: 100%;
   height: 200px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 12px;
   margin-bottom: 0.5rem;
+  background: #ffffff;
 }
 
 .cardswap-music-controls {
@@ -2912,6 +2913,16 @@ a:hover {
 .research-link:hover {
   opacity: 0.8;
   text-decoration: underline;
+}
+
+.research-title-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.research-title-link:hover .research-title {
+  text-decoration: underline;
+  color: var(--accent);
 }
 
 /* Left panel nav for experience */
