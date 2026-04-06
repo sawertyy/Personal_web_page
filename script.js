@@ -1290,7 +1290,7 @@ function initCardSwap() {
       y: visualIdx * distY,
       z: -visualIdx * 30,
       zIndex: cards.length - visualIdx,
-      opacity: Math.max(0.5, 1 - visualIdx * 0.15)
+      scale: Math.max(0.88, 1 - visualIdx * 0.03)
     };
   }
 
@@ -1302,14 +1302,14 @@ function initCardSwap() {
         gsap.to(el, {
           x: slot.x, y: slot.y, z: slot.z,
           xPercent: -50, yPercent: -50,
-          skewY: 0, opacity: slot.opacity, zIndex: slot.zIndex,
+          skewY: 0, scale: slot.scale, opacity: 1, zIndex: slot.zIndex,
           duration: 0.5, ease: 'power2.inOut', force3D: true
         });
       } else {
         gsap.set(el, {
           x: slot.x, y: slot.y, z: slot.z,
           xPercent: -50, yPercent: -50,
-          skewY: 0, opacity: slot.opacity, zIndex: slot.zIndex,
+          skewY: 0, scale: slot.scale, opacity: 1, zIndex: slot.zIndex,
           transformOrigin: 'center center', force3D: true
         });
       }
@@ -1364,7 +1364,7 @@ function initCardSwap() {
 
     // 1. Front card slides up and out
     gsap.to(frontEl, {
-      y: '-=400', opacity: 0,
+      y: '-=400', scale: 0.9,
       duration: 0.4, ease: 'power2.out'
     });
 
@@ -1381,7 +1381,7 @@ function initCardSwap() {
         gsap.to(el, {
           x: slot.x, y: slot.y, z: slot.z,
           xPercent: -50, yPercent: -50,
-          skewY: 0, opacity: slot.opacity, zIndex: slot.zIndex,
+          skewY: 0, scale: slot.scale, opacity: 1, zIndex: slot.zIndex,
           duration: 0.5, ease: 'power2.inOut', force3D: true
         });
       });
@@ -1393,10 +1393,10 @@ function initCardSwap() {
       gsap.set(frontEl, {
         x: backSlot.x, y: backSlot.y + 200, z: backSlot.z,
         xPercent: -50, yPercent: -50,
-        opacity: 0, zIndex: backSlot.zIndex
+        scale: backSlot.scale, opacity: 1, zIndex: backSlot.zIndex
       });
       gsap.to(frontEl, {
-        y: backSlot.y, opacity: backSlot.opacity,
+        y: backSlot.y, scale: backSlot.scale,
         duration: 0.4, ease: 'power2.out',
         onComplete: function() { isAnimating = false; }
       });
@@ -1416,7 +1416,7 @@ function initCardSwap() {
     gsap.set(backEl, {
       x: frontSlot.x, y: frontSlot.y - 400, z: frontSlot.z,
       xPercent: -50, yPercent: -50,
-      opacity: 0, zIndex: frontSlot.zIndex
+      opacity: 1, scale: 0.9, zIndex: frontSlot.zIndex
     });
 
     // 2. Rotate order
@@ -1431,14 +1431,14 @@ function initCardSwap() {
       gsap.to(el, {
         x: slot.x, y: slot.y, z: slot.z,
         xPercent: -50, yPercent: -50,
-        skewY: 0, opacity: slot.opacity, zIndex: slot.zIndex,
+        skewY: 0, scale: slot.scale, opacity: 1, zIndex: slot.zIndex,
         duration: 0.5, ease: 'power2.inOut', force3D: true
       });
     });
 
     // 4. Back card slides in from top
     gsap.to(backEl, {
-      y: frontSlot.y, opacity: 1,
+      y: frontSlot.y, scale: 1, opacity: 1,
       duration: 0.5, ease: 'power2.out',
       onComplete: function() { isAnimating = false; }
     });
