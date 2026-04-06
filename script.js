@@ -1246,11 +1246,21 @@ function initCardSwap() {
         '<div class="cardswap-card-title">' + card.title + '</div>' +
         '<img src="images/music.png" alt="Music" class="cardswap-music-cover">' +
         '<div class="cardswap-card-bottom">' +
-          '<p class="cardswap-music-intro">My taste in music is quite broad, but I mainly listen to <strong>melodic bass</strong>, <strong>chill house</strong>, <strong>synthpop</strong>, <strong>indie pop</strong>, and <strong>R&amp;B</strong>. Check out the cards on the right for what I\'ve been listening to lately ^^</p>' +
+          '<p class="cardswap-music-intro">My taste in music is quite broad ^^</p>' +
+          '<div class="cardswap-music-genres">' +
+            '<span class="genre-pill">melodic bass</span>' +
+            '<span class="genre-pill">chill house</span>' +
+            '<span class="genre-pill">synthpop</span>' +
+            '<span class="genre-pill">indie pop</span>' +
+            '<span class="genre-pill">R&amp;B</span>' +
+          '</div>' +
           '<div class="cardswap-music-controls">' +
+            '<div class="mini-player-info">' +
+              '<span class="mini-player-name">' + s.name + '</span>' +
+              '<span class="mini-player-artist">' + s.artist + '</span>' +
+            '</div>' +
             '<button class="cardswap-music-play" data-song-index="0" aria-label="Play"><i class="fas fa-play"></i></button>' +
             '<div class="cardswap-music-progress"><div class="cardswap-music-progress-fill"></div></div>' +
-            '<span class="cardswap-music-song-name">' + s.name + '</span>' +
           '</div>' +
         '</div>';
     } else if (card.type === 'now') {
@@ -1717,7 +1727,7 @@ function initCardSwap() {
   // Click to open overlay — pass the card element
   cardEls.forEach(function(el, i) {
     el.addEventListener('click', function(e) {
-      if (e.target.closest('.cardswap-music-play') || e.target.closest('.cardswap-music-progress')) return;
+      if (e.target.closest('.cardswap-music-controls')) return;
       openOverlay(cards[i], el);
     });
   });
@@ -1899,7 +1909,8 @@ function initCardSwap() {
   if (musicCardEl) {
     var miniPlay = musicCardEl.querySelector('.cardswap-music-play');
     var miniProgress = musicCardEl.querySelector('.cardswap-music-progress-fill');
-    var miniName = musicCardEl.querySelector('.cardswap-music-song-name');
+    var miniName = musicCardEl.querySelector('.mini-player-name');
+    var miniArtist = musicCardEl.querySelector('.mini-player-artist');
     var musicData = cards.find(function(c) { return c.id === 'music'; });
     var miniSongIdx = 0;
 
