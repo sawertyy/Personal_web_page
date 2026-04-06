@@ -1240,16 +1240,11 @@ function initCardSwap() {
         '<div class="cardswap-card-title">' + card.title + '</div>' +
         '<div class="cardswap-exp-list">' + expRows + '</div>';
     } else if (card.type === 'project') {
-      var badges = card.items.map(function(item) {
-        return '<span class="cardswap-pub-badge ' + item.badgeType + '">' + item.badge + '</span>';
-      }).join('');
       bodyContent =
         '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
         '<div class="cardswap-card-title">' + card.title + '</div>' +
         '<div class="cardswap-card-bottom">' +
-          '<div class="cardswap-card-tagline">SCI first-author with research on urban simulation &amp; productive forces</div>' +
-          '<div class="cardswap-hero-badge"><i class="fas fa-award"></i> SCI \u00b7 Q2 \u00b7 First Author</div>' +
-          '<div class="cardswap-badge-row">' + badges + '</div>' +
+          '<div class="cardswap-card-tagline">2 SCI papers published \u00b7 1 Chinese core journal \u00b7 1 SCI under review<br>10+ provincial/national awards in undergrad \u00b7 National Scholarship</div>' +
         '</div>';
     } else if (card.type === 'music') {
       var s = card.songs[0];
