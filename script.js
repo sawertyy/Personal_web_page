@@ -36,7 +36,7 @@ function initLiquidEther() {
     BFECC: true,
     resolution: 0.5,
     isBounce: false,
-    colors: ['#1E90FF', '#60C0FF', '#A0D8FF'],
+    colors: ['#3AA0FF', '#70D0FF', '#B0E8FF'],
     autoDemo: true,
     autoSpeed: 0.5,
     autoIntensity: 2.2,

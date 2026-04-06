@@ -1602,16 +1602,12 @@ a:hover {
   transition: background-color 0.8s ease;
 }
 
-[data-theme="dark"] .journey-section {
-  background-color: rgba(15, 31, 53, 0.85);
-}
-
 .journey-section.audio-active {
   background-color: rgba(250, 248, 245, 0.15);
 }
 
 [data-theme="dark"] .journey-section.audio-active {
-  background-color: rgba(10, 22, 40, 0.15);
+  background-color: rgba(10, 22, 40, 0.08);
 }
 
 .journey-layout {
@@ -1716,7 +1712,7 @@ a:hover {
 }
 
 .journey-card-hint {
-  margin-top: 0;
+  margin-top: 1.5rem;
   margin-bottom: 0.75rem;
   font-size: 0.8rem;
   color: var(--text-muted);
