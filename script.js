@@ -1165,8 +1165,8 @@ var JOURNEY_CARDS = [
     id: 'music', type: 'music', typeLabel: 'Music', typeIcon: 'fas fa-music',
     accentGradient: 'linear-gradient(135deg, #312e81, #6366f1)',
     title: "What I'm Listening To", meta: 'Melodic Bass \u00b7 Chill House \u00b7 Synthpop',
-    desc: 'Music has always been a very special part of my life \u2014 not about chasing something, but about feeling something.',
-    introText: 'Music has always been a very special part of my life \u2014 not about chasing something, but about feeling something. My taste is quite broad, but I mainly listen to <strong>melodic bass</strong>, <strong>chill house</strong>, <strong>synthpop</strong>, <strong>indie pop</strong>, and <strong>R&B</strong>. I don\u2019t have a particular favorite artist \u2014 I only recognize a song.',
+    desc: 'My taste in music is quite broad, but I mainly listen to melodic bass, chill house, synthpop, indie pop, and R&B.',
+    introText: 'My taste in music is quite broad, but I mainly listen to <strong>melodic bass</strong>, <strong>chill house</strong>, <strong>synthpop</strong>, <strong>indie pop</strong>, and <strong>R&amp;B</strong>. Check out the cards on the right for what I\'ve been listening to lately ^^',
     songs: [
       { name: 'Everything is romantic', artist: 'Charli xcx ft. caroline polachek', cover: 'music/Charli%20xcx%20-%20Everything%20is%20romantic%20featuring%20caroline%20polachek.jpg', audioId: 'journey-audio-0', genre: 'Electro Pop' },
       { name: 'Staring Down Sunset', artist: 'Tinlicker ft. Nathan Nicholson', cover: 'music/Tinlicker%20-%20Staring%20Down%20Sunset%20ft.%20Nathan%20Nicholson.jpg', audioId: 'journey-audio-1', genre: 'Dream Pop' },
@@ -1241,15 +1241,12 @@ function initCardSwap() {
         '</div>';
     } else if (card.type === 'music') {
       var s = card.songs[0];
-      var musicTags = card.tags.map(function(t) {
-        return '<span class="cardswap-music-tag">' + t + '</span>';
-      }).join('');
       bodyContent =
         '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
         '<div class="cardswap-card-title">' + card.title + '</div>' +
+        '<img src="images/music.png" alt="Music" class="cardswap-music-cover">' +
         '<div class="cardswap-card-bottom">' +
-          '<p class="cardswap-music-intro">' + (card.introText || card.desc) + '</p>' +
-          '<div class="cardswap-music-tags">' + musicTags + '</div>' +
+          '<p class="cardswap-music-intro">My taste in music is quite broad, but I mainly listen to <strong>melodic bass</strong>, <strong>chill house</strong>, <strong>synthpop</strong>, <strong>indie pop</strong>, and <strong>R&amp;B</strong>. Check out the cards on the right for what I\'ve been listening to lately ^^</p>' +
           '<div class="cardswap-music-controls">' +
             '<button class="cardswap-music-play" data-song-index="0" aria-label="Play"><i class="fas fa-play"></i></button>' +
             '<div class="cardswap-music-progress"><div class="cardswap-music-progress-fill"></div></div>' +
@@ -1829,17 +1826,9 @@ function initCardSwap() {
     if (card.type === 'music') {
       var firstSong = card.songs[0];
       var left = '<div class="overlay-split-left">' +
-        '<img src="' + firstSong.cover + '" alt="' + firstSong.name + '" class="music-player-cover overlay-anim-item" id="overlayMusicCover">' +
-        '<div class="overlay-anim-item" style="text-align:center;">' +
-          '<div class="music-player-title" id="overlayMusicTitle">' + firstSong.name + '</div>' +
-          '<div class="music-player-artist" id="overlayMusicArtist">' + firstSong.artist + '</div>' +
-        '</div>' +
-        '<div class="music-player-controls overlay-anim-item">' +
-          '<button class="music-player-btn" id="overlayMusicMainBtn" data-audio-id="' + firstSong.audioId + '"><i class="fas fa-play"></i></button>' +
-        '</div>' +
-        '<div class="overlay-anim-item">' +
-          '<div class="music-player-progress" id="overlayMusicProgress"><div class="music-player-progress-fill" id="overlayMusicProgressFill"></div></div>' +
-        '</div>' +
+        '<img src="images/music.png" alt="Music" class="music-player-cover overlay-anim-item" id="overlayMusicCover">' +
+        '<p class="overlay-split-desc overlay-anim-item">My taste in music is quite broad, but I mainly listen to <strong>melodic bass</strong>, <strong>chill house</strong>, <strong>synthpop</strong>, <strong>indie pop</strong>, and <strong>R&amp;B</strong>. I don\u2019t have a particular favorite artist \u2014 I only recognize a song.</p>' +
+        '<p class="overlay-split-desc overlay-anim-item" style="font-weight:600;">Whenever I find a great song, I\u2019m so tempted to shove my headphones into someone\u2019s ears, and I just want them to cry their eyes out after listening to it.</p>' +
       '</div>';
 
       var songList = card.songs.map(function(song, i) {
