@@ -1753,7 +1753,6 @@ a:hover {
   transform-style: preserve-3d;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  transition: box-shadow 0.3s ease;
 }
 
 [data-theme="light"] .cardswap-card {

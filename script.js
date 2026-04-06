@@ -1361,7 +1361,7 @@ function initCardSwap() {
 
     // 1. Front card slides up and fades out
     gsap.to(frontEl, {
-      y: '-=400', scale: 1, opacity: 0,
+      y: '-=400', opacity: 0,
       duration: 0.4, ease: 'power2.out'
     });
 
@@ -1369,35 +1369,34 @@ function initCardSwap() {
     order = order.slice(1).concat(order[0]);
     updateCounter('up');
 
-    // 3. Remaining cards slide up to new positions
-    setTimeout(function() {
-      cardEls.forEach(function(el, i) {
-        if (i === frontIdx) return;
-        var vi = order.indexOf(i);
-        var slot = makeSlot(vi);
-        gsap.to(el, {
-          x: slot.x, y: slot.y, z: slot.z,
-          xPercent: -50, yPercent: -50,
-          skewY: 0, scale: slot.scale, opacity: 1, zIndex: slot.zIndex,
-          duration: 0.5, ease: 'power2.inOut', force3D: true
-        });
-      });
-    }, 150);
-
-    // 4. Send front card to back
-    setTimeout(function() {
-      var backSlot = makeSlot(cards.length - 1);
-      gsap.set(frontEl, {
-        x: backSlot.x, y: backSlot.y + 200, z: backSlot.z,
+    // 3. Remaining cards slide to new positions (slight delay for stagger)
+    cardEls.forEach(function(el, i) {
+      if (i === frontIdx) return;
+      var vi = order.indexOf(i);
+      var slot = makeSlot(vi);
+      gsap.to(el, {
+        x: slot.x, y: slot.y, z: slot.z,
         xPercent: -50, yPercent: -50,
-        scale: backSlot.scale, opacity: 1, zIndex: backSlot.zIndex
+        skewY: 0, scale: slot.scale, opacity: 1, zIndex: slot.zIndex,
+        duration: 0.45, ease: 'power2.inOut', force3D: true,
+        delay: 0.1
+      });
+    });
+
+    // 4. After exit completes, reposition front card at back and slide in
+    var backSlot = makeSlot(cards.length - 1);
+    gsap.delayedCall(0.45, function() {
+      gsap.set(frontEl, {
+        x: backSlot.x, y: backSlot.y + 150, z: backSlot.z,
+        xPercent: -50, yPercent: -50,
+        scale: backSlot.scale, opacity: 0, zIndex: backSlot.zIndex
       });
       gsap.to(frontEl, {
-        y: backSlot.y, scale: backSlot.scale,
-        duration: 0.4, ease: 'power2.out',
+        y: backSlot.y, opacity: 1,
+        duration: 0.35, ease: 'power2.out',
         onComplete: function() { isAnimating = false; }
       });
-    }, 350);
+    });
   }
 
   // Reverse swap — back card slides in from top
@@ -1411,7 +1410,7 @@ function initCardSwap() {
     // 1. Place back card above viewport
     var frontSlot = makeSlot(0);
     gsap.set(backEl, {
-      x: frontSlot.x, y: frontSlot.y - 400, z: frontSlot.z,
+      x: frontSlot.x, y: frontSlot.y - 300, z: frontSlot.z,
       xPercent: -50, yPercent: -50,
       opacity: 0, scale: 1, zIndex: frontSlot.zIndex
     });
@@ -1420,7 +1419,7 @@ function initCardSwap() {
     order = [backIdx].concat(order.slice(0, -1));
     updateCounter('down');
 
-    // 3. Others slide down
+    // 3. Others slide to new positions
     cardEls.forEach(function(el, i) {
       if (i === backIdx) return;
       var vi = order.indexOf(i);
@@ -1429,14 +1428,14 @@ function initCardSwap() {
         x: slot.x, y: slot.y, z: slot.z,
         xPercent: -50, yPercent: -50,
         skewY: 0, scale: slot.scale, opacity: 1, zIndex: slot.zIndex,
-        duration: 0.5, ease: 'power2.inOut', force3D: true
+        duration: 0.45, ease: 'power2.inOut', force3D: true
       });
     });
 
     // 4. Back card slides in from top
     gsap.to(backEl, {
       y: frontSlot.y, scale: 1, opacity: 1,
-      duration: 0.5, ease: 'power2.out',
+      duration: 0.45, ease: 'power2.out',
       onComplete: function() { isAnimating = false; }
     });
   }
@@ -1452,19 +1451,6 @@ function initCardSwap() {
   function stopAuto() {
     if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
   }
-
-  // Hover: edge glow effect
-  cardEls.forEach(function(el, i) {
-    el.addEventListener('mouseenter', function() {
-      var vi = order.indexOf(i);
-      if (vi === 0) {
-        gsap.to(el, { boxShadow: '0 0 20px rgba(96, 165, 250, 0.4), 0 0 40px rgba(96, 165, 250, 0.15)', duration: 0.3, ease: 'power2.out' });
-      }
-    });
-    el.addEventListener('mouseleave', function() {
-      gsap.to(el, { boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)', duration: 0.3, ease: 'power2.out' });
-    });
-  });
 
   // --- Wheel: Journey hijack + hover card switching ---
   var isHoveringCards = false;
@@ -1521,7 +1507,7 @@ function initCardSwap() {
             if (!isAnimating && !wheelCooldown) {
               wheelCooldown = true;
               swap();
-              setTimeout(function() { wheelCooldown = false; }, 600);
+              setTimeout(function() { wheelCooldown = false; }, 500);
             }
             return;
           }
@@ -1533,7 +1519,7 @@ function initCardSwap() {
             if (!isAnimating && !wheelCooldown) {
               wheelCooldown = true;
               swapReverse();
-              setTimeout(function() { wheelCooldown = false; }, 600);
+              setTimeout(function() { wheelCooldown = false; }, 500);
             }
             return;
           }
@@ -1547,7 +1533,7 @@ function initCardSwap() {
           wheelCooldown = true;
           if (e.deltaY > 0) swap();
           else if (e.deltaY < 0) swapReverse();
-          setTimeout(function() { wheelCooldown = false; }, 600);
+          setTimeout(function() { wheelCooldown = false; }, 500);
         }
         return;
       }
