@@ -1839,6 +1839,34 @@ a:hover {
   -webkit-box-orient: vertical;
 }
 
+.cardswap-card-table {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+}
+.cardswap-table-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--tag-border);
+  font-size: 0.82rem;
+}
+.cardswap-table-row:last-child {
+  border-bottom: none;
+}
+.cardswap-table-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.cardswap-table-value {
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: right;
+}
+
 .cardswap-card-tags {
   display: flex;
   flex-wrap: wrap;
@@ -3459,6 +3487,11 @@ a:hover {
     font-size: 0.72rem;
   }
 
+  .cardswap-table-row {
+    font-size: 0.75rem;
+    padding: 0.4rem 0;
+  }
+
   .cardswap-music-cover {
     height: 120px;
   }
@@ -3548,6 +3581,11 @@ a:hover {
   .cardswap-card {
     width: 260px;
     height: 340px;
+  }
+
+  .cardswap-table-row {
+    font-size: 0.7rem;
+    padding: 0.35rem 0;
   }
 }
 

@@ -1243,9 +1243,23 @@ function initCardSwap() {
       bodyContent =
         '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
         '<div class="cardswap-card-title">' + card.title + '</div>' +
-        '<div class="cardswap-card-desc">Published 2 SCI papers (Q2 first-author on urban simulation, Q3 second-author on productive forces), 1 Chinese core journal, and 1 SCI under review. Won 10+ provincial/national awards during undergrad including CUMCM Beijing First Prize, and received the National Scholarship.</div>' +
-        '<div class="cardswap-card-bottom">' +
-          '<div class="cardswap-card-tagline">2 SCI papers published \u00b7 1 Chinese core journal \u00b7 1 SCI under review<br>10+ provincial/national awards in undergrad \u00b7 National Scholarship</div>' +
+        '<div class="cardswap-card-table">' +
+          '<div class="cardswap-table-row">' +
+            '<span class="cardswap-table-label">Publications</span>' +
+            '<span class="cardswap-table-value">2 SCI + 1 Core</span>' +
+          '</div>' +
+          '<div class="cardswap-table-row">' +
+            '<span class="cardswap-table-label">Under Review</span>' +
+            '<span class="cardswap-table-value">1 SCI</span>' +
+          '</div>' +
+          '<div class="cardswap-table-row">' +
+            '<span class="cardswap-table-label">Awards</span>' +
+            '<span class="cardswap-table-value">10+ provincial/national</span>' +
+          '</div>' +
+          '<div class="cardswap-table-row">' +
+            '<span class="cardswap-table-label">Scholarship</span>' +
+            '<span class="cardswap-table-value">National</span>' +
+          '</div>' +
         '</div>';
     } else if (card.type === 'music') {
       var s = card.songs[0];
