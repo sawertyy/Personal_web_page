@@ -1255,7 +1255,6 @@ function initCardSwap() {
             '<div class="cardswap-music-progress"><div class="cardswap-music-progress-fill"></div></div>' +
             '<span class="cardswap-music-song-name">' + s.name + '</span>' +
           '</div>' +
-           +
         '</div>';
     } else if (card.type === 'now') {
       var firstItem = card.nowItems[0] || { text: '' };

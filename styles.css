@@ -1711,6 +1711,14 @@ a:hover {
   box-shadow: 0 0 8px rgba(96, 165, 250, 0.4);
 }
 
+.journey-card-hint {
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+  letter-spacing: 0.03em;
+}
+
 /* CardSwap 3D Stack */
 .cardswap-viewport {
   position: relative;
@@ -1977,19 +1985,6 @@ a:hover {
   border-radius: 6px;
 }
 
-/* Card hint — bottom call-to-action */
-.cardswap-card-hint {
-  margin-top: auto;
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  text-align: right;
-  opacity: 0.6;
-  transition: opacity 0.25s ease;
-}
-
-.cardswap-card:hover .cardswap-card-hint {
-  opacity: 1;
-}
 
 /* Experience card — timeline layout (used in old template, kept for compat) */
 .cardswap-timeline {
