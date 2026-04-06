@@ -1744,11 +1744,9 @@ a:hover {
   left: 50%;
   border-radius: 20px;
   overflow: hidden;
-  background: rgba(15, 20, 30, 0.85);
+  background: #0f141e;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   cursor: pointer;
   will-change: transform;
   transform-style: preserve-3d;
@@ -1758,7 +1756,7 @@ a:hover {
 }
 
 [data-theme="light"] .cardswap-card {
-  background: rgba(255, 255, 255, 0.92);
+  background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
