@@ -1141,7 +1141,7 @@ var JOURNEY_CARDS = [
         meta: 'Hu, J.; Liu, D.; Zheng, X. \u2014 Land \u00b7 Nov 2024',
         desc: 'Published in SCI Q2 journal as first author. Research on multi-scenario urban expansion simulation considering multilevel urban flows.',
         link: 'https://doi.org/10.3390/land13111830',
-        image: 'images/paper-land.png',
+        images: ['images/paper-land-1.png', 'images/paper-land-2.png', 'images/paper-land-3.jpg'],
         tags: ['Urban Simulation', 'Cellular Automata', 'Multi-Scenario']
       },
       {
@@ -1150,7 +1150,7 @@ var JOURNEY_CARDS = [
         meta: 'Zhang, C.; Hu, J.; Song, C.; Lu, Y. \u2014 EDS \u00b7 2025',
         desc: 'Research on how New Quality Productive Forces influenced the urban-rural income gap.',
         link: 'https://doi.org/10.1007/s10668-025-06929-3',
-        image: 'images/paper-eds.png',
+        images: ['images/paper-eds-1.webp', 'images/paper-eds-2.webp', 'images/paper-eds-3.webp', 'images/paper-eds-4.webp'],
         tags: ['Productive Forces', 'Urban-Rural Gap', 'Panel Data']
       },
       {
@@ -1159,7 +1159,7 @@ var JOURNEY_CARDS = [
         meta: 'Hu, J.; Xu, J.; Ye, L. \u2014 CUMCM 2024 \u00b7 Beijing First Prize',
         desc: 'Mathematical modeling competition entry for optimizing supermarket vegetable pricing strategy.',
         link: null,
-        image: 'images/paper-cumcm.png',
+        images: [],
         tags: ['Mathematical Modeling', 'Optimization', 'Pricing Strategy']
       },
       {
@@ -1168,7 +1168,7 @@ var JOURNEY_CARDS = [
         meta: 'Nov 2025 \u00b7 National Second Prize',
         desc: '',
         link: null,
-        image: 'images/paper-gmmc.png',
+        images: [],
         tags: []
       }
     ]
@@ -1807,7 +1807,13 @@ function initCardSwap() {
       var right = card.items.map(function(item) {
         var boldMeta = item.meta ? item.meta.replace(/Hu, J\./g, '<strong>Hu, J.</strong>') : '';
         var citation = boldMeta ? '<p class="research-citation">' + boldMeta + '</p>' : '';
-        var img = item.image ? '<img src="' + item.image + '" alt="' + item.title + '" class="research-paper-img">' : '';
+        var gallery = '';
+        if (item.images && item.images.length > 0) {
+          var imgs = item.images.map(function(src) {
+            return '<img src="' + src + '" alt="' + item.title + '" class="research-paper-img">';
+          }).join('');
+          gallery = '<div class="research-gallery">' + imgs + '</div>';
+        }
         var titleHtml = item.link
           ? '<a href="' + item.link + '" target="_blank" rel="noopener noreferrer" class="research-title-link"><h3 class="research-title">' + item.title + '</h3></a>'
           : '<h3 class="research-title">' + item.title + '</h3>';
@@ -1816,7 +1822,7 @@ function initCardSwap() {
           '<span class="project-badge">' + item.badge + '</span>' +
           titleHtml +
           citation +
-          img +
+          gallery +
         '</div>';
       }).join('');
 
