@@ -1712,7 +1712,7 @@ a:hover {
 }
 
 .journey-card-hint {
-  margin-top: 1.5rem;
+  margin-top: 3rem;
   font-size: 0.8rem;
   color: var(--text-muted);
   opacity: 0.6;
