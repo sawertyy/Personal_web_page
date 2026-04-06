@@ -1715,7 +1715,6 @@ function initCardSwap() {
           activeClone = null;
           activeCardRect = null;
           overlay.classList.remove('active');
-          overlayContent.style.display = '';
           document.body.style.overflow = '';
           isPaused = false;
           isClosing = false;
