@@ -1643,8 +1643,8 @@ function initCardSwap() {
         if (items.length) {
           gsap.fromTo(items, { y: 20, opacity: 0 }, {
             y: 0, opacity: 1,
-            duration: 0.4, ease: 'power2.out',
-            stagger: 0.08
+            duration: 0.3, ease: 'power2.out',
+            stagger: 0.05
           });
         }
 
@@ -1690,32 +1690,30 @@ function initCardSwap() {
     activeClone.style.backdropFilter = '';
     activeClone.style.webkitBackdropFilter = '';
 
-    // Phase 1: Content fade out
+    // Phase 1: Content fade out + clone shrink (parallel)
     var items = activeClone.querySelectorAll('.overlay-anim-item');
     gsap.to(items, { y: 10, opacity: 0, duration: 0.2, stagger: 0.03 });
 
-    // Phase 2: Clone shrinks back
+    // Phase 2: Clone shrinks back (starts almost immediately)
     var cloneRef = activeClone;
     var rectRef = activeCardRect;
-    setTimeout(function() {
-      cloneRef.style.overflowY = 'hidden';
-      gsap.to(cloneRef, {
-        top: rectRef.top, left: rectRef.left,
-        xPercent: 0, yPercent: 0,
-        width: rectRef.width, height: rectRef.height,
-        borderRadius: 20,
-        duration: 0.5, ease: 'power2.inOut',
-        onComplete: function() {
-          if (cloneRef) cloneRef.remove();
-          activeClone = null;
-          activeCardRect = null;
-          overlay.classList.remove('active');
-          overlayContent.style.display = '';
-          document.body.style.overflow = '';
-          isPaused = false;
-        }
-      });
-    }, 150);
+    cloneRef.style.overflowY = 'hidden';
+    gsap.to(cloneRef, {
+      top: rectRef.top, left: rectRef.left,
+      xPercent: 0, yPercent: 0,
+      width: rectRef.width, height: rectRef.height,
+      borderRadius: 20,
+      duration: 0.4, delay: 0.05, ease: 'power3.out',
+      onComplete: function() {
+        if (cloneRef) cloneRef.remove();
+        activeClone = null;
+        activeCardRect = null;
+        overlay.classList.remove('active');
+        overlayContent.style.display = '';
+        document.body.style.overflow = '';
+        isPaused = false;
+      }
+    });
   }
 
   if (overlayClose) overlayClose.addEventListener('click', closeOverlay);
@@ -1902,12 +1900,10 @@ function initCardSwap() {
 
   function connectFluidAudio(audioEl) {
     if (window.fluidAudio) window.fluidAudio.connect(audioEl);
-    document.querySelector('.journey-section')?.classList.add('audio-active');
   }
 
   function disconnectFluidAudio() {
     if (window.fluidAudio) window.fluidAudio.disconnect();
-    document.querySelector('.journey-section')?.classList.remove('audio-active');
   }
 
   // Expose for floating player
