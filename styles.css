@@ -2857,6 +2857,15 @@ a:hover {
   line-height: 1.6;
 }
 
+.research-paper-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  background: var(--border);
+}
+
 .research-abstract {
   font-size: 0.88rem;
   color: var(--text-secondary);

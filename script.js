@@ -1137,18 +1137,20 @@ var JOURNEY_CARDS = [
     items: [
       {
         badge: 'SCI Q2 \u00b7 First Author', badgeType: 'sci',
-        title: 'Multi-Scenario Simulation of Urban Expansion',
+        title: 'Research on Multi-Scenario Simulation of Urban Expansion for Beijing\u2013Tianjin\u2013Hebei Region Considering Multilevel Urban Flows',
         meta: 'Hu, J.; Liu, D.; Zheng, X. \u2014 Land, 2024',
         desc: 'Published in SCI Q2 journal as first author. Research on multi-scenario urban expansion simulation considering multilevel urban flows.',
         link: 'https://doi.org/10.3390/land13111830',
+        image: 'images/paper-land.png',
         tags: ['Urban Simulation', 'Cellular Automata', 'Multi-Scenario']
       },
       {
         badge: 'SCI \u00b7 Second Author', badgeType: 'sci',
-        title: 'New Quality Productive Forces & Urban-Rural Income Gap',
+        title: 'How New Quality Productive Forces Influenced the Urban-Rural Income Gap: Evidence from Prefectural Cities in China',
         meta: 'Zhang, C.; Hu, J.; Song, C.; Lu, Y. \u2014 EDS, 2025',
         desc: 'Research on how New Quality Productive Forces influenced the urban-rural income gap.',
         link: 'https://doi.org/10.1007/s10668-025-06929-3',
+        image: 'images/paper-eds.png',
         tags: ['Productive Forces', 'Urban-Rural Gap', 'Panel Data']
       },
       {
@@ -1157,6 +1159,7 @@ var JOURNEY_CARDS = [
         meta: 'Hu, J.; Xu, J.; Ye, L. \u2014 CUMCM 2024 \u00b7 Beijing First Prize',
         desc: 'Mathematical modeling competition entry for optimizing supermarket vegetable pricing strategy.',
         link: null,
+        image: 'images/paper-cumcm.png',
         tags: ['Mathematical Modeling', 'Optimization', 'Pricing Strategy']
       }
     ]
@@ -1793,17 +1796,16 @@ function initCardSwap() {
       '</div>';
 
       var right = card.items.map(function(item) {
-        var tags = item.tags.map(function(t) { return '<span class="project-keyword">' + t + '</span>'; }).join('');
         var link = item.link ? '<a href="' + item.link + '" target="_blank" rel="noopener noreferrer" class="research-link">View Publication \u2192</a>' : '';
         var citation = item.meta ? '<p class="research-citation">' + item.meta + '</p>' : '';
+        var img = item.image ? '<img src="' + item.image + '" alt="' + item.title + '" class="research-paper-img">' : '';
 
         return '<div class="overlay-research-entry overlay-anim-item">' +
+          img +
           '<span class="project-badge">' + item.badge + '</span>' +
           '<h3 class="research-title">' + item.title + '</h3>' +
           citation +
-          '<p class="research-abstract">' + item.desc + '</p>' +
           link +
-          '<div class="project-keywords">' + tags + '</div>' +
         '</div>';
       }).join('');
 
