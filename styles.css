@@ -1747,7 +1747,7 @@ a:hover {
   overflow: hidden;
   background: #0f141e;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 24px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   cursor: pointer;
   will-change: transform;
   transform-style: preserve-3d;
@@ -2266,9 +2266,9 @@ a:hover {
 
 .cardswap-music-cover {
   width: 100%;
-  max-height: 200px;
-  object-fit: contain;
-  border-radius: 10px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
   margin-bottom: 0.5rem;
 }
 
@@ -2360,21 +2360,9 @@ a:hover {
   transition: width 0.1s linear;
 }
 
-.cardswap-music-genres {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-bottom: 0.75rem;
-}
-
-.genre-pill {
-  font-size: 0.65rem;
-  font-weight: 600;
-  padding: 0.2rem 0.6rem;
-  border-radius: 20px;
+.genre-accent {
   color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
-  white-space: nowrap;
+  font-weight: 700;
 }
 
 /* Now card variant */
@@ -3418,7 +3406,7 @@ a:hover {
   }
 
   .cardswap-music-cover {
-    max-height: 120px;
+    height: 120px;
   }
 
   .card-overlay-content {

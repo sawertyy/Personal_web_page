@@ -1166,7 +1166,7 @@ var JOURNEY_CARDS = [
     accentGradient: 'linear-gradient(135deg, #312e81, #6366f1)',
     title: "What I'm Listening To", meta: 'Melodic Bass \u00b7 Chill House \u00b7 Synthpop',
     desc: 'My taste in music is quite broad, but I mainly listen to melodic bass, chill house, synthpop, indie pop, and R&B.',
-    introText: 'My taste in music is quite broad, but I mainly listen to <strong>melodic bass</strong>, <strong>chill house</strong>, <strong>synthpop</strong>, <strong>indie pop</strong>, and <strong>R&amp;B</strong>. Check out the cards on the right for what I\'ve been listening to lately ^^',
+    introText: 'My taste in music is quite broad, but I mainly listen to <strong class="genre-accent">melodic bass</strong>, <strong class="genre-accent">chill house</strong>, <strong class="genre-accent">synthpop</strong>, <strong class="genre-accent">indie pop</strong>, and <strong class="genre-accent">R&amp;B</strong>. Check out the cards on the right for what I\'ve been listening to lately ^^',
     songs: [
       { name: 'Everything is romantic', artist: 'Charli xcx ft. caroline polachek', cover: 'music/Charli%20xcx%20-%20Everything%20is%20romantic%20featuring%20caroline%20polachek.jpg', audioId: 'journey-audio-0', genre: 'Electro Pop' },
       { name: 'Staring Down Sunset', artist: 'Tinlicker ft. Nathan Nicholson', cover: 'music/Tinlicker%20-%20Staring%20Down%20Sunset%20ft.%20Nathan%20Nicholson.jpg', audioId: 'journey-audio-1', genre: 'Dream Pop' },
@@ -1246,14 +1246,7 @@ function initCardSwap() {
         '<div class="cardswap-card-title">' + card.title + '</div>' +
         '<img src="images/music.png" alt="Music" class="cardswap-music-cover">' +
         '<div class="cardswap-card-bottom">' +
-          '<p class="cardswap-music-intro">My taste in music is quite broad ^^</p>' +
-          '<div class="cardswap-music-genres">' +
-            '<span class="genre-pill">melodic bass</span>' +
-            '<span class="genre-pill">chill house</span>' +
-            '<span class="genre-pill">synthpop</span>' +
-            '<span class="genre-pill">indie pop</span>' +
-            '<span class="genre-pill">R&amp;B</span>' +
-          '</div>' +
+          '<p class="cardswap-music-intro">' + (card.introText || card.desc) + '</p>' +
           '<div class="cardswap-music-controls">' +
             '<div class="mini-player-info">' +
               '<span class="mini-player-name">' + s.name + '</span>' +
@@ -1934,6 +1927,8 @@ function initCardSwap() {
           musicState.playing = true;
           miniPlay.classList.add('playing');
           connectFluidAudio(audioEl);
+          if (miniName) miniName.textContent = musicData.songs[miniSongIdx].name;
+          if (miniArtist) miniArtist.textContent = musicData.songs[miniSongIdx].artist;
           // Show floating player
           if (window.showFloatingPlayer) window.showFloatingPlayer(musicData.songs[miniSongIdx], audioEl);
           audioEl.ontimeupdate = function() {
@@ -1951,6 +1946,24 @@ function initCardSwap() {
         }
       });
     }
+
+    // Expose global mini player updater for overlay/floating player sync
+    window._updateMiniPlayer = function(song, audioEl) {
+      if (miniName) miniName.textContent = song.name;
+      if (miniArtist) miniArtist.textContent = song.artist;
+      miniPlay.classList.add('playing');
+      if (audioEl) {
+        audioEl.ontimeupdate = function() {
+          if (audioEl.duration && miniProgress) {
+            miniProgress.style.width = (audioEl.currentTime / audioEl.duration * 100) + '%';
+          }
+        };
+      }
+      // Update miniSongIdx to match
+      for (var si = 0; si < musicData.songs.length; si++) {
+        if (musicData.songs[si].name === song.name) { miniSongIdx = si; break; }
+      }
+    };
   }
 
   // Overlay music player
@@ -2022,8 +2035,8 @@ function initCardSwap() {
 
         // Show floating player
         if (window.showFloatingPlayer) window.showFloatingPlayer(song, audioEl);
-
-        // Highlight playing item + main btn
+        // Sync mini player on small card
+        if (window._updateMiniPlayer) window._updateMiniPlayer(song, audioEl);
         if (mainBtn) mainBtn.querySelector('i').className = 'fas fa-pause';
         var activeItem = root.querySelector('.overlay-music-item[data-song-index="' + index + '"]');
         if (activeItem) {
