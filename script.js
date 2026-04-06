@@ -1456,16 +1456,16 @@ function initCardSwap() {
     if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
   }
 
-  // Hover: subtle pull-out effect
+  // Hover: edge glow effect
   cardEls.forEach(function(el, i) {
     el.addEventListener('mouseenter', function() {
       var vi = order.indexOf(i);
       if (vi === 0) {
-        gsap.to(el, { scale: 1.03, duration: 0.3, ease: 'power2.out' });
+        gsap.to(el, { boxShadow: '0 0 20px rgba(96, 165, 250, 0.4), 0 0 40px rgba(96, 165, 250, 0.15)', duration: 0.3, ease: 'power2.out' });
       }
     });
     el.addEventListener('mouseleave', function() {
-      gsap.to(el, { scale: 1, duration: 0.3, ease: 'power2.out' });
+      gsap.to(el, { boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)', duration: 0.3, ease: 'power2.out' });
     });
   });
 
