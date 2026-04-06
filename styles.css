@@ -1602,6 +1602,10 @@ a:hover {
   transition: background-color 0.8s ease;
 }
 
+[data-theme="dark"] .journey-section {
+  background-color: rgba(15, 31, 53, 0.85);
+}
+
 .journey-section.audio-active {
   background-color: rgba(250, 248, 245, 0.15);
 }
@@ -1712,7 +1716,8 @@ a:hover {
 }
 
 .journey-card-hint {
-  margin-top: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
   font-size: 0.8rem;
   color: var(--text-muted);
   opacity: 0.6;
@@ -1746,7 +1751,7 @@ a:hover {
   overflow: hidden;
   background: #0f141e;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   cursor: pointer;
   will-change: transform;
   transform-style: preserve-3d;
