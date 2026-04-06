@@ -1145,7 +1145,7 @@ var JOURNEY_CARDS = [
         tags: ['Urban Simulation', 'Cellular Automata', 'Multi-Scenario']
       },
       {
-        badge: 'SCI \u00b7 Second Author', badgeType: 'sci',
+        badge: 'SCI Q3 \u00b7 Second Author', badgeType: 'sci',
         title: 'How New Quality Productive Forces Influenced the Urban-Rural Income Gap: Evidence from Prefectural Cities in China',
         meta: 'Zhang, C.; Hu, J.; Song, C.; Lu, Y. \u2014 EDS \u00b7 2025',
         desc: 'Research on how New Quality Productive Forces influenced the urban-rural income gap.',
