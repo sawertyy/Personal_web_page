@@ -265,7 +265,7 @@ a:hover {
   font-weight: 400;
   color: var(--text-primary);
   line-height: 1.2;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 /* ===== Hero Section ===== */
@@ -1650,7 +1650,7 @@ a:hover {
   font-size: 0.9rem;
   color: var(--text-secondary);
   line-height: 1.8;
-  margin: 1.25rem 0 2rem;
+  margin: 0.5rem 0 1.5rem;
   max-width: 340px;
 }
 
@@ -1658,7 +1658,7 @@ a:hover {
   display: flex;
   align-items: baseline;
   gap: 0.75rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   justify-content: flex-end;
   overflow: hidden;
 }
@@ -1712,7 +1712,7 @@ a:hover {
 }
 
 .journey-card-hint {
-  margin-top: 3rem;
+  margin-top: 1.5rem;
   font-size: 0.8rem;
   color: var(--text-muted);
   opacity: 0.6;
