@@ -1138,7 +1138,7 @@ var JOURNEY_CARDS = [
       {
         badge: 'SCI Q2 \u00b7 First Author', badgeType: 'sci',
         title: 'Research on Multi-Scenario Simulation of Urban Expansion for Beijing\u2013Tianjin\u2013Hebei Region Considering Multilevel Urban Flows',
-        meta: 'Hu, J.; Liu, D.; Zheng, X. \u2014 Land, 2024',
+        meta: 'Hu, J.; Liu, D.; Zheng, X. \u2014 Land \u00b7 Nov 2024',
         desc: 'Published in SCI Q2 journal as first author. Research on multi-scenario urban expansion simulation considering multilevel urban flows.',
         link: 'https://doi.org/10.3390/land13111830',
         image: 'images/paper-land.png',
@@ -1147,7 +1147,7 @@ var JOURNEY_CARDS = [
       {
         badge: 'SCI \u00b7 Second Author', badgeType: 'sci',
         title: 'How New Quality Productive Forces Influenced the Urban-Rural Income Gap: Evidence from Prefectural Cities in China',
-        meta: 'Zhang, C.; Hu, J.; Song, C.; Lu, Y. \u2014 EDS, 2025',
+        meta: 'Zhang, C.; Hu, J.; Song, C.; Lu, Y. \u2014 EDS \u00b7 2025',
         desc: 'Research on how New Quality Productive Forces influenced the urban-rural income gap.',
         link: 'https://doi.org/10.1007/s10668-025-06929-3',
         image: 'images/paper-eds.png',
@@ -1161,6 +1161,15 @@ var JOURNEY_CARDS = [
         link: null,
         image: 'images/paper-cumcm.png',
         tags: ['Mathematical Modeling', 'Optimization', 'Pricing Strategy']
+      },
+      {
+        badge: 'National Award', badgeType: 'award',
+        title: 'Graduate Mathematical Modeling Competition',
+        meta: 'Nov 2025 \u00b7 National Second Prize',
+        desc: '',
+        link: null,
+        image: 'images/paper-gmmc.png',
+        tags: []
       }
     ]
   },
@@ -1171,10 +1180,10 @@ var JOURNEY_CARDS = [
     desc: 'My taste in music is quite broad, but I mainly listen to melodic bass, chill house, synthpop, indie pop, and R&B.',
     introText: 'My taste in music is quite broad, but I mainly listen to <strong class="genre-accent">melodic bass</strong>, <strong class="genre-accent">chill house</strong>, <strong class="genre-accent">synthpop</strong>, <strong class="genre-accent">indie pop</strong>, and <strong class="genre-accent">R&amp;B</strong>. Check out the cards on the right for what I\'ve been listening to lately ^^',
     songs: [
+      { name: '\u5fc3\u8df3119', artist: 'JOYCE \u5c31\u4ee5\u65af', cover: 'music/%E5%BF%83%E8%B7%B3119%20-%20JOYCE%20%E5%B0%B1%E4%BB%A5%E6%96%AF.jpg', audioId: 'journey-audio-3', genre: 'R&B' },
       { name: 'Everything is romantic', artist: 'Charli xcx ft. caroline polachek', cover: 'music/Charli%20xcx%20-%20Everything%20is%20romantic%20featuring%20caroline%20polachek.jpg', audioId: 'journey-audio-0', genre: 'Electro Pop' },
       { name: 'Staring Down Sunset', artist: 'Tinlicker ft. Nathan Nicholson', cover: 'music/Tinlicker%20-%20Staring%20Down%20Sunset%20ft.%20Nathan%20Nicholson.jpg', audioId: 'journey-audio-1', genre: 'Dream Pop' },
-      { name: 'Saiko', artist: 'yeule', cover: 'music/yeule%20-%20Saiko.jpg', audioId: 'journey-audio-2', genre: 'Alternative Pop' },
-      { name: '\u5fc3\u8df3119', artist: 'JOYCE \u5c31\u4ee5\u65af', cover: 'music/%E5%BF%83%E8%B7%B3119%20-%20JOYCE%20%E5%B0%B1%E4%BB%A5%E6%96%AF.jpg', audioId: 'journey-audio-3', genre: 'R&B' }
+      { name: 'Saiko', artist: 'yeule', cover: 'music/yeule%20-%20Saiko.jpg', audioId: 'journey-audio-2', genre: 'Alternative Pop' }
     ],
     tags: ['Melodic Bass', 'Chill House', 'Synthpop', 'Indie Pop', 'R&B']
   },
