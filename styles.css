@@ -2383,7 +2383,7 @@ a:hover {
   max-width: 700px;
   max-height: 80vh;
   overflow-y: auto;
-  background: rgba(15, 20, 30, 0.95);
+  background: #0f141e;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
   padding: 3rem;
@@ -2393,7 +2393,7 @@ a:hover {
 }
 
 [data-theme="light"] .card-overlay-content {
-  background: rgba(255, 255, 255, 0.98);
+  background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
@@ -2548,7 +2548,7 @@ a:hover {
 
 /* Card Clone (extract/return animation) */
 .cardswap-card-clone {
-  background: rgba(15, 20, 30, 0.95);
+  background: #0f141e;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
   overflow: hidden;
@@ -2557,7 +2557,7 @@ a:hover {
 }
 
 [data-theme="light"] .cardswap-card-clone {
-  background: rgba(255, 255, 255, 0.98);
+  background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
