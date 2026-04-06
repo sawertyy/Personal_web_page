@@ -1243,6 +1243,7 @@ function initCardSwap() {
       bodyContent =
         '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
         '<div class="cardswap-card-title">' + card.title + '</div>' +
+        '<div class="cardswap-card-desc">Published 2 SCI papers (Q2 first-author on urban simulation, Q3 second-author on productive forces), 1 Chinese core journal, and 1 SCI under review. Won 10+ provincial/national awards during undergrad including CUMCM Beijing First Prize, and received the National Scholarship.</div>' +
         '<div class="cardswap-card-bottom">' +
           '<div class="cardswap-card-tagline">2 SCI papers published \u00b7 1 Chinese core journal \u00b7 1 SCI under review<br>10+ provincial/national awards in undergrad \u00b7 National Scholarship</div>' +
         '</div>';
