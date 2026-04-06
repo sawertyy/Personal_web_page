@@ -1255,7 +1255,7 @@ function initCardSwap() {
             '<div class="cardswap-music-progress"><div class="cardswap-music-progress-fill"></div></div>' +
             '<span class="cardswap-music-song-name">' + s.name + '</span>' +
           '</div>' +
-          '<div class="cardswap-card-hint">' + card.songs.length + ' songs, tap for more \u2192</div>' +
+           +
         '</div>';
     } else if (card.type === 'now') {
       var firstItem = card.nowItems[0] || { text: '' };
@@ -1981,6 +1981,7 @@ function initCardSwap() {
       if (on) {
         overlay.style.background = isDark ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.15)';
         if (activeClone) {
+          activeClone.style.transition = 'background 0.6s ease, backdrop-filter 0.6s ease';
           activeClone.style.background = isDark ? 'rgba(15, 20, 30, 0.75)' : 'rgba(255, 255, 255, 0.8)';
           activeClone.style.backdropFilter = 'blur(8px)';
           activeClone.style.webkitBackdropFilter = 'blur(8px)';
