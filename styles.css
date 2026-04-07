@@ -51,7 +51,7 @@
   --border-light: #2a4a6a;
   --tag-bg: rgba(96, 165, 250, 0.08);
   --tag-border: rgba(96, 165, 250, 0.2);
-  --card-shadow: rgba(0, 0, 0, 0.3);
+  --card-shadow: rgba(0, 0, 0, 0.15);
   color-scheme: dark;
 }
 
@@ -417,7 +417,7 @@ a:hover {
   border-radius: 20px;
   padding: 1.5rem;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.4s ease, border-color 0.4s ease;
 }
 
 .bento-card:hover {
@@ -755,7 +755,7 @@ a:hover {
   border: 1px solid var(--border);
   border-radius: 16px;
   overflow: hidden;
-  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
 }
 
 .exp-card:hover {
@@ -959,7 +959,7 @@ a:hover {
 /* ===== Music Section ===== */
 .music-section {
   background: var(--bg-secondary);
-  transition: background-color 0.8s ease;
+  transition: background-color 0.4s ease;
 }
 
 .music-layout {
@@ -1423,7 +1423,7 @@ a:hover {
   overflow: hidden;
   cursor: pointer;
   outline: none;
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease, background-color 0.4s ease;
 }
 
 .pixel-transition-card:hover,
@@ -1599,7 +1599,7 @@ a:hover {
 /* ===== Journey Section (CardSwap) ===== */
 .journey-section {
   background: var(--bg-secondary);
-  transition: background-color 0.8s ease;
+  transition: background-color 0.4s ease;
 }
 
 .journey-section.audio-active {
@@ -1747,8 +1747,9 @@ a:hover {
   overflow: hidden;
   background: #0f141e;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 30px rgba(255, 255, 255, 0.12), 0 0 60px rgba(255, 255, 255, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 30px rgba(255, 255, 255, 0.06), 0 0 60px rgba(255, 255, 255, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.04);
   cursor: pointer;
+  transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
   will-change: transform;
   transform-style: preserve-3d;
   backface-visibility: hidden;
@@ -2456,7 +2457,7 @@ a:hover {
   border-radius: 20px;
   padding: 3rem;
   transform: translateY(20px);
-  transition: transform 0.35s ease;
+  transition: transform 0.35s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
   color: var(--text-primary);
 }
 
@@ -2620,7 +2621,8 @@ a:hover {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
   will-change: transform, width, height, top, left;
 }
 
