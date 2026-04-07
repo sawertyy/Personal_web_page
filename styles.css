@@ -3046,7 +3046,7 @@ a:hover {
   aspect-ratio: 1;
   border-radius: 16px;
   object-fit: cover;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   margin-bottom: 1.5rem;
 }
 
