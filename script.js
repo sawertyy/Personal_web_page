@@ -1058,7 +1058,11 @@ function initActiveNavLinks() {
 // ===== Scroll Indicator =====
 function initScrollIndicator() {
   document.querySelector('.hero-scroll-hint')?.addEventListener('click', () => {
-    document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' });
+    const container = document.getElementById('snapContainer');
+    const target = document.querySelector('#about');
+    if (container && target) {
+      container.scrollTo({ top: target.offsetTop, behavior: 'smooth' });
+    }
   });
 }
 
@@ -1073,7 +1077,7 @@ function initNavScroll() {
       const targetId = link.getAttribute('href');
       const target = document.querySelector(targetId);
       if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
+        container.scrollTo({ top: target.offsetTop, behavior: 'smooth' });
       }
     });
   });
@@ -1492,9 +1496,12 @@ function initCardSwap() {
   }
 
   function isJourneyVisible() {
-    if (!journeySectionEl) return false;
-    var rect = journeySectionEl.getBoundingClientRect();
-    return rect.top <= 10 && rect.bottom >= window.innerHeight - 10;
+    if (!journeySectionEl || !snapContainer) return false;
+    var viewportTop = snapContainer.scrollTop;
+    var viewportBottom = viewportTop + snapContainer.clientHeight;
+    var sectionTop = journeySectionEl.offsetTop;
+    var sectionBottom = sectionTop + journeySectionEl.offsetHeight;
+    return sectionTop <= viewportTop + 10 && sectionBottom >= viewportBottom - 10;
   }
 
   var snapContainer = document.getElementById('snapContainer');
@@ -1568,9 +1575,11 @@ function initCardSwap() {
       if (pageCooldown) return;
 
       var currentIdx = 0;
+      var containerMiddle = snapContainer.scrollTop + snapContainer.clientHeight / 2;
       for (var i = 0; i < allSections.length; i++) {
-        var rect = allSections[i].getBoundingClientRect();
-        if (Math.abs(rect.top) < window.innerHeight / 2) { currentIdx = i; break; }
+        var sectionTop = allSections[i].offsetTop;
+        var sectionBottom = sectionTop + allSections[i].offsetHeight;
+        if (containerMiddle >= sectionTop && containerMiddle < sectionBottom) { currentIdx = i; break; }
       }
 
       var targetIdx;
@@ -1583,7 +1592,7 @@ function initCardSwap() {
       if (targetIdx === currentIdx) return;
 
       pageCooldown = true;
-      allSections[targetIdx].scrollIntoView({ behavior: 'smooth' });
+      snapContainer.scrollTo({ top: allSections[targetIdx].offsetTop, behavior: 'smooth' });
       setTimeout(function() { pageCooldown = false; }, 1200);
     }, { passive: false });
   }
