@@ -1284,44 +1284,56 @@ var JOURNEY_CARDS = [
     title: 'Where I\u2019ve Worked',
     items: [
       {
-        logo: 'images/%E7%99%BE%E5%BA%A6.svg', company: 'Baidu', role: 'AI Product Intern',
-        period: 'Jan 2026 \u2014 Present',
-        desc: 'Built 150+ emotionally engaging dynamic greetings for AI assistant and designed feature demo cards for creative writing, multimodal understanding, and text generation.',
+        logo: 'images/%E4%BA%AC%E4%B8%9Clogo.png', company: 'JD.com', role: 'AI Product Intern',
+        period: 'May 2026 \u2014 Present',
+        desc: 'Working on AI-assisted operational products for collection, review, and human-in-the-loop workflows.',
         highlights: [
-          'Sayhi greetings: homepage title CTR \u2192 3%, 91% new users enter conversation',
-          'Feature demo cards: CTR 4.13%, 12.1% users continue chatting with model',
-          'Creative writing evaluation across 5 leading LLMs, identifying core strengths & gaps'
+          'Redesigned a pre-collection assistant information interface, reducing average call-preparation time by 11% and lookup clicks by 19%',
+          'Built an AI-assisted phone-number review workflow with ASR/OCR verification, human escalation, and sampling checks',
+          'Kept AI review accuracy above 85% and reduced management-side review workload by 50%'
         ],
-        tags: ['LLM', 'A/B Testing', 'User Research']
+        tags: ['AI Workflow', 'Human-in-the-loop', 'Operations']
+      },
+      {
+        logo: 'images/%E7%99%BE%E5%BA%A6.svg', company: 'Baidu', role: 'AI Product Intern',
+        period: 'Jan \u2014 May 2026',
+        desc: 'Worked on Wenxin Yiyan Web, improving AI assistant engagement through dynamic greetings, demo cards, and model capability evaluation.',
+        highlights: [
+          'Built 150+ emotionally engaging SayHi prompts, lifting homepage title CTR to 2% and average chat depth by 20%',
+          'Designed 4 model demo card types across creative writing, multimodal understanding, and text generation; achieved 4.13% CTR and 12.1% post-click continued conversation',
+          'Evaluated 5 leading LLMs on targeted capabilities and translated findings into product and operations strategies'
+        ],
+        tags: ['LLM', 'AI Assistant', 'Evaluation']
       },
       {
         logo: 'images/%E5%B0%8F%E7%BA%A2%E4%B9%A6.png', company: 'Xiaohongshu', role: 'E-commerce Product Intern',
         period: 'Sep \u2014 Dec 2025',
-        desc: 'Designed LLM-powered filter keyword recommendations and optimized product cards & trending search cards to drive discovery and conversion.',
+        desc: 'Designed LLM-powered search and product-card improvements to improve product discovery and conversion in e-commerce search.',
         highlights: [
-          'LLM filter keywords: coverage 40%, CTR 5%, post-filter conversion +30%',
-          'Product card optimization: search GMV +3%, DAB +1%',
-          '\u201cTrending Searches\u201d card: 2% CTR, improved search distribution'
+          'Built a filter keyword recommendation pipeline from LLM generation and prompt tuning to data cleaning and launch',
+          'Increased filter coverage to 40%, filter CTR to 5%, and post-filter conversion by 30%',
+          'Optimized product card and trending-search card experiences, driving search GMV +3%, DAB +1%, and 2% organic CTR'
         ],
         tags: ['E-commerce', 'Search', 'Conversion']
       },
       {
         logo: 'images/%E7%99%BE%E8%9E%8D%E4%BA%91%E5%88%9B.png', company: 'BaiRong Cloud', role: 'AI Product Intern',
         period: 'Jun \u2014 Sep 2025',
-        desc: 'Built AI Agent features from 0\u21921 inside CRM and designed AI outbound calling to replace manual calls for overseas finance clients.',
+        desc: 'Launched AI Agent and AI outbound-call workflows for overseas financial clients, connecting model capabilities with frontline operations.',
         highlights: [
-          'AI Agent in CRM: 5 managers\u2019 efficiency +50% (4h \u2192 2h), helped close deal',
-          'AI outbound: intention rate 56%, labor cost \u221280%, call cycle 8d \u2192 2d'
+          'Shipped 0-to-1 CRM AI Agent features including pre-call summaries, scenario templates, and an agent chat page',
+          'Improved efficiency for 5 client managers by 50% and helped move the project toward deal signing',
+          'Designed AI outbound-call workflows with SOP mapping, prompt design, and dialing strategies; achieved 56% intent rate, 0.8% conversion, and 80% labor-cost reduction'
         ],
         tags: ['AI Agent', 'Enterprise', 'SaaS']
       },
       {
         logo: 'images/%E6%98%93%E6%99%BA%E7%91%9E.png', company: 'Esri China', role: 'Product Operations Intern',
         period: 'Jul \u2014 Oct 2024',
-        desc: 'Designed a \u201cProvincial Natural Resources Dashboard\u201d interactive demo and led typhoon weather scenario showcases at industry conferences.',
+        desc: 'Designed a provincial natural-resources dashboard demo and supported typhoon-weather scenario showcases for GIS industry clients.',
         highlights: [
-          'Dashboard template adopted into official library, 200+ monthly uses',
-          'Conference demo: 5 inquiries, 2 signings, tutorial views 10,000+'
+          'Dashboard template adopted into the official library, reaching 200+ monthly uses',
+          'Conference demos generated 5 inquiries and 2 signings, while related tutorials reached 10,000+ views'
         ],
         tags: ['GIS', 'Documentation', 'Operations']
       }
@@ -1387,12 +1399,12 @@ var JOURNEY_CARDS = [
   {
     id: 'now', type: 'now', typeLabel: 'Now', typeIcon: 'fas fa-clock',
     accentGradient: 'linear-gradient(135deg, #0369a1, #38bdf8)',
-    title: "What I'm Up To", meta: 'Last updated Mar 2026',
-    desc: 'A snapshot of my current state.',
+    title: "What I'm Up To", meta: 'Last updated Jul 2026',
+    desc: 'Recent questions I keep returning to while building AI products.',
     nowItems: [
-      { label: 'Doing', text: 'Exploring AI assistant UX and creative writing evaluation at Baidu' },
-      { label: 'Reading', text: '<em>erta and ferti AI</em> by Jasmine Sun \u2014 rethinking how AI products find product-market fit' },
-      { label: 'Thinking', text: 'Should AI product evaluation be defined by user satisfaction or model capability benchmarks?' }
+      { label: 'Doing', text: 'Connecting model capabilities with real operational workflows \u2014 from review automation to CRM agents and collection assistants.' },
+      { label: 'Thinking', text: 'How should AI products be evaluated: model capability benchmarks, user satisfaction, task completion, or business metrics?' },
+      { label: 'Learning', text: 'Studying how AI Agents move from demos to production through permissions, uncertainty handling, human escalation, data quality, and measurable ROI.' }
     ],
     tags: []
   }
@@ -1962,7 +1974,7 @@ function initCardSwap() {
 
       var left = '<div class="overlay-split-left">' +
         '<h3 class="overlay-split-title overlay-anim-item">' + card.title + '</h3>' +
-        '<p class="overlay-split-desc overlay-anim-item">4 product internships across AI, social, fintech & GIS</p>' +
+        '<p class="overlay-split-desc overlay-anim-item">5 product internships across AI, e-commerce, fintech & GIS</p>' +
         '<div class="overlay-left-stats overlay-anim-item">' +
           '<div><span class="overlay-left-stat-num">' + card.items.length + '</span><span class="overlay-left-stat-label">Internships</span></div>' +
         '</div>' +
@@ -1973,15 +1985,6 @@ function initCardSwap() {
       var right = card.items.map(function(item) {
         var hl = item.highlights ? item.highlights.map(function(h) { return '<li>' + h + '</li>'; }).join('') : '';
         var tags = item.tags.map(function(t) { return '<span class="exp-tag">' + t + '</span>'; }).join('');
-        // Extract skills from tags for visualization
-        var skills = item.tags.map(function(t, i) {
-          var levels = [85, 75, 70];
-          return '<div class="exp-skill-bar">' +
-            '<span class="exp-skill-name">' + t + '</span>' +
-            '<div class="exp-skill-track"><div class="exp-skill-fill" data-level="' + (levels[i] || 65) + '"></div></div>' +
-          '</div>';
-        }).join('');
-
         return '<div class="overlay-exp-entry overlay-anim-item">' +
           '<div class="exp-timeline-dot"></div>' +
           '<div class="exp-entry-header">' +
@@ -1993,7 +1996,6 @@ function initCardSwap() {
           '</div>' +
           '<p class="exp-desc">' + item.desc + '</p>' +
           (hl ? '<ul class="exp-highlights">' + hl + '</ul>' : '') +
-          '<div class="exp-skills">' + skills + '</div>' +
           '<div class="exp-tags">' + tags + '</div>' +
         '</div>';
       }).join('');
@@ -2076,13 +2078,13 @@ function initCardSwap() {
         '<h3 class="overlay-split-title overlay-anim-item">' + card.title + '</h3>' +
         '<div class="status-indicator overlay-anim-item">' +
           '<span class="status-dot"></span>' +
-          '<span class="status-text">Currently: Studying at WHU</span>' +
+          '<span class="status-text">Currently: Studying at WHU & building AI product judgment</span>' +
         '</div>' +
         '<p class="overlay-split-desc overlay-anim-item">' + card.meta + '</p>' +
         '<p class="overlay-split-desc overlay-anim-item" style="margin-top:auto;font-size:0.75rem;color:var(--text-muted);">' + card.desc + '</p>' +
       '</div>';
 
-      var labelColors = { Doing: 'building', Reading: 'reading', Thinking: 'learning', Listening: 'listening' };
+      var labelColors = { Doing: 'building', Reading: 'reading', Thinking: 'learning', Learning: 'reading', Listening: 'listening' };
       var chatLines = card.nowItems.map(function(item) {
         var colorClass = labelColors[item.label] || 'building';
         return '<div class="chat-bubble chat-answer overlay-anim-item">' +
