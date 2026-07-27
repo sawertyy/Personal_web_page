@@ -25,27 +25,58 @@ function initLiquidEther() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   // --- Configuration ---
+  const isLowPowerDevice =
+    window.matchMedia('(max-width: 768px)').matches ||
+    window.matchMedia('(pointer: coarse)').matches ||
+    ((navigator.hardwareConcurrency || 8) <= 4);
+
   const CONFIG = {
-    mouseForce: 20,
-    cursorSize: 100,
+    mouseForce: 14,
+    cursorSize: 95,
     isViscous: true,
     viscous: 30,
-    iterationsViscous: 32,
-    iterationsPoisson: 32,
-    dt: 0.014,
-    BFECC: true,
-    resolution: 0.5,
+    iterationsViscous: isLowPowerDevice ? 4 : 8,
+    iterationsPoisson: isLowPowerDevice ? 8 : 12,
+    dt: 0.012,
+    BFECC: false,
+    resolution: isLowPowerDevice ? 0.28 : 0.38,
+    maxPixelRatio: isLowPowerDevice ? 1 : 1.25,
     isBounce: false,
     colors: ['#3AA0FF', '#70D0FF', '#B0E8FF'],
-    autoDemo: true,
-    autoSpeed: 0.5,
-    autoIntensity: 2.2,
-    takeoverDuration: 0.25,
+    autoDemo: false,
+    autoSpeed: 0.38,
+    autoIntensity: 2.4,
+    takeoverDuration: 0.4,
     autoResumeDelay: 3000,
-    autoRampDuration: 0.6,
-    audioMouseForce: 0,
-    audioCursorSize: 60,
-    audioForceMultiplier: 0.5,
+    autoRampDuration: 1.2,
+    autoMargin: 0.08,
+    autoPauseMin: 450,
+    autoPauseMax: 1600,
+    autoDurationMin: 1.4,
+    autoDurationMax: 4.2,
+    autoFastDurationMin: 0.65,
+    autoFastDurationMax: 1.25,
+    autoFastChance: 0.32,
+    autoCurveStrengthMin: 0.25,
+    autoCurveStrengthMax: 0.75,
+    autoEdgeBias: 0.7,
+    audioCursorSize: isLowPowerDevice ? 180 : 260,
+    audioForceBase: 0.003,
+    audioForceMultiplier: 0.018,
+    audioForceMax: 0.018,
+    audioSmoothingAttack: 0.75,
+    audioSmoothingRelease: 1.8,
+    audioEnergyFloor: 0.025,
+    audioEnergyGamma: 1.35,
+    audioBreathSpeed: 0.035,
+    audioBreathEnergySpeed: 0.025,
+    audioDriftRangeX: 0.22,
+    audioDriftRangeY: 0.16,
+    audioDriftSecondary: 0.05,
+    audioDriftSpeedX: 0.045,
+    audioDriftSpeedY: 0.038,
+    audioForceTurnSpeed: 0.11,
+    audioForceYRatio: 0.72,
   };
 
   // --- Palette Texture ---
@@ -258,7 +289,7 @@ function initLiquidEther() {
   const Common = {
     width: 0, height: 0, renderer: null, clock: null, time: 0, delta: 0,
     init(el) {
-      this.pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      this.pixelRatio = Math.min(window.devicePixelRatio || 1, CONFIG.maxPixelRatio || 1);
       this.resize(el);
       this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       this.renderer.autoClear = false;
@@ -396,64 +427,151 @@ function initLiquidEther() {
       this.speed = opts.speed;
       this.resumeDelay = opts.resumeDelay || 3000;
       this.rampDurationMs = (opts.rampDuration || 0) * 1000;
+      this.margin = opts.margin ?? 0.08;
+      this.pauseMin = opts.pauseMin ?? 450;
+      this.pauseMax = opts.pauseMax ?? 1600;
+      this.durationMin = opts.durationMin ?? 1.4;
+      this.durationMax = opts.durationMax ?? 4.2;
+      this.fastDurationMin = opts.fastDurationMin ?? 0.65;
+      this.fastDurationMax = opts.fastDurationMax ?? 1.25;
+      this.fastChance = opts.fastChance ?? 0.32;
+      this.curveStrengthMin = opts.curveStrengthMin ?? 0.25;
+      this.curveStrengthMax = opts.curveStrengthMax ?? 0.75;
+      this.edgeBias = opts.edgeBias ?? 0.7;
       this.active = false;
       this.current = new THREE.Vector2(0, 0);
-      this.target = new THREE.Vector2();
-      this.lastTime = performance.now();
+      this.p0 = new THREE.Vector2();
+      this.p1 = new THREE.Vector2();
+      this.p2 = new THREE.Vector2();
+      this.p3 = new THREE.Vector2();
+      this.segmentStartTime = 0;
+      this.segmentDurationMs = 0;
+      this.pauseUntil = 0;
       this.activationTime = 0;
-      this.margin = 0.2;
       this._tmpDir = new THREE.Vector2();
-      this.pickNewTarget();
+      this._tmpPerp = new THREE.Vector2();
+      this._tmpPoint = new THREE.Vector2();
+      this._tmpBezier = new THREE.Vector2();
     }
-    pickNewTarget() {
-      this.target.set(
-        (Math.random() * 2 - 1) * (1 - this.margin),
-        (Math.random() * 2 - 1) * (1 - this.margin)
-      );
+    randomRange(min, max) {
+      return min + Math.random() * (max - min);
+    }
+    randomInBounds() {
+      const limit = 1 - this.margin;
+      const pickAxis = () => {
+        const sign = Math.random() < 0.5 ? -1 : 1;
+        if (Math.random() < this.edgeBias) {
+          return sign * this.randomRange(0.45, 1) * limit;
+        }
+        return (Math.random() * 2 - 1) * limit;
+      };
+      return this._tmpPoint.set(pickAxis(), pickAxis()).clone();
+    }
+    clampToBounds(v) {
+      const limit = 1 - this.margin;
+      v.x = Math.max(-limit, Math.min(limit, v.x));
+      v.y = Math.max(-limit, Math.min(limit, v.y));
+      return v;
+    }
+    speedProfile(t) {
+      t = Math.max(0, Math.min(1, t));
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+    bezier(t, out) {
+      const u = 1 - t;
+      const uu = u * u;
+      const tt = t * t;
+      const uuu = uu * u;
+      const ttt = tt * t;
+      out.set(0, 0);
+      out.addScaledVector(this.p0, uuu);
+      out.addScaledVector(this.p1, 3 * uu * t);
+      out.addScaledVector(this.p2, 3 * u * tt);
+      out.addScaledVector(this.p3, ttt);
+      return out;
+    }
+    startSegment(now) {
+      this.p0.copy(this.current);
+      this.p3.copy(this.randomInBounds());
+
+      const dir = this._tmpDir.subVectors(this.p3, this.p0);
+      const dist = Math.max(dir.length(), 0.001);
+      dir.normalize();
+      const perp = this._tmpPerp.set(-dir.y, dir.x);
+      const bend = this.randomRange(this.curveStrengthMin, this.curveStrengthMax) * dist;
+      const bendSign = Math.random() < 0.5 ? -1 : 1;
+      const drift = this.randomRange(-0.18, 0.18) * dist;
+
+      this.p1.copy(this.p0)
+        .addScaledVector(dir, dist * this.randomRange(0.22, 0.38))
+        .addScaledVector(perp, bend * bendSign)
+        .addScaledVector(dir, drift);
+      this.p2.copy(this.p0)
+        .addScaledVector(dir, dist * this.randomRange(0.62, 0.82))
+        .addScaledVector(perp, -bend * bendSign * this.randomRange(0.45, 0.9))
+        .addScaledVector(dir, -drift * 0.5);
+
+      this.clampToBounds(this.p1);
+      this.clampToBounds(this.p2);
+      this.clampToBounds(this.p3);
+
+      const isFast = Math.random() < this.fastChance;
+      const min = isFast ? this.fastDurationMin : this.durationMin;
+      const max = isFast ? this.fastDurationMax : this.durationMax;
+      const speedScale = this.speed > 0 ? 0.38 / this.speed : 1;
+      this.segmentDurationMs = this.randomRange(min, max) * speedScale * 1000;
+      this.segmentStartTime = now;
+      this.pauseUntil = 0;
     }
     forceStop() {
       this.active = false;
+      this.pauseUntil = 0;
       this.mouse.isAutoActive = false;
     }
     update() {
       if (!this.enabled) return;
+      const now = performance.now();
+
       if (audioReactive.connected) {
         if (this.active) this.forceStop();
         return;
       }
-      const now = performance.now();
+
       const idle = now - this.manager.lastUserInteraction;
       if (idle < this.resumeDelay) {
-        if (this.active) this.forceStop();
-        return;
-      }
-      if (this.mouse.isHoverInside) {
         if (this.active) this.forceStop();
         return;
       }
       if (!this.active) {
         this.active = true;
         this.current.copy(this.mouse.coords);
-        this.lastTime = now;
+        this.clampToBounds(this.current);
         this.activationTime = now;
+        this.startSegment(now);
       }
       this.mouse.isAutoActive = true;
-      let dtSec = (now - this.lastTime) / 1000;
-      this.lastTime = now;
-      if (dtSec > 0.2) dtSec = 0.016;
-      const dir = this._tmpDir.subVectors(this.target, this.current);
-      const dist = dir.length();
-      if (dist < 0.01) { this.pickNewTarget(); return; }
-      dir.normalize();
+
+      if (this.pauseUntil) {
+        if (now < this.pauseUntil) return;
+        this.startSegment(now);
+      }
+
+      const rawT = (now - this.segmentStartTime) / this.segmentDurationMs;
+      if (rawT >= 1) {
+        this.current.copy(this.p3);
+        this.mouse.coords.copy(this.current);
+        this.pauseUntil = now + this.randomRange(this.pauseMin, this.pauseMax);
+        return;
+      }
+
       let ramp = 1;
       if (this.rampDurationMs > 0) {
-        const t = Math.min(1, (now - this.activationTime) / this.rampDurationMs);
-        ramp = t * t * (3 - 2 * t);
+        const rt = Math.min(1, (now - this.activationTime) / this.rampDurationMs);
+        ramp = rt * rt * (3 - 2 * rt);
       }
-      const step = this.speed * dtSec * ramp;
-      const move = Math.min(step, dist);
-      this.current.addScaledVector(dir, move);
-      this.mouse.coords.set(this.current.x, this.current.y);
+      const t = this.speedProfile(rawT * ramp);
+      this.current.copy(this.bezier(t, this._tmpBezier));
+      this.mouse.coords.copy(this.current);
       this.mouse.mouseMoved = true;
     }
   }
@@ -549,26 +667,26 @@ function initLiquidEther() {
       this.scene.add(this.mouse);
     }
     update(props) {
-      const forceX = (Mouse.diff.x / 2) * props.mouse_force + props.audioForce.x;
-      const forceY = (Mouse.diff.y / 2) * props.mouse_force + props.audioForce.y;
-      const csX = props.cursor_size * props.cellScale.x;
-      const csY = props.cursor_size * props.cellScale.y;
-      var centerX, centerY;
-      if (props.audioActive) {
-        var t = performance.now() * 0.0005;
-        centerX = Math.sin(t * 1.3) * 0.4;
-        centerY = Math.cos(t * 0.9) * 0.4;
-      } else {
-        centerX = Mouse.coords.x;
-        centerY = Mouse.coords.y;
-      }
-      centerX = Math.min(Math.max(centerX, -1 + csX + props.cellScale.x * 2), 1 - csX - props.cellScale.x * 2);
-      centerY = Math.min(Math.max(centerY, -1 + csY + props.cellScale.y * 2), 1 - csY - props.cellScale.y * 2);
       const u = this.mouse.material.uniforms;
-      u.force.value.set(forceX, forceY);
-      u.center.value.set(centerX, centerY);
-      u.scale.value.set(props.cursor_size, props.cursor_size);
-      super.update();
+      const renderImpulse = (center, force, cursorSize) => {
+        const csX = cursorSize * props.cellScale.x;
+        const csY = cursorSize * props.cellScale.y;
+        const centerX = Math.min(Math.max(center.x, -1 + csX + props.cellScale.x * 2), 1 - csX - props.cellScale.x * 2);
+        const centerY = Math.min(Math.max(center.y, -1 + csY + props.cellScale.y * 2), 1 - csY - props.cellScale.y * 2);
+        u.force.value.set(force.x, force.y);
+        u.center.value.set(centerX, centerY);
+        u.scale.value.set(cursorSize, cursorSize);
+        super.update();
+      };
+
+      renderImpulse(Mouse.coords, {
+        x: (Mouse.diff.x / 2) * props.mouse_force,
+        y: (Mouse.diff.y / 2) * props.mouse_force
+      }, props.cursor_size);
+
+      if (props.audioActive) {
+        renderImpulse(props.audioCenter, props.audioForce, props.audioCursorSize);
+      }
     }
   }
 
@@ -768,11 +886,13 @@ function initLiquidEther() {
 
       this.advection.update({ dt: this.options.dt, isBounce: this.options.isBounce, BFECC: this.options.BFECC });
       this.externalForce.update({
-        cursor_size: audioReactive.connected ? this.options.audioCursorSize : this.options.cursorSize,
-        mouse_force: audioReactive.connected ? this.options.audioMouseForce : this.options.mouseForce,
+        cursor_size: this.options.cursorSize,
+        mouse_force: this.options.mouseForce,
         cellScale: this.cellScale,
         audioForce: audioReactive.force,
-        audioActive: audioReactive.connected
+        audioCenter: audioReactive.center,
+        audioCursorSize: this.options.audioCursorSize,
+        audioActive: audioReactive.active
       });
 
       let vel = this.fbos.vel_1;
@@ -850,7 +970,18 @@ function initLiquidEther() {
     enabled: CONFIG.autoDemo,
     speed: CONFIG.autoSpeed,
     resumeDelay: CONFIG.autoResumeDelay,
-    rampDuration: CONFIG.autoRampDuration
+    rampDuration: CONFIG.autoRampDuration,
+    margin: CONFIG.autoMargin,
+    pauseMin: CONFIG.autoPauseMin,
+    pauseMax: CONFIG.autoPauseMax,
+    durationMin: CONFIG.autoDurationMin,
+    durationMax: CONFIG.autoDurationMax,
+    fastDurationMin: CONFIG.autoFastDurationMin,
+    fastDurationMax: CONFIG.autoFastDurationMax,
+    fastChance: CONFIG.autoFastChance,
+    curveStrengthMin: CONFIG.autoCurveStrengthMin,
+    curveStrengthMax: CONFIG.autoCurveStrengthMax,
+    edgeBias: CONFIG.autoEdgeBias
   });
 
   // ===== Audio Reactive =====
@@ -860,8 +991,67 @@ function initLiquidEther() {
     sourceMap: new WeakMap(),
     dataArray: null,
     connected: false,
+    active: false,
     currentAudio: null,
+    center: new THREE.Vector2(0, 0),
     force: { x: 0, y: 0 },
+    smoothedEnergy: 0,
+    ambientPhase: 0,
+    lastAmbientTime: 0,
+
+    resetAmbient() {
+      this.active = false;
+      this.force.x = 0;
+      this.force.y = 0;
+      this.center.set(0, 0);
+      this.smoothedEnergy = 0;
+      this.ambientPhase = 0;
+      this.lastAmbientTime = 0;
+    },
+
+    clearAmbient() {
+      this.active = false;
+      this.force.x = 0;
+      this.force.y = 0;
+      this.lastAmbientTime = 0;
+    },
+
+    updateAmbient(rawEnergy, now) {
+      if (!this.active) {
+        this.force.x = 0;
+        this.force.y = 0;
+        return;
+      }
+
+      if (!this.lastAmbientTime) this.lastAmbientTime = now;
+      const dt = Math.min(0.05, Math.max(0.001, (now - this.lastAmbientTime) / 1000));
+      this.lastAmbientTime = now;
+
+      const attack = 1 - Math.exp(-dt / CONFIG.audioSmoothingAttack);
+      const release = 1 - Math.exp(-dt / CONFIG.audioSmoothingRelease);
+      const k = rawEnergy > this.smoothedEnergy ? attack : release;
+      this.smoothedEnergy += (rawEnergy - this.smoothedEnergy) * k;
+
+      const normalizedEnergy = Math.max(0, this.smoothedEnergy - CONFIG.audioEnergyFloor);
+      const energy = Math.pow(normalizedEnergy, CONFIG.audioEnergyGamma);
+      this.ambientPhase += dt * (CONFIG.audioBreathSpeed + energy * CONFIG.audioBreathEnergySpeed);
+      const breath = 0.55 + 0.45 * Math.sin(this.ambientPhase * Math.PI * 2);
+
+      const driftT = now / 1000;
+      this.center.set(
+        Math.sin(driftT * CONFIG.audioDriftSpeedX) * CONFIG.audioDriftRangeX +
+          Math.sin(driftT * 0.017) * CONFIG.audioDriftSecondary,
+        Math.cos(driftT * CONFIG.audioDriftSpeedY) * CONFIG.audioDriftRangeY
+      );
+
+      const amp = Math.min(
+        CONFIG.audioForceMax,
+        CONFIG.audioForceBase + energy * CONFIG.audioForceMultiplier * breath
+      );
+      const angle = driftT * CONFIG.audioForceTurnSpeed;
+      this.force.x = Math.cos(angle) * amp;
+      this.force.y = Math.sin(angle * 0.87 + 1.2) * amp * CONFIG.audioForceYRatio;
+    },
 
     connect(audioEl) {
       if (this.currentAudio === audioEl && this.connected) return;
@@ -880,6 +1070,7 @@ function initLiquidEther() {
       }
       source.connect(this.analyser);
       this.analyser.connect(this.ctx.destination);
+      this.resetAmbient();
       this.connected = true;
       this.currentAudio = audioEl;
     },
@@ -890,6 +1081,7 @@ function initLiquidEther() {
       if (this.analyser) { this.analyser.disconnect(); this.analyser = null; }
       this.connected = false;
       this.currentAudio = null;
+      this.resetAmbient();
     },
 
     getEnergy() {
@@ -912,24 +1104,25 @@ function initLiquidEther() {
     output.resize();
   }
 
+  function isHomeSectionActive() {
+    const snapContainer = document.getElementById('snapContainer');
+    const aboutSection = document.getElementById('about');
+    if (!snapContainer || !aboutSection) return true;
+    return snapContainer.scrollTop < aboutSection.offsetTop * 0.5;
+  }
+
   function loop() {
     if (!running) return;
     autoDriver.update();
-    Mouse.update();
-    // Audio-reactive force — compute independently (not via Mouse.diff)
-    audioReactive.force.x = 0;
-    audioReactive.force.y = 0;
-    if (audioReactive.connected) {
-      var energy = audioReactive.getEnergy();
-      if (energy > 0.05) {
-        var t = performance.now() * 0.001;
-        var angle = t * 1.5 + Math.sin(t * 0.7) * 2;
-        var force = energy * CONFIG.audioForceMultiplier;
-        audioReactive.force.x = Math.cos(angle) * force;
-        audioReactive.force.y = Math.sin(angle) * force;
-        Mouse.mouseMoved = true;
-      }
+    const homeActive = isHomeSectionActive();
+    audioReactive.active = audioReactive.connected && !homeActive;
+    if (audioReactive.active) {
+      const energy = audioReactive.getEnergy();
+      audioReactive.updateAmbient(energy, performance.now());
+    } else {
+      audioReactive.clearAmbient();
     }
+    Mouse.update();
     Common.update();
     output.update();
     rafId = requestAnimationFrame(loop);
