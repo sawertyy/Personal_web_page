@@ -1348,7 +1348,7 @@ var JOURNEY_CARDS = [
         badge: 'SCI Q2 \u00b7 First Author', badgeType: 'sci',
         title: 'Research on Multi-Scenario Simulation of Urban Expansion for Beijing\u2013Tianjin\u2013Hebei Region Considering Multilevel Urban Flows',
         meta: 'Hu, J.; Liu, D.; Zheng, X. \u2014 Land \u00b7 Nov 2024',
-        desc: 'Published in SCI Q2 journal as first author. Research on multi-scenario urban expansion simulation considering multilevel urban flows.',
+        desc: '',
         link: 'https://doi.org/10.3390/land13111830',
         images: ['images/paper-land-1.png', 'images/paper-land-2.png', 'images/paper-land-3.jpg'],
         tags: ['Urban Simulation', 'Cellular Automata', 'Multi-Scenario']
@@ -1357,28 +1357,37 @@ var JOURNEY_CARDS = [
         badge: 'SCI Q3 \u00b7 Second Author', badgeType: 'sci',
         title: 'How New Quality Productive Forces Influenced the Urban-Rural Income Gap: Evidence from Prefectural Cities in China',
         meta: 'Zhang, C.; Hu, J.; Song, C.; Lu, Y. \u2014 EDS \u00b7 2025',
-        desc: 'Research on how New Quality Productive Forces influenced the urban-rural income gap.',
+        desc: '',
         link: 'https://doi.org/10.1007/s10668-025-06929-3',
         images: ['images/paper-eds-1.webp', 'images/paper-eds-2.webp', 'images/paper-eds-3.webp', 'images/paper-eds-4.webp'],
         tags: ['Productive Forces', 'Urban-Rural Gap', 'Panel Data']
       },
       {
-        badge: 'National Award', badgeType: 'award',
-        title: 'Supermarket Vegetable Pricing Optimization',
-        meta: 'Hu, J.; Xu, J.; Ye, L. \u2014 CUMCM 2024 \u00b7 Beijing First Prize',
-        desc: 'Mathematical modeling competition entry for optimizing supermarket vegetable pricing strategy.',
+        badge: 'Beijing First Prize', badgeType: 'award',
+        title: 'China Undergraduate Mathematical Contest in Modeling',
+        meta: 'Beijing First Prize \u00b7 Top 8%',
+        desc: 'Built a dual-objective replenishment and pricing model for fresh-supermarket vegetables, combining sales-pattern analysis, SARIMA demand forecasting, clustering, price elasticity, and multi-objective optimization to balance profit and customer demand.',
         link: null,
-        images: [],
-        tags: ['Mathematical Modeling', 'Optimization', 'Pricing Strategy']
+        images: ['images/cumcm-pearson-heatmap.png', 'images/cumcm-sales-distribution.png', 'images/cumcm-autocorrelation.png', 'images/cumcm-fitting-curve.png'],
+        tags: ['Mathematical Modeling', 'SARIMA', 'Pricing Optimization']
+      },
+      {
+        badge: 'International Award', badgeType: 'award',
+        title: 'Mathematical Contest in Modeling (MCM) · COMAP',
+        meta: 'Honorable Mention',
+        desc: 'Modeled how adaptive sex-ratio variation in sea lampreys affects ecosystem dynamics, combining food-web simulation, modified Logistic and Lotka-Volterra models, and ecosystem stability assessment.',
+        link: null,
+        images: ['images/mcm-workflow-diagram.png', 'images/mcm-modeling-framework.png', 'images/mcm-food-web.png', 'images/mcm-simulation-results.png', 'images/mcm-scenario-comparison.png'],
+        tags: ['Mathematical Modeling', 'Ecosystem Simulation', 'Stability Assessment']
       },
       {
         badge: 'National Award', badgeType: 'award',
-        title: 'Graduate Mathematical Modeling Competition',
-        meta: 'Nov 2025 \u00b7 National Second Prize',
-        desc: '',
+        title: 'China Graduate Mathematical Contest in Modeling',
+        meta: 'National Second Prize',
+        desc: 'Developed an intelligent framework for recognizing micro-fractures in borehole digital images, reconstructing 3D fracture networks, quantifying uncertainty, and optimizing supplementary drilling layouts for safer coal-mine exploration.',
         link: null,
-        images: [],
-        tags: []
+        images: ['images/grad-modeling-route.png', 'images/grad-modeling-recognition.png', 'images/grad-modeling-sine-fit.png', 'images/grad-modeling-connectivity.png', 'images/grad-modeling-3d-reconstruction.png'],
+        tags: ['Mathematical Modeling', 'U-Net', '3D Reconstruction']
       }
     ]
   },
@@ -2036,6 +2045,7 @@ function initCardSwap() {
           '<span class="project-badge">' + item.badge + '</span>' +
           titleHtml +
           citation +
+          (item.desc ? '<p class="research-abstract">' + item.desc + '</p>' : '') +
           gallery +
         '</div>';
       }).join('');
