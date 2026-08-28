@@ -1,3 +1,243 @@
+// ===== Internationalization =====
+const LANG_STORAGE_KEY = 'siteLang';
+const SUPPORTED_LANGS = ['en', 'zh'];
+
+function getCurrentLang() {
+  const saved = localStorage.getItem(LANG_STORAGE_KEY);
+  return SUPPORTED_LANGS.includes(saved) ? saved : 'en';
+}
+
+let currentLang = getCurrentLang();
+document.documentElement.setAttribute('lang', currentLang === 'zh' ? 'zh-CN' : 'en');
+document.documentElement.setAttribute('data-lang', currentLang);
+
+const I18N = {
+  en: {
+    pageTitle: 'Jiayi Hu | AI Product Builder',
+    nav: { home: 'Home', about: 'About', journey: 'Journey', contact: 'Contact' },
+    hero: { scroll: 'scroll' },
+    about: {
+      greeting: "Hi, I'm Jiayi!",
+      intro: 'A half-Lishui, half-Kunming native and a textbook INTP, currently pursuing my Master\'s degree at <strong>Wuhan University</strong>. I spend my days navigating the world of Spatiotemporal Big Data&mdash;essentially learning how to turn the world\'s messy footprints into meaningful stories. With a solid background in GIS and a GPA in the top 5%, I\'ve also earned an <strong>SCI first-authorship</strong> and the <strong>National Scholarship</strong>.',
+      stats: ['Internships', 'First Author', 'Awards'],
+      awardsNum: '10+',
+      skills: 'Skills',
+      resumeText: 'Feel free to check out my resume ^^',
+      resume: 'Resume',
+      education: 'Education',
+      edu: [
+        { date: '2025 — Present', school: 'Wuhan University', degree: 'M.Eng. Spatiotemporal Big Data', note: '985 · Recommended Admission' },
+        { date: '2021 — 2025', school: 'China University of Geosciences', degree: 'B.S. Geographic Information Science', note: 'GPA 3.86 (Top 5%) · National Scholarship · 211' }
+      ],
+      connect: 'Connect',
+      interests: 'Interests',
+      tags: ['Music', 'Photography', 'Reading']
+    },
+    journeyInfo: {
+      label: 'Journey',
+      heading: "A snapshot of where I've been and what I'm building",
+      intro: 'from product internships to published research, plus the music that keeps me going',
+      hint: 'Tap card for more →'
+    },
+    contact: {
+      pixelSub: 'Feel free to reach out',
+      label: 'Connect',
+      heading: "Let's Talk",
+      text: 'Open to product roles, research collaboration, or just a good conversation about building with AI.',
+      button: 'Say Hello',
+      footer: 'Designed & Built by Jiayi Hu © 2026'
+    },
+    typewriter: ['INTP', "WHU Master's Student", 'Product Manager Intern'],
+    cards: [
+      {
+        id: 'experience', type: 'experience', typeLabel: 'Experience', typeIcon: 'fas fa-briefcase', accentGradient: 'linear-gradient(135deg, #0f2b46, #1a4a7a)', title: 'Where I’ve Worked',
+        overlayDesc: '5 product internships across AI, e-commerce, fintech & GIS', statLabel: 'Internships',
+        items: [
+          { logo: 'images/%E4%BA%AC%E4%B8%9Clogo.png', company: 'JD.com', role: 'AI Product Intern', period: 'May 2026 — Present', desc: 'Working on AI-assisted operational products for collection, review, and human-in-the-loop workflows.', tags: ['AI Workflow', 'Human-in-the-loop', 'Operations'] },
+          { logo: 'images/%E7%99%BE%E5%BA%A6.svg', company: 'Baidu', role: 'AI Product Intern', period: 'Jan — May 2026', desc: 'Worked on Wenxin Yiyan Web, improving AI assistant engagement through dynamic greetings, demo cards, and model capability evaluation.', tags: ['LLM', 'AI Assistant', 'Evaluation'] },
+          { logo: 'images/%E5%B0%8F%E7%BA%A2%E4%B9%A6.png', company: 'Xiaohongshu', role: 'E-commerce Product Intern', period: 'Sep — Dec 2025', desc: 'Designed LLM-powered search and product-card improvements to improve product discovery and conversion in e-commerce search.', tags: ['E-commerce', 'Search', 'Conversion'] },
+          { logo: 'images/%E7%99%BE%E8%9E%8D%E4%BA%91%E5%88%9B.png', company: 'BaiRong Cloud', role: 'AI Product Intern', period: 'Jun — Sep 2025', desc: 'Launched AI Agent and AI outbound-call workflows for overseas financial clients, connecting model capabilities with frontline operations.', tags: ['AI Agent', 'Enterprise', 'SaaS'] },
+          { logo: 'images/%E6%98%93%E6%99%BA%E7%91%9E.png', company: 'Esri China', role: 'Product Operations Intern', period: 'Jul — Oct 2024', desc: 'Designed a provincial natural-resources dashboard demo and supported typhoon-weather scenario showcases for GIS industry clients.', tags: ['GIS', 'Documentation', 'Operations'] }
+        ]
+      },
+      {
+        id: 'research', type: 'project', typeLabel: 'Research & Awards', typeIcon: 'fas fa-file-alt', accentGradient: 'linear-gradient(135deg, #1e40af, #3b82f6)', title: 'Publications & Awards',
+        overlayDesc: 'Published research & academic achievements', statLabels: { publications: 'Publications', awards: 'Awards' },
+        tableRows: [['Publications', '3 SCI + 1 Core'], ['Accepted', '1 SCI · not online'], ['Awards', '10+ provincial/national'], ['Scholarship', 'National']],
+        items: [
+          { badge: 'SCI · First Author', badgeType: 'sci', status: 'Accepted · Not yet online', title: 'Controlling for Confounding Effects in Spatial Flow Analysis with Partial and Full Conditional FlowLISA Methods', meta: 'Hu, J.; Tao, R. — International Journal of Geographical Information Science · Accepted 2026', desc: 'Accepted for publication and currently in production. The article has a DOI, but has not yet been published online on Taylor & Francis Online.', link: 'https://doi.org/10.1080/13658816.2026.2718487', images: [], tags: ['Geographical Information Science', 'Accepted', 'DOI'] },
+          { badge: 'SCI Q2 · First Author', badgeType: 'sci', title: 'Research on Multi-Scenario Simulation of Urban Expansion for Beijing–Tianjin–Hebei Region Considering Multilevel Urban Flows', meta: 'Hu, J.; Liu, D.; Zheng, X. — Land · Nov 2024', desc: '', link: 'https://doi.org/10.3390/land13111830', images: ['images/paper-land-1.png', 'images/paper-land-2.png', 'images/paper-land-3.jpg'], tags: ['Urban Simulation', 'Cellular Automata', 'Multi-Scenario'] },
+          { badge: 'SCI Q3 · Second Author', badgeType: 'sci', title: 'How New Quality Productive Forces Influenced the Urban-Rural Income Gap: Evidence from Prefectural Cities in China', meta: 'Zhang, C.; Hu, J.; Song, C.; Lu, Y. — EDS · 2025', desc: '', link: 'https://doi.org/10.1007/s10668-025-06929-3', images: ['images/paper-eds-1.webp', 'images/paper-eds-2.webp', 'images/paper-eds-3.webp', 'images/paper-eds-4.webp'], tags: ['Productive Forces', 'Urban-Rural Gap', 'Panel Data'] },
+          { badge: 'Beijing First Prize', badgeType: 'award', title: 'China Undergraduate Mathematical Contest in Modeling', meta: 'Beijing First Prize · Top 8%', desc: 'Built a dual-objective replenishment and pricing model for fresh-supermarket vegetables, combining sales-pattern analysis, SARIMA demand forecasting, clustering, price elasticity, and multi-objective optimization to balance profit and customer demand.', link: null, images: ['images/cumcm-pearson-heatmap.png', 'images/cumcm-sales-distribution.png', 'images/cumcm-autocorrelation.png', 'images/cumcm-fitting-curve.png'], tags: ['Mathematical Modeling', 'SARIMA', 'Pricing Optimization'] },
+          { badge: 'International Award', badgeType: 'award', title: 'Mathematical Contest in Modeling (MCM) · COMAP', meta: 'Honorable Mention', desc: 'Modeled how adaptive sex-ratio variation in sea lampreys affects ecosystem dynamics, combining food-web simulation, modified Logistic and Lotka-Volterra models, and ecosystem stability assessment.', link: null, images: ['images/mcm-workflow-diagram.png', 'images/mcm-modeling-framework.png', 'images/mcm-food-web.png', 'images/mcm-simulation-results.png', 'images/mcm-scenario-comparison.png'], tags: ['Mathematical Modeling', 'Ecosystem Simulation', 'Stability Assessment'] },
+          { badge: 'National Award', badgeType: 'award', title: 'China Graduate Mathematical Contest in Modeling', meta: 'National Second Prize', desc: 'Developed an intelligent framework for recognizing micro-fractures in borehole digital images, reconstructing 3D fracture networks, quantifying uncertainty, and optimizing supplementary drilling layouts for safer coal-mine exploration.', link: null, images: ['images/grad-modeling-route.png', 'images/grad-modeling-recognition.png', 'images/grad-modeling-sine-fit.png', 'images/grad-modeling-connectivity.png', 'images/grad-modeling-3d-reconstruction.png'], tags: ['Mathematical Modeling', 'U-Net', '3D Reconstruction'] }
+        ]
+      },
+      {
+        id: 'music', type: 'music', typeLabel: 'Music', typeIcon: 'fas fa-music', accentGradient: 'linear-gradient(135deg, #312e81, #6366f1)', title: "What I'm Listening To", meta: 'Melodic Bass · Chill House · Synthpop',
+        desc: 'My taste in music is quite broad, but I mainly listen to melodic bass, chill house, synthpop, indie pop, and R&B.',
+        introText: 'My taste in music is quite broad, but I mainly listen to <strong class="genre-accent">melodic bass</strong>, <strong class="genre-accent">chill house</strong>, <strong class="genre-accent">synthpop</strong>, <strong class="genre-accent">indie pop</strong>, and <strong class="genre-accent">R&amp;B</strong>. Check out the cards on the right for what I\'ve been listening to lately ^^',
+        overlayIntro: 'My taste in music is quite broad, but I mainly listen to <strong>melodic bass</strong>, <strong>chill house</strong>, <strong>synthpop</strong>, <strong>indie pop</strong>, and <strong>R&amp;B</strong>. I don’t have a particular favorite artist — I only recognize a song.',
+        overlayFeeling: 'Whenever I find a great song, I’m so tempted to shove my headphones into someone’s ears, and I just want them to cry their eyes out after listening to it.',
+        playlistTitle: 'Playlist',
+        songs: [
+          { name: '心跳119', artist: 'JOYCE 就以斯', cover: 'music/%E5%BF%83%E8%B7%B3119%20-%20JOYCE%20%E5%B0%B1%E4%BB%A5%E6%96%AF.jpg', audioId: 'journey-audio-3', genre: 'R&B' },
+          { name: 'Everything is romantic', artist: 'Charli xcx ft. caroline polachek', cover: 'music/Charli%20xcx%20-%20Everything%20is%20romantic%20featuring%20caroline%20polachek.jpg', audioId: 'journey-audio-0', genre: 'Electro Pop' },
+          { name: 'Staring Down Sunset', artist: 'Tinlicker ft. Nathan Nicholson', cover: 'music/Tinlicker%20-%20Staring%20Down%20Sunset%20ft.%20Nathan%20Nicholson.jpg', audioId: 'journey-audio-1', genre: 'Dream Pop' },
+          { name: 'Saiko', artist: 'yeule', cover: 'music/yeule%20-%20Saiko.jpg', audioId: 'journey-audio-2', genre: 'Alternative Pop' }
+        ], tags: ['Melodic Bass', 'Chill House', 'Synthpop', 'Indie Pop', 'R&B']
+      },
+      {
+        id: 'now', type: 'now', typeLabel: 'Now', typeIcon: 'fas fa-clock', accentGradient: 'linear-gradient(135deg, #0369a1, #38bdf8)', title: "What I'm Up To", meta: 'Last updated Jul 2026', desc: 'Recent questions I keep returning to while building AI products.',
+        status: 'Currently: Studying at WHU & building AI product judgment', question: 'What are you up to lately?', activeText: 'Currently Active',
+        nowItems: [
+          { label: 'Doing', text: 'Connecting model capabilities with real operational workflows — from review automation to CRM agents and collection assistants.' },
+          { label: 'Thinking', text: 'How should AI products be evaluated: model capability benchmarks, user satisfaction, task completion, or business metrics?' },
+          { label: 'Learning', text: 'Studying how AI Agents move from demos to production through permissions, uncertainty handling, human escalation, data quality, and measurable ROI.' }
+        ], tags: []
+      }
+    ]
+  },
+  zh: {
+    pageTitle: '欢迎来到我的个人网页',
+    nav: { home: 'Home', about: 'About', journey: 'Journey', contact: 'Contact' },
+    hero: { scroll: 'scroll' },
+    about: {
+      greeting: 'Hi~，我是佳怡。',
+      intro: '浙江丽水人，MBTI 为 INTP。现在在 <strong>武汉大学</strong> 读研，研究方向为时空大数据与空间统计。本科专业是 GIS（地理信息科学），通俗来说就是计算机与地理的交叉学科。专业成绩位列前 5%，目前有两篇 SCI 一作论文，其中一篇已接收，正在等待正式上线；曾获得国家奖学金。<br><br>目前正在进行暑期实习，岗位方向是 AI 产品经理。过往实习经历主要围绕大模型提效等方面，Ask me anything！',
+      stats: ['段实习', '一作论文', '项奖项'], awardsNum: '10+', skills: '技能', resumeText: '欢迎查看我的简历 ^^', resume: 'Resume', education: '教育经历',
+      edu: [
+        { date: '2025 — 至今', school: '武汉大学', degree: '时空大数据、空间统计研究方向', note: '985 · 推免录取' },
+        { date: '2021 — 2025', school: '中国地质大学', degree: '地理信息科学本科', note: 'GPA 3.86（专业前 5%）· 国家奖学金 · 211' }
+      ], connect: '相关网站', interests: '兴趣', tags: ['音乐', '摄影', '阅读']
+    },
+    journeyInfo: { label: 'Journey', heading: '经历与近况', intro: '从实习经历到学术研究，再到一些正在发生的近况', hint: '点击卡片查看更多 →' },
+    contact: { pixelSub: '欢迎来聊聊', label: 'Connect', heading: '期待交流', text: '我关注 AI 产品、大模型与 GIS/空间智能，也欢迎关于产品、研究和创造力的任何对话。', button: 'Say Hello', footer: 'Designed & Built by Jiayi Hu © 2026' },
+    typewriter: ['INTP', '武汉大学硕士在读', 'AI 产品实习生'],
+    cards: [
+      { id: 'experience', type: 'experience', typeLabel: '经历', typeIcon: 'fas fa-briefcase', accentGradient: 'linear-gradient(135deg, #0f2b46, #1a4a7a)', title: '实习经历', overlayDesc: '5 段产品实习，覆盖 AI、电商、金融科技与 GIS 场景', statLabel: '段实习', items: [
+        { logo: 'images/%E4%BA%AC%E4%B8%9Clogo.png', company: 'JD.com', role: 'AI 产品实习生', period: '2026.05 — 至今', desc: '围绕催收、审核与人机协同链路，设计 AI 辅助运营产品，将模型能力嵌入一线业务流程。', tags: ['AI 工作流', '人机协同', '运营效率'] },
+        { logo: 'images/%E7%99%BE%E5%BA%A6.svg', company: 'Baidu', role: 'AI 产品实习生', period: '2026.01 — 2026.05', desc: '参与文心一言 Web 端增长与体验优化，通过动态问候、Demo 卡片和模型能力评估，提升用户进入对话的意愿。', tags: ['LLM', 'AI 助手', '模型评估'] },
+        { logo: 'images/%E5%B0%8F%E7%BA%A2%E4%B9%A6.png', company: 'Xiaohongshu', role: '电商产品实习生', period: '2025.09 — 2025.12', desc: '围绕电商搜索与商品卡片体验，设计 LLM 辅助的筛选词与导购链路，帮助用户更快找到合适商品。', tags: ['电商', '搜索', '转化'] },
+        { logo: 'images/%E7%99%BE%E8%9E%8D%E4%BA%91%E5%88%9B.png', company: 'BaiRong Cloud', role: 'AI 产品实习生', period: '2025.06 — 2025.09', desc: '面向海外金融客户落地 AI Agent 与外呼流程，将模型能力转化为客户经理可用的工作台和自动化助手。', tags: ['AI Agent', '企业服务', 'SaaS'] },
+        { logo: 'images/%E6%98%93%E6%99%BA%E7%91%9E.png', company: 'Esri China', role: '产品运营实习生', period: '2024.07 — 2024.10', desc: '参与自然资源与台风天气场景的 GIS 产品展示，将空间数据能力转译为客户更容易理解的行业方案。', tags: ['GIS', '文档', '行业方案'] }
+      ] },
+      { id: 'research', type: 'project', typeLabel: '研究与奖项', typeIcon: 'fas fa-file-alt', accentGradient: 'linear-gradient(135deg, #1e40af, #3b82f6)', title: '论文与奖项', overlayDesc: '发表研究、建模竞赛与学术积累', statLabels: { publications: '论文', awards: '展示的奖项' }, tableRows: [['论文', '3 SCI + 1 Core'], ['已接收', '1 SCI · 待上线'], ['奖项', '10+ 省级/国家级'], ['奖学金', '国家奖学金']], items: [
+        { badge: 'SCI · 一作', badgeType: 'sci', status: '已接收 · 待正式上线', title: 'Controlling for Confounding Effects in Spatial Flow Analysis with Partial and Full Conditional FlowLISA Methods', meta: 'Hu, J.; Tao, R. — International Journal of Geographical Information Science · Accepted 2026', desc: '论文已被接收，目前处于出版生产流程中。DOI 已生成，待 Taylor & Francis Online 正式上线。', link: 'https://doi.org/10.1080/13658816.2026.2718487', images: [], tags: ['地理信息科学', '已接收', 'DOI'] },
+        { badge: 'SCI Q2 · 一作', badgeType: 'sci', title: 'Research on Multi-Scenario Simulation of Urban Expansion for Beijing–Tianjin–Hebei Region Considering Multilevel Urban Flows', meta: 'Hu, J.; Liu, D.; Zheng, X. — Land · Nov 2024', desc: '', link: 'https://doi.org/10.3390/land13111830', images: ['images/paper-land-1.png', 'images/paper-land-2.png', 'images/paper-land-3.jpg'], tags: ['城市模拟', '元胞自动机', '多情景分析'] },
+        { badge: 'SCI Q3 · 二作', badgeType: 'sci', title: 'How New Quality Productive Forces Influenced the Urban-Rural Income Gap: Evidence from Prefectural Cities in China', meta: 'Zhang, C.; Hu, J.; Song, C.; Lu, Y. — EDS · 2025', desc: '', link: 'https://doi.org/10.1007/s10668-025-06929-3', images: ['images/paper-eds-1.webp', 'images/paper-eds-2.webp', 'images/paper-eds-3.webp', 'images/paper-eds-4.webp'], tags: ['新质生产力', '城乡收入差距', '面板数据'] },
+        { badge: '北京市一等奖', badgeType: 'award', title: '全国大学生数学建模竞赛', meta: '北京市一等奖 · Top 8%', desc: '针对生鲜商超蔬菜补货与定价问题，构建兼顾收益与需求满足的双目标模型，结合销售规律分析、SARIMA 预测、聚类、价格弹性与多目标优化。', link: null, images: ['images/cumcm-pearson-heatmap.png', 'images/cumcm-sales-distribution.png', 'images/cumcm-autocorrelation.png', 'images/cumcm-fitting-curve.png'], tags: ['数学建模', 'SARIMA', '定价优化'] },
+        { badge: '国际奖项', badgeType: 'award', title: '美国大学生数学建模竞赛（MCM）', meta: 'Honorable Mention', desc: '围绕海七鳃鳗性别比例变化对生态系统的影响，结合食物网模拟、改进 Logistic 与 Lotka-Volterra 模型评估生态稳定性。', link: null, images: ['images/mcm-workflow-diagram.png', 'images/mcm-modeling-framework.png', 'images/mcm-food-web.png', 'images/mcm-simulation-results.png', 'images/mcm-scenario-comparison.png'], tags: ['数学建模', '生态模拟', '稳定性评估'] },
+        { badge: '国家级奖项', badgeType: 'award', title: '中国研究生数学建模竞赛', meta: '国家二等奖', desc: '构建钻孔数字图像微裂隙识别与三维重构框架，结合不确定性量化和补充钻孔优化，为煤矿勘探安全提供决策支持。', link: null, images: ['images/grad-modeling-route.png', 'images/grad-modeling-recognition.png', 'images/grad-modeling-sine-fit.png', 'images/grad-modeling-connectivity.png', 'images/grad-modeling-3d-reconstruction.png'], tags: ['数学建模', 'U-Net', '三维重构'] }
+      ] },
+      { id: 'music', type: 'music', typeLabel: '音乐', typeIcon: 'fas fa-music', accentGradient: 'linear-gradient(135deg, #312e81, #6366f1)', title: '最近在听什么', meta: 'Melodic Bass · Chill House · Synthpop', desc: '我的听歌口味很杂，但最常回到 melodic bass、chill house、synthpop、indie pop 和 R&B。', introText: '我的听歌口味很杂，但最常回到 <strong class="genre-accent">melodic bass</strong>、<strong class="genre-accent">chill house</strong>、<strong class="genre-accent">synthpop</strong>、<strong class="genre-accent">indie pop</strong> 和 <strong class="genre-accent">R&amp;B</strong>。右边的卡片里，是最近常常循环的几首歌 ^^', overlayIntro: '我的听歌口味很杂，但最常回到 <strong>melodic bass</strong>、<strong>chill house</strong>、<strong>synthpop</strong>、<strong>indie pop</strong> 和 <strong>R&amp;B</strong>。', overlayFeeling: '', playlistTitle: '歌单', songs: [
+        { name: '心跳119', artist: 'JOYCE 就以斯', cover: 'music/%E5%BF%83%E8%B7%B3119%20-%20JOYCE%20%E5%B0%B1%E4%BB%A5%E6%96%AF.jpg', audioId: 'journey-audio-3', genre: 'R&B' },
+        { name: 'Everything is romantic', artist: 'Charli xcx ft. caroline polachek', cover: 'music/Charli%20xcx%20-%20Everything%20is%20romantic%20featuring%20caroline%20polachek.jpg', audioId: 'journey-audio-0', genre: 'Electro Pop' },
+        { name: 'Staring Down Sunset', artist: 'Tinlicker ft. Nathan Nicholson', cover: 'music/Tinlicker%20-%20Staring%20Down%20Sunset%20ft.%20Nathan%20Nicholson.jpg', audioId: 'journey-audio-1', genre: 'Dream Pop' },
+        { name: 'Saiko', artist: 'yeule', cover: 'music/yeule%20-%20Saiko.jpg', audioId: 'journey-audio-2', genre: 'Alternative Pop' }
+      ], tags: ['Melodic Bass', 'Chill House', 'Synthpop', 'Indie Pop', 'R&B'] },
+      { id: 'now', type: 'now', typeLabel: '近况', typeIcon: 'fas fa-clock', accentGradient: 'linear-gradient(135deg, #0369a1, #38bdf8)', title: '最近发生的事情', meta: '最近更新：2026 年 7 月', desc: '一些关于论文、实习和阶段感受的近况。', status: '京东AI产品经理实习中', question: '最近发生了什么？', activeText: '京东AI产品经理实习中', nowItems: [
+        { label: '论文', text: '一篇关于空间流分析的论文已被 International Journal of Geographical Information Science 接收，目前正在等待正式上线。' },
+        { label: '实习', text: '五月开始在京东做 AI 产品经理实习，继续观察大模型如何进入真实业务流程，并和人的判断一起工作。' },
+        { label: '感想', text: '最近越来越觉得，产品不是把能力堆上去，而是把复杂的系统整理成清晰、可靠、让人愿意使用的体验。' }
+      ], tags: [] }
+    ]
+  }
+};
+
+function tRoot() {
+  return I18N[currentLang] || I18N.en;
+}
+
+function setHtml(selector, html) {
+  const el = document.querySelector(selector);
+  if (el) el.innerHTML = html;
+}
+
+function setText(selector, text) {
+  const el = document.querySelector(selector);
+  if (el) el.textContent = text;
+}
+
+function applyStaticI18n() {
+  const copy = tRoot();
+  document.title = copy.pageTitle;
+  document.documentElement.setAttribute('lang', currentLang === 'zh' ? 'zh-CN' : 'en');
+  document.documentElement.setAttribute('data-lang', currentLang);
+
+  const navLinks = document.querySelectorAll('.nav-links a');
+  ['home', 'about', 'journey', 'contact'].forEach((key, index) => {
+    if (navLinks[index]) navLinks[index].textContent = copy.nav[key];
+  });
+
+  setText('.hero-scroll-hint span', copy.hero.scroll);
+  const introTexts = document.querySelectorAll('.bento-intro-text');
+  if (introTexts[0]) introTexts[0].innerHTML = '<strong>' + copy.about.greeting + '</strong>';
+  if (introTexts[1]) introTexts[1].innerHTML = copy.about.intro;
+  const statLabels = document.querySelectorAll('.bento-stat-label');
+  copy.about.stats.forEach((label, index) => { if (statLabels[index]) statLabels[index].textContent = label; });
+  const statNums = document.querySelectorAll('.bento-stat-num');
+  if (statNums[2]) statNums[2].textContent = copy.about.awardsNum;
+  setText('.bento-skills .bento-card-label', copy.about.skills);
+  setText('.bento-resume-text', copy.about.resumeText);
+  const resumeLink = document.querySelector('.resume-link');
+  if (resumeLink) resumeLink.innerHTML = '<i class="fas fa-download"></i> ' + copy.about.resume;
+  setText('.bento-edu .bento-card-label', copy.about.education);
+  document.querySelectorAll('.bento-edu-item').forEach((item, index) => {
+    const edu = copy.about.edu[index];
+    if (!edu) return;
+    item.querySelector('.bento-edu-date').textContent = edu.date;
+    item.querySelector('.bento-edu-school').textContent = edu.school;
+    item.querySelector('.bento-edu-degree').textContent = edu.degree;
+    item.querySelector('.bento-edu-note').textContent = edu.note;
+  });
+  const socialLabels = document.querySelectorAll('.bento-social .bento-card-label');
+  if (socialLabels[0]) socialLabels[0].textContent = copy.about.connect;
+  if (socialLabels[1]) socialLabels[1].textContent = copy.about.interests;
+  const interestTags = document.querySelectorAll('.bento-tag');
+  copy.about.tags.forEach((label, index) => {
+    if (!interestTags[index]) return;
+    const icon = interestTags[index].querySelector('i')?.outerHTML || '';
+    interestTags[index].innerHTML = icon + ' ' + label;
+  });
+
+  setText('.journey-info .section-label', copy.journeyInfo.label);
+  setText('.journey-info .section-heading', copy.journeyInfo.heading);
+  setText('.journey-intro', copy.journeyInfo.intro);
+  setText('.journey-card-hint', copy.journeyInfo.hint);
+  document.querySelectorAll('.journey-dot').forEach((dot, index) => {
+    const card = copy.cards[index];
+    if (card) dot.title = card.typeLabel;
+  });
+
+  setText('.pixel-card__sub', copy.contact.pixelSub);
+  setText('.contact-info .section-label', copy.contact.label);
+  setText('.contact-info .section-heading', copy.contact.heading);
+  setText('.contact-text', copy.contact.text);
+  setText('.contact-btn', copy.contact.button);
+  setText('.footer p:last-child', copy.contact.footer);
+}
+
+function initLanguageToggle() {
+  const toggle = document.getElementById('languageToggle');
+  if (!toggle) return;
+  toggle.onclick = (event) => {
+    const option = event.target.closest('[data-lang-option]');
+    const nextLang = option ? option.dataset.langOption : (currentLang === 'en' ? 'zh' : 'en');
+    if (!SUPPORTED_LANGS.includes(nextLang) || nextLang === currentLang) return;
+    currentLang = nextLang;
+    localStorage.setItem(LANG_STORAGE_KEY, currentLang);
+    document.body.classList.add('i18n-fade');
+    window.setTimeout(() => {
+      JOURNEY_CARDS = tRoot().cards;
+      applyStaticI18n();
+      initTypewriter();
+      if (window.refreshJourneyCards) window.refreshJourneyCards();
+      document.body.classList.remove('i18n-fade');
+    }, 120);
+  };
+}
+
 // ===== Theme Management =====
 function getEffectiveTheme() {
   return localStorage.getItem('theme') || 'light';
@@ -11,9 +251,12 @@ function applyTheme(theme) {
 function initThemeToggle() {
   const toggle = document.getElementById('themeToggle');
   if (!toggle) return;
-  toggle.addEventListener('click', () => {
-    applyTheme(getEffectiveTheme() === 'dark' ? 'light' : 'dark');
-  });
+  toggle.onclick = (event) => {
+    const option = event.target.closest('[data-theme-option]');
+    const nextTheme = option ? option.dataset.themeOption : (getEffectiveTheme() === 'dark' ? 'light' : 'dark');
+    if (!['light', 'dark'].includes(nextTheme)) return;
+    applyTheme(nextTheme);
+  };
 }
 
 // ===== Three.js Liquid Ether Background (WebGL Fluid Simulation) =====
@@ -1277,147 +1520,7 @@ function initNavScroll() {
 }
 
 // ===== CardSwap Journey Section =====
-var JOURNEY_CARDS = [
-  {
-    id: 'experience', type: 'experience', typeLabel: 'Experience', typeIcon: 'fas fa-briefcase',
-    accentGradient: 'linear-gradient(135deg, #0f2b46, #1a4a7a)',
-    title: 'Where I\u2019ve Worked',
-    items: [
-      {
-        logo: 'images/%E4%BA%AC%E4%B8%9Clogo.png', company: 'JD.com', role: 'AI Product Intern',
-        period: 'May 2026 \u2014 Present',
-        desc: 'Working on AI-assisted operational products for collection, review, and human-in-the-loop workflows.',
-        highlights: [
-          'Redesigned a pre-collection assistant information interface, reducing average call-preparation time by 11% and lookup clicks by 19%',
-          'Built an AI-assisted phone-number review workflow with ASR/OCR verification, human escalation, and sampling checks',
-          'Kept AI review accuracy above 85% and reduced management-side review workload by 50%'
-        ],
-        tags: ['AI Workflow', 'Human-in-the-loop', 'Operations']
-      },
-      {
-        logo: 'images/%E7%99%BE%E5%BA%A6.svg', company: 'Baidu', role: 'AI Product Intern',
-        period: 'Jan \u2014 May 2026',
-        desc: 'Worked on Wenxin Yiyan Web, improving AI assistant engagement through dynamic greetings, demo cards, and model capability evaluation.',
-        highlights: [
-          'Built 150+ emotionally engaging SayHi prompts, lifting homepage title CTR to 2% and average chat depth by 20%',
-          'Designed 4 model demo card types across creative writing, multimodal understanding, and text generation; achieved 4.13% CTR and 12.1% post-click continued conversation',
-          'Evaluated 5 leading LLMs on targeted capabilities and translated findings into product and operations strategies'
-        ],
-        tags: ['LLM', 'AI Assistant', 'Evaluation']
-      },
-      {
-        logo: 'images/%E5%B0%8F%E7%BA%A2%E4%B9%A6.png', company: 'Xiaohongshu', role: 'E-commerce Product Intern',
-        period: 'Sep \u2014 Dec 2025',
-        desc: 'Designed LLM-powered search and product-card improvements to improve product discovery and conversion in e-commerce search.',
-        highlights: [
-          'Built a filter keyword recommendation pipeline from LLM generation and prompt tuning to data cleaning and launch',
-          'Increased filter coverage to 40%, filter CTR to 5%, and post-filter conversion by 30%',
-          'Optimized product card and trending-search card experiences, driving search GMV +3%, DAB +1%, and 2% organic CTR'
-        ],
-        tags: ['E-commerce', 'Search', 'Conversion']
-      },
-      {
-        logo: 'images/%E7%99%BE%E8%9E%8D%E4%BA%91%E5%88%9B.png', company: 'BaiRong Cloud', role: 'AI Product Intern',
-        period: 'Jun \u2014 Sep 2025',
-        desc: 'Launched AI Agent and AI outbound-call workflows for overseas financial clients, connecting model capabilities with frontline operations.',
-        highlights: [
-          'Shipped 0-to-1 CRM AI Agent features including pre-call summaries, scenario templates, and an agent chat page',
-          'Improved efficiency for 5 client managers by 50% and helped move the project toward deal signing',
-          'Designed AI outbound-call workflows with SOP mapping, prompt design, and dialing strategies; achieved 56% intent rate, 0.8% conversion, and 80% labor-cost reduction'
-        ],
-        tags: ['AI Agent', 'Enterprise', 'SaaS']
-      },
-      {
-        logo: 'images/%E6%98%93%E6%99%BA%E7%91%9E.png', company: 'Esri China', role: 'Product Operations Intern',
-        period: 'Jul \u2014 Oct 2024',
-        desc: 'Designed a provincial natural-resources dashboard demo and supported typhoon-weather scenario showcases for GIS industry clients.',
-        highlights: [
-          'Dashboard template adopted into the official library, reaching 200+ monthly uses',
-          'Conference demos generated 5 inquiries and 2 signings, while related tutorials reached 10,000+ views'
-        ],
-        tags: ['GIS', 'Documentation', 'Operations']
-      }
-    ]
-  },
-  {
-    id: 'research', type: 'project', typeLabel: 'Research & Awards', typeIcon: 'fas fa-file-alt',
-    accentGradient: 'linear-gradient(135deg, #1e40af, #3b82f6)',
-    title: 'Publications & Awards',
-    items: [
-      {
-        badge: 'SCI Q2 \u00b7 First Author', badgeType: 'sci',
-        title: 'Research on Multi-Scenario Simulation of Urban Expansion for Beijing\u2013Tianjin\u2013Hebei Region Considering Multilevel Urban Flows',
-        meta: 'Hu, J.; Liu, D.; Zheng, X. \u2014 Land \u00b7 Nov 2024',
-        desc: '',
-        link: 'https://doi.org/10.3390/land13111830',
-        images: ['images/paper-land-1.png', 'images/paper-land-2.png', 'images/paper-land-3.jpg'],
-        tags: ['Urban Simulation', 'Cellular Automata', 'Multi-Scenario']
-      },
-      {
-        badge: 'SCI Q3 \u00b7 Second Author', badgeType: 'sci',
-        title: 'How New Quality Productive Forces Influenced the Urban-Rural Income Gap: Evidence from Prefectural Cities in China',
-        meta: 'Zhang, C.; Hu, J.; Song, C.; Lu, Y. \u2014 EDS \u00b7 2025',
-        desc: '',
-        link: 'https://doi.org/10.1007/s10668-025-06929-3',
-        images: ['images/paper-eds-1.webp', 'images/paper-eds-2.webp', 'images/paper-eds-3.webp', 'images/paper-eds-4.webp'],
-        tags: ['Productive Forces', 'Urban-Rural Gap', 'Panel Data']
-      },
-      {
-        badge: 'Beijing First Prize', badgeType: 'award',
-        title: 'China Undergraduate Mathematical Contest in Modeling',
-        meta: 'Beijing First Prize \u00b7 Top 8%',
-        desc: 'Built a dual-objective replenishment and pricing model for fresh-supermarket vegetables, combining sales-pattern analysis, SARIMA demand forecasting, clustering, price elasticity, and multi-objective optimization to balance profit and customer demand.',
-        link: null,
-        images: ['images/cumcm-pearson-heatmap.png', 'images/cumcm-sales-distribution.png', 'images/cumcm-autocorrelation.png', 'images/cumcm-fitting-curve.png'],
-        tags: ['Mathematical Modeling', 'SARIMA', 'Pricing Optimization']
-      },
-      {
-        badge: 'International Award', badgeType: 'award',
-        title: 'Mathematical Contest in Modeling (MCM) · COMAP',
-        meta: 'Honorable Mention',
-        desc: 'Modeled how adaptive sex-ratio variation in sea lampreys affects ecosystem dynamics, combining food-web simulation, modified Logistic and Lotka-Volterra models, and ecosystem stability assessment.',
-        link: null,
-        images: ['images/mcm-workflow-diagram.png', 'images/mcm-modeling-framework.png', 'images/mcm-food-web.png', 'images/mcm-simulation-results.png', 'images/mcm-scenario-comparison.png'],
-        tags: ['Mathematical Modeling', 'Ecosystem Simulation', 'Stability Assessment']
-      },
-      {
-        badge: 'National Award', badgeType: 'award',
-        title: 'China Graduate Mathematical Contest in Modeling',
-        meta: 'National Second Prize',
-        desc: 'Developed an intelligent framework for recognizing micro-fractures in borehole digital images, reconstructing 3D fracture networks, quantifying uncertainty, and optimizing supplementary drilling layouts for safer coal-mine exploration.',
-        link: null,
-        images: ['images/grad-modeling-route.png', 'images/grad-modeling-recognition.png', 'images/grad-modeling-sine-fit.png', 'images/grad-modeling-connectivity.png', 'images/grad-modeling-3d-reconstruction.png'],
-        tags: ['Mathematical Modeling', 'U-Net', '3D Reconstruction']
-      }
-    ]
-  },
-  {
-    id: 'music', type: 'music', typeLabel: 'Music', typeIcon: 'fas fa-music',
-    accentGradient: 'linear-gradient(135deg, #312e81, #6366f1)',
-    title: "What I'm Listening To", meta: 'Melodic Bass \u00b7 Chill House \u00b7 Synthpop',
-    desc: 'My taste in music is quite broad, but I mainly listen to melodic bass, chill house, synthpop, indie pop, and R&B.',
-    introText: 'My taste in music is quite broad, but I mainly listen to <strong class="genre-accent">melodic bass</strong>, <strong class="genre-accent">chill house</strong>, <strong class="genre-accent">synthpop</strong>, <strong class="genre-accent">indie pop</strong>, and <strong class="genre-accent">R&amp;B</strong>. Check out the cards on the right for what I\'ve been listening to lately ^^',
-    songs: [
-      { name: '\u5fc3\u8df3119', artist: 'JOYCE \u5c31\u4ee5\u65af', cover: 'music/%E5%BF%83%E8%B7%B3119%20-%20JOYCE%20%E5%B0%B1%E4%BB%A5%E6%96%AF.jpg', audioId: 'journey-audio-3', genre: 'R&B' },
-      { name: 'Everything is romantic', artist: 'Charli xcx ft. caroline polachek', cover: 'music/Charli%20xcx%20-%20Everything%20is%20romantic%20featuring%20caroline%20polachek.jpg', audioId: 'journey-audio-0', genre: 'Electro Pop' },
-      { name: 'Staring Down Sunset', artist: 'Tinlicker ft. Nathan Nicholson', cover: 'music/Tinlicker%20-%20Staring%20Down%20Sunset%20ft.%20Nathan%20Nicholson.jpg', audioId: 'journey-audio-1', genre: 'Dream Pop' },
-      { name: 'Saiko', artist: 'yeule', cover: 'music/yeule%20-%20Saiko.jpg', audioId: 'journey-audio-2', genre: 'Alternative Pop' }
-    ],
-    tags: ['Melodic Bass', 'Chill House', 'Synthpop', 'Indie Pop', 'R&B']
-  },
-  {
-    id: 'now', type: 'now', typeLabel: 'Now', typeIcon: 'fas fa-clock',
-    accentGradient: 'linear-gradient(135deg, #0369a1, #38bdf8)',
-    title: "What I'm Up To", meta: 'Last updated Jul 2026',
-    desc: 'Recent questions I keep returning to while building AI products.',
-    nowItems: [
-      { label: 'Doing', text: 'Connecting model capabilities with real operational workflows \u2014 from review automation to CRM agents and collection assistants.' },
-      { label: 'Thinking', text: 'How should AI products be evaluated: model capability benchmarks, user satisfaction, task completion, or business metrics?' },
-      { label: 'Learning', text: 'Studying how AI Agents move from demos to production through permissions, uncertainty handling, human escalation, data quality, and measurable ROI.' }
-    ],
-    tags: []
-  }
-];
+var JOURNEY_CARDS = tRoot().cards;
 
 // --- CardSwap class ---
 function initCardSwap() {
@@ -1434,13 +1537,7 @@ function initCardSwap() {
   var distY = isMobile ? 18 : 28;
   var skewY = 0;
 
-  // Render cards
-  cards.forEach(function(card, i) {
-    var el = document.createElement('div');
-    el.className = 'cardswap-card card-type-' + card.type;
-    el.dataset.index = i;
-    el.dataset.cardId = card.id;
-
+  function renderCardBody(card) {
     var bodyContent = '';
     if (card.type === 'experience') {
       var expRows = card.items.map(function(item) {
@@ -1462,22 +1559,12 @@ function initCardSwap() {
         '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
         '<div class="cardswap-card-title">' + card.title + '</div>' +
         '<div class="cardswap-card-table">' +
-          '<div class="cardswap-table-row">' +
-            '<span class="cardswap-table-label">Publications</span>' +
-            '<span class="cardswap-table-value">2 SCI + 1 Core</span>' +
-          '</div>' +
-          '<div class="cardswap-table-row">' +
-            '<span class="cardswap-table-label">Under Review</span>' +
-            '<span class="cardswap-table-value">1 SCI</span>' +
-          '</div>' +
-          '<div class="cardswap-table-row">' +
-            '<span class="cardswap-table-label">Awards</span>' +
-            '<span class="cardswap-table-value">10+ provincial/national</span>' +
-          '</div>' +
-          '<div class="cardswap-table-row">' +
-            '<span class="cardswap-table-label">Scholarship</span>' +
-            '<span class="cardswap-table-value">National</span>' +
-          '</div>' +
+          card.tableRows.map(function(row) {
+            return '<div class="cardswap-table-row">' +
+              '<span class="cardswap-table-label">' + row[0] + '</span>' +
+              '<span class="cardswap-table-value">' + row[1] + '</span>' +
+            '</div>';
+          }).join('') +
         '</div>';
     } else if (card.type === 'music') {
       var s = card.songs[0];
@@ -1500,7 +1587,7 @@ function initCardSwap() {
       var firstItem = card.nowItems[0] || { text: '' };
       var plainText = firstItem.text.replace(/<[^>]*>/g, '');
       var lines = card.nowItems.map(function(item) {
-        return '<div class="cardswap-now-line"><span class="cardswap-now-label">' + item.label + '</span>' + item.text + '</div>';
+        return '<div class="cardswap-now-line"><span class="cardswap-now-label">' + item.label + '</span> ' + item.text + '</div>';
       }).join('');
       bodyContent =
         '<div class="cardswap-card-type"><i class="' + card.typeIcon + '"></i> ' + card.typeLabel + '</div>' +
@@ -1508,20 +1595,57 @@ function initCardSwap() {
         '<div class="cardswap-card-bottom">' +
           '<div class="cardswap-status">' +
             '<span class="cardswap-status-dot"></span>' +
-            '<span class="cardswap-status-text">Currently Active</span>' +
+            '<span class="cardswap-status-text">' + card.activeText + '</span>' +
           '</div>' +
           '<div class="cardswap-card-tagline">' + plainText + '</div>' +
           '<div class="cardswap-now-chat">' + lines + '</div>' +
         '</div>';
     }
 
-    el.innerHTML =
-      '<div class="cardswap-card-accent" style="background: ' + card.accentGradient + '"></div>' +
+    return '<div class="cardswap-card-accent" style="background: ' + card.accentGradient + '"></div>' +
       '<div class="cardswap-card-body">' + bodyContent + '</div>';
+  }
 
+  // Render cards
+  cards.forEach(function(card, i) {
+    var el = document.createElement('div');
+    el.className = 'cardswap-card card-type-' + card.type;
+    el.dataset.index = i;
+    el.dataset.cardId = card.id;
+
+    el.innerHTML = renderCardBody(card);
     stackEl.appendChild(el);
     cardEls.push(el);
   });
+
+
+  window.refreshJourneyCards = function() {
+    cards = JOURNEY_CARDS;
+    cardEls.forEach(function(el, i) {
+      var card = cards[i];
+      if (!card) return;
+      el.className = 'cardswap-card card-type-' + card.type;
+      el.dataset.cardId = card.id;
+      el.innerHTML = renderCardBody(card);
+    });
+    updateCounter();
+    bindMiniPlayer();
+
+    if (activeClone) {
+      var activeIdx = parseInt(activeClone.dataset.index, 10);
+      var activeCard = cards[activeIdx];
+      if (activeCard && activeClone.querySelector('.overlay-expanded')) {
+        activeClone.querySelector('.overlay-expanded').innerHTML =
+          '<button class="clone-close" aria-label="Close"><i class="fas fa-times"></i></button>' +
+          renderOverlay(activeCard);
+        var cloneClose = activeClone.querySelector('.clone-close');
+        if (cloneClose) cloneClose.addEventListener('click', closeOverlay);
+        if (activeCard.type === 'music') wireOverlayMusic(activeCard, activeClone);
+      } else if (activeCard) {
+        activeClone.innerHTML = renderCardBody(activeCard);
+      }
+    }
+  };
 
   // Position helpers
   function makeSlot(visualIdx) {
@@ -1983,16 +2107,15 @@ function initCardSwap() {
 
       var left = '<div class="overlay-split-left">' +
         '<h3 class="overlay-split-title overlay-anim-item">' + card.title + '</h3>' +
-        '<p class="overlay-split-desc overlay-anim-item">5 product internships across AI, e-commerce, fintech & GIS</p>' +
+        '<p class="overlay-split-desc overlay-anim-item">' + card.overlayDesc + '</p>' +
         '<div class="overlay-left-stats overlay-anim-item">' +
-          '<div><span class="overlay-left-stat-num">' + card.items.length + '</span><span class="overlay-left-stat-label">Internships</span></div>' +
+          '<div><span class="overlay-left-stat-num">' + card.items.length + '</span><span class="overlay-left-stat-label">' + card.statLabel + '</span></div>' +
         '</div>' +
         '<div class="overlay-left-nav">' + leftNav + '</div>' +
       '</div>';
 
       // Right content — timeline entries
       var right = card.items.map(function(item) {
-        var hl = item.highlights ? item.highlights.map(function(h) { return '<li>' + h + '</li>'; }).join('') : '';
         var tags = item.tags.map(function(t) { return '<span class="exp-tag">' + t + '</span>'; }).join('');
         return '<div class="overlay-exp-entry overlay-anim-item">' +
           '<div class="exp-timeline-dot"></div>' +
@@ -2004,7 +2127,6 @@ function initCardSwap() {
             '</div>' +
           '</div>' +
           '<p class="exp-desc">' + item.desc + '</p>' +
-          (hl ? '<ul class="exp-highlights">' + hl + '</ul>' : '') +
           '<div class="exp-tags">' + tags + '</div>' +
         '</div>';
       }).join('');
@@ -2020,15 +2142,16 @@ function initCardSwap() {
 
       var left = '<div class="overlay-split-left">' +
         '<h3 class="overlay-split-title overlay-anim-item">' + card.title + '</h3>' +
-        '<p class="overlay-split-desc overlay-anim-item">Published research & academic achievements</p>' +
+        '<p class="overlay-split-desc overlay-anim-item">' + card.overlayDesc + '</p>' +
         '<div class="overlay-left-stats overlay-anim-item">' +
-          '<div><span class="overlay-left-stat-num metric-value" data-count="' + paperCount + '">0</span><span class="overlay-left-stat-label">Publications</span></div>' +
-          '<div><span class="overlay-left-stat-num metric-value" data-count="' + awardCount + '">0</span><span class="overlay-left-stat-label">Awards</span></div>' +
+          '<div><span class="overlay-left-stat-num metric-value" data-count="' + paperCount + '">0</span><span class="overlay-left-stat-label">' + card.statLabels.publications + '</span></div>' +
+          '<div><span class="overlay-left-stat-num metric-value" data-count="' + awardCount + '">0</span><span class="overlay-left-stat-label">' + card.statLabels.awards + '</span></div>' +
         '</div>' +
       '</div>';
 
       var right = card.items.map(function(item) {
         var boldMeta = item.meta ? item.meta.replace(/Hu, J\./g, '<strong>Hu, J.</strong>') : '';
+        var status = item.status ? '<p class="research-status">' + item.status + '</p>' : '';
         var citation = boldMeta ? '<p class="research-citation">' + boldMeta + '</p>' : '';
         var gallery = '';
         if (item.images && item.images.length > 0) {
@@ -2043,6 +2166,7 @@ function initCardSwap() {
 
         return '<div class="overlay-research-entry overlay-anim-item">' +
           '<span class="project-badge">' + item.badge + '</span>' +
+          status +
           titleHtml +
           citation +
           (item.desc ? '<p class="research-abstract">' + item.desc + '</p>' : '') +
@@ -2057,10 +2181,13 @@ function initCardSwap() {
     // === MUSIC — Player UI ===
     if (card.type === 'music') {
       var firstSong = card.songs[0];
+      var feelingText = card.overlayFeeling
+        ? '<p class="overlay-split-desc overlay-anim-item" style="font-weight:600;">' + card.overlayFeeling + '</p>'
+        : '';
       var left = '<div class="overlay-split-left">' +
         '<img src="images/music.png" alt="Music" class="music-player-cover overlay-anim-item" id="overlayMusicCover">' +
-        '<p class="overlay-split-desc overlay-anim-item">My taste in music is quite broad, but I mainly listen to <strong>melodic bass</strong>, <strong>chill house</strong>, <strong>synthpop</strong>, <strong>indie pop</strong>, and <strong>R&amp;B</strong>. I don\u2019t have a particular favorite artist \u2014 I only recognize a song.</p>' +
-        '<p class="overlay-split-desc overlay-anim-item" style="font-weight:600;">Whenever I find a great song, I\u2019m so tempted to shove my headphones into someone\u2019s ears, and I just want them to cry their eyes out after listening to it.</p>' +
+        '<p class="overlay-split-desc overlay-anim-item">' + card.overlayIntro + '</p>' +
+        feelingText +
       '</div>';
 
       var songList = card.songs.map(function(song, i) {
@@ -2074,7 +2201,7 @@ function initCardSwap() {
         '</div>';
       }).join('');
 
-      var right = '<h3 class="overlay-split-title overlay-anim-item">Playlist</h3>' +
+      var right = '<h3 class="overlay-split-title overlay-anim-item">' + card.playlistTitle + '</h3>' +
         '<p class="overlay-split-desc overlay-anim-item">' + card.desc + '</p>' +
         '<div class="overlay-music-list">' + songList + '</div>';
 
@@ -2088,13 +2215,13 @@ function initCardSwap() {
         '<h3 class="overlay-split-title overlay-anim-item">' + card.title + '</h3>' +
         '<div class="status-indicator overlay-anim-item">' +
           '<span class="status-dot"></span>' +
-          '<span class="status-text">Currently: Studying at WHU & building AI product judgment</span>' +
+          '<span class="status-text">' + card.status + '</span>' +
         '</div>' +
         '<p class="overlay-split-desc overlay-anim-item">' + card.meta + '</p>' +
         '<p class="overlay-split-desc overlay-anim-item" style="margin-top:auto;font-size:0.75rem;color:var(--text-muted);">' + card.desc + '</p>' +
       '</div>';
 
-      var labelColors = { Doing: 'building', Reading: 'reading', Thinking: 'learning', Learning: 'reading', Listening: 'listening' };
+      var labelColors = { Doing: 'building', Reading: 'reading', Thinking: 'learning', Learning: 'reading', Listening: 'listening', '在做': 'building', '在想': 'learning', '在学': 'reading', '论文': 'learning', '实习': 'building', '感想': 'reading' };
       var chatLines = card.nowItems.map(function(item) {
         var colorClass = labelColors[item.label] || 'building';
         return '<div class="chat-bubble chat-answer overlay-anim-item">' +
@@ -2106,7 +2233,7 @@ function initCardSwap() {
         '</div>';
       }).join('');
 
-      var right = '<div class="chat-bubble chat-question overlay-anim-item"><span class="chat-avatar">?</span><p>What are you up to lately?</p></div>' +
+      var right = '<div class="chat-bubble chat-question overlay-anim-item"><span class="chat-avatar">?</span><p>' + card.question + '</p></div>' +
         chatLines;
 
       return '<div class="overlay-split">' + left +
@@ -2140,57 +2267,54 @@ function initCardSwap() {
   window._connectFluidAudio = connectFluidAudio;
   window._disconnectFluidAudio = disconnectFluidAudio;
 
-  // Mini player on music card
-  var musicCardEl = stackEl.querySelector('[data-card-id="music"]');
-  if (musicCardEl) {
+  function bindMiniPlayer() {
+    var musicCardEl = stackEl.querySelector('[data-card-id="music"]');
+    if (!musicCardEl) return;
     var miniPlay = musicCardEl.querySelector('.cardswap-music-play');
     var miniProgress = musicCardEl.querySelector('.cardswap-music-progress-fill');
     var miniName = musicCardEl.querySelector('.mini-player-name');
     var miniArtist = musicCardEl.querySelector('.mini-player-artist');
     var musicData = cards.find(function(c) { return c.id === 'music'; });
     var miniSongIdx = 0;
+    if (!miniPlay || !musicData) return;
 
-    if (miniPlay) {
-      miniPlay.addEventListener('click', function(e) {
-        e.stopPropagation();
-        var audioEl = document.getElementById(musicData.songs[miniSongIdx].audioId);
-        if (musicState.playing && musicState.audio === audioEl) {
-          audioEl.pause();
-          musicState.playing = false;
-          miniPlay.classList.remove('playing');
+    miniPlay.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var audioEl = document.getElementById(musicData.songs[miniSongIdx].audioId);
+      if (musicState.playing && musicState.audio === audioEl) {
+        audioEl.pause();
+        musicState.playing = false;
+        miniPlay.classList.remove('playing');
+        disconnectFluidAudio();
+      } else {
+        if (musicState.audio && musicState.audio !== audioEl) {
+          musicState.audio.pause();
+          musicState.audio.currentTime = 0;
           disconnectFluidAudio();
-        } else {
-          if (musicState.audio && musicState.audio !== audioEl) {
-            musicState.audio.pause();
-            musicState.audio.currentTime = 0;
-            disconnectFluidAudio();
-          }
-          audioEl.play().catch(function() {});
-          musicState.audio = audioEl;
-          musicState.playing = true;
-          miniPlay.classList.add('playing');
-          connectFluidAudio(audioEl);
-          if (miniName) miniName.textContent = musicData.songs[miniSongIdx].name;
-          if (miniArtist) miniArtist.textContent = musicData.songs[miniSongIdx].artist;
-          // Show floating player
-          if (window.showFloatingPlayer) window.showFloatingPlayer(musicData.songs[miniSongIdx], audioEl);
-          audioEl.ontimeupdate = function() {
-            if (audioEl.duration && miniProgress) {
-              miniProgress.style.width = (audioEl.currentTime / audioEl.duration * 100) + '%';
-            }
-          };
-          audioEl.onended = function() {
-            miniPlay.classList.remove('playing');
-            if (miniProgress) miniProgress.style.width = '0%';
-            musicState.playing = false;
-            musicState.audio = null;
-            disconnectFluidAudio();
-          };
         }
-      });
-    }
+        audioEl.play().catch(function() {});
+        musicState.audio = audioEl;
+        musicState.playing = true;
+        miniPlay.classList.add('playing');
+        connectFluidAudio(audioEl);
+        if (miniName) miniName.textContent = musicData.songs[miniSongIdx].name;
+        if (miniArtist) miniArtist.textContent = musicData.songs[miniSongIdx].artist;
+        if (window.showFloatingPlayer) window.showFloatingPlayer(musicData.songs[miniSongIdx], audioEl);
+        audioEl.ontimeupdate = function() {
+          if (audioEl.duration && miniProgress) {
+            miniProgress.style.width = (audioEl.currentTime / audioEl.duration * 100) + '%';
+          }
+        };
+        audioEl.onended = function() {
+          miniPlay.classList.remove('playing');
+          if (miniProgress) miniProgress.style.width = '0%';
+          musicState.playing = false;
+          musicState.audio = null;
+          disconnectFluidAudio();
+        };
+      }
+    });
 
-    // Expose global mini player updater for overlay/floating player sync
     window._updateMiniPlayer = function(song, audioEl) {
       if (miniName) miniName.textContent = song.name;
       if (miniArtist) miniArtist.textContent = song.artist;
@@ -2202,12 +2326,14 @@ function initCardSwap() {
           }
         };
       }
-      // Update miniSongIdx to match
       for (var si = 0; si < musicData.songs.length; si++) {
         if (musicData.songs[si].name === song.name) { miniSongIdx = si; break; }
       }
     };
   }
+
+  // Mini player on music card
+  bindMiniPlayer();
 
   // Overlay music player
   function wireOverlayMusic(card, container) {
@@ -2367,11 +2493,23 @@ function initCardSwap() {
 }
 
 // ===== Typewriter Effect =====
+let typewriterTimer = null;
+let typewriterRunId = 0;
+
 function initTypewriter() {
   const el = document.querySelector('.typewriter-text');
   if (!el) return;
 
-  const phrases = ['INTP', 'WHU Master\'s Student', 'Product Manager Intern'];
+  if (typewriterTimer) clearTimeout(typewriterTimer);
+  typewriterRunId++;
+  const runId = typewriterRunId;
+  const phrases = tRoot().typewriter;
+
+  function schedule(fn, delay) {
+    typewriterTimer = setTimeout(() => {
+      if (runId === typewriterRunId) fn();
+    }, delay);
+  }
 
   // Respect reduced motion: show first phrase statically
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -2390,20 +2528,20 @@ function initTypewriter() {
       charIdx++;
       el.textContent = current.substring(0, charIdx);
       if (charIdx === current.length) {
-        setTimeout(() => { isDeleting = true; tick(); }, 1500);
+        schedule(() => { isDeleting = true; tick(); }, 1500);
         return;
       }
-      setTimeout(tick, 80);
+      schedule(tick, 80);
     } else {
       charIdx--;
       el.textContent = current.substring(0, charIdx);
       if (charIdx === 0) {
         isDeleting = false;
         phraseIdx = (phraseIdx + 1) % phrases.length;
-        setTimeout(tick, 400);
+        schedule(tick, 400);
         return;
       }
-      setTimeout(tick, 40);
+      schedule(tick, 40);
     }
   }
 
@@ -2608,6 +2746,8 @@ function initFloatingPlayer() {
 
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', () => {
+  applyStaticI18n();
+  initLanguageToggle();
   initThemeToggle();
   initLiquidEther();
   initTypewriter();
