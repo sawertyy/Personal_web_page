@@ -19,7 +19,9 @@ const I18N = {
     about: {
       greeting: "Hi, I'm Jiayi!",
       intro: 'A half-Lishui, half-Kunming native and a textbook INTP, currently pursuing my Master\'s degree at <strong>Wuhan University</strong>. I spend my days navigating the world of Spatiotemporal Big Data&mdash;essentially learning how to turn the world\'s messy footprints into meaningful stories. With a solid background in GIS and a GPA in the top 5%, I\'ve also earned an <strong>SCI first-authorship</strong> and the <strong>National Scholarship</strong>.',
-      stats: ['Internships', 'First Author', 'Awards'],
+      stats: ['Internships', 'Publications', 'Awards'],
+      publicationsNum: '4',
+      publicationsDetail: ['SCI Q1 First Author × 1', 'SCI Q2 First Author × 1', 'SCI Q3 Second Author × 1', 'Chinese Core Second Author × 1'],
       awardsNum: '10+',
       skills: 'Skills',
       resumeText: 'Feel free to check out my resume ^^',
@@ -105,7 +107,10 @@ const I18N = {
     about: {
       greeting: 'Hi~，我是佳怡。',
       intro: '浙江丽水人，MBTI 为 INTP。现在在 <strong>武汉大学</strong> 读研，研究方向为时空大数据与空间统计。本科专业是 GIS（地理信息科学），通俗来说就是计算机与地理的交叉学科。专业成绩位列前 5%，目前有两篇 SCI 一作论文，其中一篇已接收，正在等待正式上线；曾获得国家奖学金。<br><br>目前正在进行暑期实习，岗位方向是 AI 产品经理。过往实习经历主要围绕大模型提效等方面，Ask me anything！',
-      stats: ['段实习', '一作论文', '项奖项'], awardsNum: '10+', skills: '技能', resumeText: '欢迎查看我的简历 ^^', resume: 'Resume', education: '教育经历',
+      stats: ['段实习', '发表论文', '项奖项'],
+      publicationsNum: '4',
+      publicationsDetail: ['SCI 一区一作 × 1', 'SCI Q2 一作 × 1', 'SCI Q3 二作 × 1', '中文核心二作 × 1'],
+      awardsNum: '10+', skills: '技能', resumeText: '欢迎查看我的简历 ^^', resume: 'Resume', education: '教育经历',
       edu: [
         { date: '2025 — 至今', school: '武汉大学', degree: '时空大数据、空间统计研究方向', note: '985 · 推免录取' },
         { date: '2021 — 2025', school: '中国地质大学', degree: '地理信息科学本科', note: 'GPA 3.86（专业前 5%）· 国家奖学金 · 211' }
@@ -177,7 +182,12 @@ function applyStaticI18n() {
   const statLabels = document.querySelectorAll('.bento-stat-label');
   copy.about.stats.forEach((label, index) => { if (statLabels[index]) statLabels[index].textContent = label; });
   const statNums = document.querySelectorAll('.bento-stat-num');
+  if (statNums[1]) statNums[1].textContent = copy.about.publicationsNum;
   if (statNums[2]) statNums[2].textContent = copy.about.awardsNum;
+  const publicationTooltip = document.querySelector('.bento-stat-tooltip');
+  if (publicationTooltip && copy.about.publicationsDetail) {
+    publicationTooltip.innerHTML = copy.about.publicationsDetail.join('<br>');
+  }
   setText('.bento-skills .bento-card-label', copy.about.skills);
   setText('.bento-resume-text', copy.about.resumeText);
   const resumeLink = document.querySelector('.resume-link');
@@ -227,14 +237,21 @@ function initLanguageToggle() {
     if (!SUPPORTED_LANGS.includes(nextLang) || nextLang === currentLang) return;
     currentLang = nextLang;
     localStorage.setItem(LANG_STORAGE_KEY, currentLang);
-    document.body.classList.add('i18n-fade');
+    const container = document.getElementById('snapContainer');
+    if (container) {
+      container.classList.remove('i18n-transitioning');
+      void container.offsetWidth;
+      container.classList.add('i18n-transitioning');
+    }
     window.setTimeout(() => {
       JOURNEY_CARDS = tRoot().cards;
       applyStaticI18n();
       initTypewriter();
       if (window.refreshJourneyCards) window.refreshJourneyCards();
-      document.body.classList.remove('i18n-fade');
-    }, 120);
+    }, 260);
+    if (container) {
+      window.setTimeout(() => container.classList.remove('i18n-transitioning'), 620);
+    }
   };
 }
 
